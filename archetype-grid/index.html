@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Archetype gym — RANDO</title>
+    <link rel="stylesheet" href="./gym-matchups.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Archetype gym</h1>
+      <p class="muted">Three games per combination · 10 × 10 arena · Small barriers</p>
+      <nav id="matchups" aria-label="Archetype matchup"></nav>
+      <p id="status" role="status">Loading games…</p>
+      <section id="results" hidden>
+        <h2 id="heading"></h2>
+        <p id="summary"></p>
+        <p id="legend"></p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Game results">
+          <table id="grid"></table>
+        </div>
+        <p class="muted">
+          Each game opens its replay. Deaths and HP are shown as row move : column move. Fewer
+          deaths wins; health breaks ties.
+        </p>
+      </section>
+    </main>
+    <script type="module" src="./gym-matchups.js"></script>
+  </body>
+</html>
