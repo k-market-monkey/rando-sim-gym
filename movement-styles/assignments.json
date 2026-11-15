@@ -1,0 +1,75 @@
+{
+  "lunge slash": {
+    "style": "aggressive",
+    "status": "unique in this experiment",
+    "unresolved": []
+  },
+  "spinning sweep": {
+    "style": "aggressive",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "ranged-strafing",
+      "defensive"
+    ]
+  },
+  "spear thrust": {
+    "style": "defensive",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "aggressive",
+      "ranged-strafing"
+    ]
+  },
+  "pepper stream": {
+    "style": "balanced",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "aggressive",
+      "ranged-strafing",
+      "defensive"
+    ]
+  },
+  "homing missile": {
+    "style": "ranged-strafing",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "aggressive",
+      "defensive"
+    ]
+  },
+  "bouncing laser": {
+    "style": "defensive",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "aggressive",
+      "ranged-strafing"
+    ]
+  },
+  "widening laser": {
+    "style": "defensive",
+    "status": "unique in this experiment",
+    "unresolved": []
+  },
+  "lob grenade": {
+    "style": "ranged-strafing",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "aggressive",
+      "defensive"
+    ]
+  },
+  "artillery": {
+    "style": "defensive",
+    "status": "provisional; unresolved alternatives",
+    "unresolved": [
+      "balanced",
+      "aggressive",
+      "ranged-strafing"
+    ]
+  }
+}
