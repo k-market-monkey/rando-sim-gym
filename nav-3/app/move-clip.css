@@ -1,0 +1,47 @@
+.move-clip {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  aspect-ratio: 3 / 2;
+}
+.move-clip canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+.move-clip[data-state='loading'] canvas,
+.move-clip[data-state='unavailable'] canvas {
+  visibility: hidden;
+}
+.move-clip-status {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  font: 13px var(--mono);
+  color: var(--muted);
+}
+.move-clip-status[hidden],
+.move-clip-toggle[hidden] {
+  display: none;
+}
+.move-clip-toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  font: 12px var(--mono);
+}
+.move-clip.is-compact .move-clip-toggle {
+  right: 4px;
+  bottom: 4px;
+  padding: 2px 6px;
+}
