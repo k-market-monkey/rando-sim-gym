@@ -1,0 +1,87 @@
+#pairs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+#pairs button {
+  text-align: left;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+#pairs button[aria-pressed='true'] {
+  border-color: var(--acid);
+  box-shadow: inset 3px 0 var(--acid);
+}
+#pairs strong,
+#pairs span {
+  display: block;
+  margin: 4px 0;
+}
+#pairs span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.gym-table-wrap {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+caption {
+  text-align: left;
+  color: var(--muted);
+  margin: 8px 0;
+}
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+tr[aria-current='true'] {
+  background: #78f0c51a;
+}
+#gym-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+}
+#live-stats {
+  font: 14px var(--mono);
+  line-height: 1.7;
+}
+pre {
+  max-height: 400px;
+  overflow: auto;
+  font-size: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+}
+#verification {
+  font-size: 13px;
+  color: var(--acid);
+}
+#verdict {
+  line-height: 1.7;
+}
+@media (max-width: 600px) {
+  .replay-main {
+    padding: 20px 12px;
+  }
+  .replay-toolbar {
+    flex-wrap: wrap;
+  }
+  th,
+  td {
+    padding: 6px;
+  }
+}

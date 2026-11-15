@@ -1,0 +1,185 @@
+// Bounded, current-state tactics. No stat modifiers, prediction cache or search tree.
+import { compileMove } from './compiler.js';
+import { enemyTargets } from './mechanics.js';
+import { previewPlacement } from './runtime.js';
+import { selfDamageEnabled } from './self-damage.js';
+import { allWalls, circling } from './queries.js';
+import { blockedSegment, clamp, dir, direction, hitEntity } from './geometry.js';
+import { getStateMap } from '../map-state.js';
+import { legalFighterPosition } from '../arena-physics.js';
+import { hypot, square } from '../exact-math.js';
+import { itemPace } from './items.js';
+import { teleportAim } from './teleport-aim.js';
+
+export function closestEnemy(state, player) {
+  return enemyTargets(state, player)
+    .filter(
+      (target) =>
+        !target.dead &&
+        target.id !== player.id &&
+        (!state.teamBattle || target.team !== player.team),
+    )
+    .sort(
+      (a, b) =>
+        square(a.x - player.x) +
+        square(a.y - player.y) -
+        square(b.x - player.x) -
+        square(b.y - player.y),
+    )[0];
+}
+
+/** Legal ready casts: usable teleports first, then preferred distance and slot. */
+export function readyCombatPlans(state, player, target) {
+  if (!target) return [];
+  const distance = hypot(target.x - player.x, target.y - player.y),
+    walls = allWalls(state);
+  return player.loadout
+    .map((move, slot) => ({
+      move,
+      slot,
+      plan: compileMove(move),
+      resource: player.moveResources[move.name],
+    }))
+    .filter(
+      ({ move, plan, resource }) =>
+        resource.cooldown === 0 &&
+        resource.recovery === 0 &&
+        resource.reload === 0 &&
+        !resource.overheated &&
+        resource.sequence !== 2 &&
+        (!['charges', 'magazine'].includes(move.resource.kind) || resource.ammo > 0) &&
+        (state.botDifficulty === 'hard' && move.casterAction.kind === 'teleport'
+          ? teleportReady(state, player, move, target)
+          : (resource.sequence === 1 ||
+              distance <
+                Math.max(plan.affordances.range + 13, plan.affordances.preferredDistance + 40)) &&
+            (plan.affordances.setup === 'pair' ||
+              !blockedSegment(player.x, player.y, target.x, target.y, walls)) &&
+            previewPlacement(state, player, move, target.x, target.y)),
+    )
+    .sort(
+      (a, b) =>
+        (state.botDifficulty === 'hard'
+          ? Number(b.move.casterAction.kind === 'teleport') -
+            Number(a.move.casterAction.kind === 'teleport')
+          : 0) ||
+        Math.abs(distance - a.plan.affordances.preferredDistance) -
+          Math.abs(distance - b.plan.affordances.preferredDistance) ||
+        a.slot - b.slot,
+    );
+}
+
+function teleportReady(state, player, move, target) {
+  const aim = teleportAim(state, player, move, target);
+  return aim && hypot(aim.x - player.x, aim.y - player.y) > 70;
+}
+
+export function hardMoveSlot(state, player) {
+  return readyCombatPlans(state, player, closestEnemy(state, player))[0]?.slot;
+}
+
+/** Sample at most the engine's 96 effects and at most eight directions plus standing. */
+export function hardDefense(state, player, original) {
+  const input = { ...original, shield: false, dash: false },
+    map = getStateMap(state),
+    walls = [...allWalls(state), ...map.hazards],
+    pace = ((state.speedPercent ?? 100) / 100) * itemPace(player),
+    walk = 4.5 * pace,
+    desired =
+      input.x || input.y
+        ? dir(Math.round(direction(clamp(input.x || 0, -1, 1), clamp(input.y || 0, -1, 1)) / 4) * 4)
+        : [0, 0],
+    threats = state.entities
+      .slice(0, 96)
+      .sort((a, b) => a.id - b.id)
+      .filter((entity) => {
+        if (entity.removed || entity.ttl <= 0 || entity.arm - entity.age > 3) return false;
+        const owner = state.players.find((candidate) => candidate.id === entity.owner);
+        if (
+          entity.owner === player.id
+            ? !selfDamageEnabled(entity.move, state)
+            : state.teamBattle && owner?.team === player.team
+        )
+          return false;
+        const template = compileMove(entity.move).templates[entity.templateId];
+        return template.damage.amount > 0 || template.damage.shield > 0 || template.impulse > 0;
+      }),
+    legal = (vector, speed) =>
+      [1, 2, 3].every((tick) =>
+        legalFighterPosition(
+          map,
+          walls,
+          player.x + vector[0] * speed * tick,
+          player.y + vector[1] * speed * tick,
+        ),
+      ),
+    danger = (vector, speed) =>
+      threats.reduce((total, entity) => {
+        const template = compileMove(entity.move).templates[entity.templateId],
+          [dx, dy] = dir(entity.angle),
+          travel = ['linear', 'bounce', 'return_to_owner'].includes(template.motion.kind)
+            ? entity.speed
+            : 0;
+        return (
+          total +
+          Number(
+            [1, 2, 3].some((tick) =>
+              hitEntity(
+                {
+                  ...entity,
+                  previousX: entity.x + dx * travel * (tick - 1),
+                  previousY: entity.y + dy * travel * (tick - 1),
+                  x: entity.x + dx * travel * tick,
+                  y: entity.y + dy * travel * tick,
+                  previousAngle: entity.angle,
+                },
+                { x: player.x + vector[0] * speed * tick, y: player.y + vector[1] * speed * tick },
+              ),
+            ),
+          )
+        );
+      }, 0),
+    directions = [[0, 0], ...Array.from({ length: 8 }, (_, index) => dir(index * 4))];
+  input.x = desired[0];
+  input.y = desired[1];
+  if (legal(desired, walk) && danger(desired, walk) === 0) return input;
+  const choices = directions
+    .map((vector, index) => ({
+      vector,
+      index,
+      risk: danger(vector, walk),
+      legal: legal(vector, walk),
+    }))
+    .filter((choice) => choice.legal)
+    .sort(
+      (a, b) =>
+        a.risk - b.risk ||
+        square(a.vector[0] - desired[0]) +
+          square(a.vector[1] - desired[1]) -
+          square(b.vector[0] - desired[0]) -
+          square(b.vector[1] - desired[1]) ||
+        a.index - b.index,
+    );
+  const best = choices[0];
+  if (best?.risk === 0) return { ...input, x: best.vector[0], y: best.vector[1] };
+  if (
+    state.shieldEnabled !== false &&
+    !player.shieldLocked &&
+    player.shield > 30 &&
+    !player.dashTicks
+  )
+    return { ...input, x: best?.vector[0] || 0, y: best?.vector[1] || 0, shield: true };
+  if (
+    state.dashEnabled !== false &&
+    !player.dashCooldown &&
+    !player.shieldRelease &&
+    !player.shielding &&
+    !circling(state, player.id)
+  ) {
+    const escape = directions
+      .slice(1)
+      .find((vector) => legal(vector, 14 * pace) && danger(vector, 14 * pace) === 0);
+    if (escape) return { ...input, x: escape[0], y: escape[1], dash: true };
+  }
+  return { ...input, x: best?.vector[0] || 0, y: best?.vector[1] || 0 };
+}

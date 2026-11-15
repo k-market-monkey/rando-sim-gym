@@ -1,0 +1,54 @@
+.recent-moves {
+  border-top: 1px solid var(--line);
+  padding: 24px 0 30px;
+}
+.recent-moves[hidden] {
+  display: none;
+}
+.recent-moves h2 {
+  margin: 0 0 12px;
+  font: 700 13px var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.recent-moves-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  /* Move names are at most 14 characters. Sized in this font, 1ch is one name
+     character, so a column always fits the longest name beside its glyph and
+     its widest tag, COMPOSED: 8 characters of 10px type with 1px spacing. */
+  font: 13px var(--mono);
+  --tag: calc(8 * 10ch / 13 + 8px + 18px);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, calc(14ch + var(--tag) + 24px + 2 * 10px + 22px)), 1fr)
+  );
+  gap: 8px;
+}
+.recent-move {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+.recent-move canvas {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+.recent-move-name {
+  flex: 1 0 14ch;
+  white-space: nowrap;
+  font: 13px var(--mono);
+  color: var(--ink);
+}
+.recent-move .tag {
+  flex: none;
+  font-size: 10px;
+}
