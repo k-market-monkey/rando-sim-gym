@@ -786,7 +786,10 @@ function moveObject(s, e) {
       nx = q(e.x + dx * e.speed),
       ny = q(e.y + dy * e.speed),
       { width, height } = stateArena(s);
-    const blocking = walls(s).filter((w) => !w.objectId || w.objectId !== e.id),
+    const everyWall = walls(s),
+      blocking = everyWall.some((w) => w.objectId && w.objectId === e.id)
+        ? everyWall.filter((w) => !w.objectId || w.objectId !== e.id)
+        : everyWall,
       blocked =
         nx < 20 + e.physicalRadius ||
         nx > width - 20 - e.physicalRadius ||
@@ -904,9 +907,11 @@ export function damageEntity(s, target, amount, ownerId, move) {
 }
 /**
  * A melee blade turns away the projectiles it touches, as the built-in swipe
- * does: never its owner's, and a shot already deflected once breaks.
+ * does: never its owner's, and a shot already deflected once breaks. Returns
+ * the ids it touched, which the blade then does not damage.
  */
 function parry(s, e, owner) {
+  const parried = new Set();
   for (const target of s.entities) {
     if (
       target.owner === e.owner ||
@@ -918,8 +923,10 @@ function parry(s, e, owner) {
       )
     )
       continue;
+    parried.add(target.id);
     deflect(s, target, owner, e.move);
   }
+  return parried;
 }
 export function simulateEffects(s) {
   s.actionWork = {};
@@ -961,7 +968,8 @@ export function simulateEffects(s) {
         if (e.ttl <= 0 && !e.removed) terminal(s, e, 'expiry');
         continue;
       }
-      if (t.motion.kind === 'caster_attached' && t.damage.amount > 0) parry(s, e, owner);
+      const parried =
+        t.motion.kind === 'caster_attached' && t.damage.amount > 0 ? parry(s, e, owner) : null;
       const ownCandidates = [];
       let playerContact = false;
       for (const p of s.players) {
@@ -997,6 +1005,7 @@ export function simulateEffects(s) {
         for (const target of objectIndex.query(e.x, e.y, reach)) {
           if (
             target.id === e.id ||
+            parried?.has(target.id) ||
             target.owner === e.owner ||
             target.removed ||
             !relationDamageScale(e.move, owner, player(s, target.owner), s) ||

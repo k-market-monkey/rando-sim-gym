@@ -24,13 +24,17 @@ export function survivalInput(state, player, input, map, walls) {
   if (inside(goal.x, goal.y) && legalFighterPosition(map, walls, goal.x, goal.y))
     candidates.push(goal);
   for (let y = 60; y < map.height - 33; y += 40)
-    for (let x = 60; x < map.width - 33; x += 40)
-      if (inside(x, y) && legalFighterPosition(map, walls, x, y)) candidates.push({ x, y });
-  candidates.sort(
-    (a, b) =>
-      square(a.x - goal.x) + square(a.y - goal.y) - square(b.x - goal.x) - square(b.y - goal.y),
-  );
-  for (const destination of candidates) {
+    for (let x = 60; x < map.width - 33; x += 40) if (inside(x, y)) candidates.push({ x, y });
+  const distances = candidates.map((c) => square(c.x - goal.x) + square(c.y - goal.y)),
+    used = candidates.map(() => false);
+  for (let round = 0; round < candidates.length; round++) {
+    let pick = -1;
+    for (let i = 0; i < candidates.length; i++)
+      if (!used[i] && (pick < 0 || distances[i] < distances[pick])) pick = i;
+    used[pick] = true;
+    const destination = candidates[pick];
+    if (destination !== goal && !legalFighterPosition(map, walls, destination.x, destination.y))
+      continue;
     const path = routeOnFloor(map, walls, player, destination);
     if (!path.length) continue;
     // The routing lattice may snap a clamped point back outside the safe area.

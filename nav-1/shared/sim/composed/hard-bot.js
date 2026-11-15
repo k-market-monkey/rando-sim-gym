@@ -92,6 +92,7 @@ export function hardMoveSlot(state, player) {
   return readyCombatPlans(state, player, closestEnemy(state, player))[0]?.slot;
 }
 
+const DIRECTIONS = [[0, 0], ...Array.from({ length: 8 }, (_, index) => dir(index * 4))];
 /** Sample at most the engine's 96 effects and at most eight directions plus standing. */
 export function hardDefense(state, player, original) {
   const input = { ...original, shield: false, dash: false },
@@ -128,69 +129,72 @@ export function hardDefense(state, player, original) {
           player.y + vector[1] * speed * tick,
         ),
       ),
-    danger = (vector, speed) =>
-      threats.reduce((total, entity) => {
-        const template = compileMove(entity.move).templates[entity.templateId];
-        if (template.motion.kind === 'lob') {
-          // A lob is harmless until it lands at its marked point.
-          const landing = entity.flight - (entity.age - entity.arm),
-            at = { ...entity, x: entity.toX, y: entity.toY };
-          Object.assign(at, { previousX: at.x, previousY: at.y, previousAngle: entity.angle });
-          return (
-            total +
-            Number(
-              [1, 2, 3].some(
-                (tick) =>
-                  tick >= landing &&
-                  hitEntity(
-                    at,
-                    {
-                      x: player.x + vector[0] * speed * tick,
-                      y: player.y + vector[1] * speed * tick,
-                    },
-                    13 + lobBlast(entity.move, template),
-                  ),
-              ),
+    // Each threat's three projected poses do not depend on the direction tried.
+    projections = threats.map((entity) => {
+      const template = compileMove(entity.move).templates[entity.templateId],
+        pose = (x, y, previousX, previousY) => ({
+          geometries: entity.geometries,
+          linkTo: entity.linkTo,
+          angle: entity.angle,
+          previousAngle: entity.angle,
+          previousX,
+          previousY,
+          x,
+          y,
+        });
+      if (template.motion.kind === 'lob') {
+        // A lob is harmless until it lands at its marked point.
+        const at = pose(entity.toX, entity.toY, entity.toX, entity.toY);
+        return {
+          poses: [at, at, at],
+          landing: entity.flight - (entity.age - entity.arm),
+          radius: 13 + lobBlast(entity.move, template),
+        };
+      }
+      const [dx, dy] = dir(entity.angle),
+        travel = ['linear', 'bounce', 'return_to_owner'].includes(template.motion.kind)
+          ? entity.speed
+          : 0;
+      return {
+        poses: [1, 2, 3].map((tick) =>
+          pose(
+            entity.x + dx * travel * tick,
+            entity.y + dy * travel * tick,
+            entity.x + dx * travel * (tick - 1),
+            entity.y + dy * travel * (tick - 1),
+          ),
+        ),
+        landing: 0,
+        radius: 13,
+      };
+    }),
+    danger = (vector, speed) => {
+      let total = 0;
+      for (const { poses, landing, radius } of projections)
+        for (let tick = 1; tick <= 3; tick++)
+          if (
+            tick >= landing &&
+            hitEntity(
+              poses[tick - 1],
+              { x: player.x + vector[0] * speed * tick, y: player.y + vector[1] * speed * tick },
+              radius,
             )
-          );
-        }
-        const [dx, dy] = dir(entity.angle),
-          travel = ['linear', 'bounce', 'return_to_owner'].includes(template.motion.kind)
-            ? entity.speed
-            : 0;
-        return (
-          total +
-          Number(
-            [1, 2, 3].some((tick) =>
-              hitEntity(
-                {
-                  ...entity,
-                  previousX: entity.x + dx * travel * (tick - 1),
-                  previousY: entity.y + dy * travel * (tick - 1),
-                  x: entity.x + dx * travel * tick,
-                  y: entity.y + dy * travel * tick,
-                  previousAngle: entity.angle,
-                },
-                { x: player.x + vector[0] * speed * tick, y: player.y + vector[1] * speed * tick },
-              ),
-            ),
-          )
-        );
-      }, 0),
-    directions = [[0, 0], ...Array.from({ length: 8 }, (_, index) => dir(index * 4))];
+          ) {
+            total++;
+            break;
+          }
+      return total;
+    },
+    directions = DIRECTIONS;
   const parry = builtinParry(state, player, input, threats);
   if (parry) return parry;
   input.x = desired[0];
   input.y = desired[1];
   if (legal(desired, walk) && danger(desired, walk) === 0) return input;
   const choices = directions
-    .map((vector, index) => ({
-      vector,
-      index,
-      risk: danger(vector, walk),
-      legal: legal(vector, walk),
-    }))
+    .map((vector, index) => ({ vector, index, legal: legal(vector, walk) }))
     .filter((choice) => choice.legal)
+    .map((choice) => ({ ...choice, risk: danger(choice.vector, walk) }))
     .sort(
       (a, b) =>
         a.risk - b.risk ||

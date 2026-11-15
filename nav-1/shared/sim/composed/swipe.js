@@ -95,9 +95,9 @@ export function resolveSwipe(state) {
         )
       )
         continue;
-      // Objects with health break; shots are knocked away.
-      if (target.maxHp > 0) damageEntity(state, target, SWIPE.damage, player.id, SWIPE_MOVE);
-      else deflect(state, target, player, SWIPE_MOVE);
+      // Deflectable shots are knocked away unharmed; other objects with health take damage.
+      if (deflectable(target)) deflect(state, target, player, SWIPE_MOVE);
+      else damageEntity(state, target, SWIPE.damage, player.id, SWIPE_MOVE);
     }
     for (const target of state.players) {
       if (target === player || target.dead || !swipeContact(player, target, angle, walls)) continue;

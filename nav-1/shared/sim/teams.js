@@ -78,14 +78,14 @@ export function resolveAppearance(profile = {}, team) {
 // With friendly fire off (Composed rooms), a teammate's attack does nothing.
 export function relationDamageScale(move, owner, target, state = {}) {
   if (!move || !owner || !target) return 1;
+  const self = owner.id === target.id;
+  // Most hits land on an opponent; decide that before parsing the colour.
+  if (!self && !(state.teamBattle && playerTeam(owner) && playerTeam(owner) === playerTeam(target)))
+    return 1;
+  if (self && !(isComponentFormat(state.formatVersion) && selfDamageEnabled(move, state))) return 0;
+  if (!self && state.friendlyFire === false) return 0;
   const channels = rgb(move.coreColor ?? move.presentation?.coreColor ?? move.color) || [0, 0, 0];
-  if (owner.id === target.id) {
-    const enabled = isComponentFormat(state.formatVersion) && selfDamageEnabled(move, state);
-    return enabled ? Math.min(channels[0], channels[1]) / 255 : 0;
-  }
-  if (state.teamBattle && playerTeam(owner) && playerTeam(owner) === playerTeam(target))
-    return state.friendlyFire === false ? 0 : channels[0] / 255;
-  return 1;
+  return self ? Math.min(channels[0], channels[1]) / 255 : channels[0] / 255;
 }
 export function recordTeamKill(state, target, owner) {
   const killer = typeof owner === 'string' ? state.players.find((p) => p.id === owner) : owner;

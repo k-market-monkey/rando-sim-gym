@@ -115,6 +115,9 @@ const templateSchema = obj({
 // Optional, so stored moves stay valid and keep their identity: true marks a
 // circular object that turns beams at its edge.
 templateSchema.properties.reflectsBeams = { type: 'boolean' };
+// Optional: false keeps a free-flying object from being deflected, as for bees.
+// Absent means true. Health does not decide deflection.
+templateSchema.properties.deflectable = { type: 'boolean' };
 // Optional presentation hint with no simulation effect; absent means 'auto'.
 templateSchema.properties.visual = en('auto', 'slash', 'thrust');
 const moveSchema = obj({

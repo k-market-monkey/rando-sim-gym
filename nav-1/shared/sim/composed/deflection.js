@@ -3,7 +3,8 @@
 // the striker, belongs to them and has its full lifetime again. A homing
 // projectile stops steering and flies straight; a big one comes back slower.
 // A projectile that was already deflected breaks instead, so it cannot be
-// rallied forever.
+// rallied forever. A deflecting hit never damages the projectile; health only
+// matters to other attacks. A template opts out with `deflectable: false`.
 import { direction, clamp, q } from './geometry.js';
 import { compileMove } from './compiler.js';
 import { count } from './runtime.js';
@@ -21,11 +22,11 @@ export const DEFLECT = Object.freeze({
 export const deflectSpeedScale = (radius) =>
   clamp(1 - (radius - DEFLECT.fullSpeedRadius) * DEFLECT.slowPerRadius, DEFLECT.minSpeedScale, 1);
 
-/** Any free-flying object without health, built-in or generated. */
+/** Any free-flying object, built-in or generated, unless its template opts out. */
 export function deflectable(entity) {
-  if (entity.removed || entity.maxHp > 0 || entity.solid || entity.anchorIds) return false;
+  if (entity.removed || entity.solid || entity.anchorIds) return false;
   const template = compileMove(entity.move).templates[entity.templateId];
-  return FREE_FLIGHT.includes(template.motion.kind);
+  return FREE_FLIGHT.includes(template.motion.kind) && template.deflectable !== false;
 }
 
 /** Sends the projectile away from the striker along the line between them,

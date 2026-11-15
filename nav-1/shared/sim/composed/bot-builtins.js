@@ -88,6 +88,10 @@ export function builtinOffense(state, player, target, original) {
   return input;
 }
 
+/** A shot one swipe handles: it deflects, or it breaks in one hit (bees). */
+const swipeAnswers = (effect) =>
+  deflectable(effect) || (effect.speed > 0 && effect.maxHp > 0 && effect.hp <= SWIPE.damage);
+
 /** Intercept a hostile shot only when Swipe will contact before the shot hits.
  * Resolve happens after projectile motion, including the commit tick. */
 export function builtinParry(state, player, original, effects = state.entities) {
@@ -95,7 +99,7 @@ export function builtinParry(state, player, original, effects = state.entities) 
   const walls = allWalls(state),
     horizon = SWIPE.windup + 1;
   for (const effect of effects.slice(0, 96)) {
-    if (effect.owner === player.id || effect.age < effect.arm || !deflectable(effect)) continue;
+    if (effect.owner === player.id || effect.age < effect.arm || !swipeAnswers(effect)) continue;
     const owner = state.players.find((p) => p.id === effect.owner);
     if (state.teamBattle && owner?.team === player.team) continue;
     const [dx, dy] = dir(effect.angle),

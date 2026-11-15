@@ -85,16 +85,21 @@ export function segmentRect(ax, ay, bx, by, w, pad = 0) {
     hi = 1;
   const dx = bx - ax,
     dy = by - ay;
-  for (const [origin, delta, min, max] of [
-    [ax, dx, w.x - pad, w.x + w.w + pad],
-    [ay, dy, w.y - pad, w.y + w.h + pad],
-  ]) {
-    if (Math.abs(delta) < 1e-9) {
-      if (origin < min || origin > max) return false;
-      continue;
-    }
-    let t0 = (min - origin) / delta,
-      t1 = (max - origin) / delta;
+  if (Math.abs(dx) < 1e-9) {
+    if (ax < w.x - pad || ax > w.x + w.w + pad) return false;
+  } else {
+    let t0 = (w.x - pad - ax) / dx,
+      t1 = (w.x + w.w + pad - ax) / dx;
+    if (t0 > t1) [t0, t1] = [t1, t0];
+    lo = Math.max(lo, t0);
+    hi = Math.min(hi, t1);
+    if (lo > hi) return false;
+  }
+  if (Math.abs(dy) < 1e-9) {
+    if (ay < w.y - pad || ay > w.y + w.h + pad) return false;
+  } else {
+    let t0 = (w.y - pad - ay) / dy,
+      t1 = (w.y + w.h + pad - ay) / dy;
     if (t0 > t1) [t0, t1] = [t1, t0];
     lo = Math.max(lo, t0);
     hi = Math.min(hi, t1);
