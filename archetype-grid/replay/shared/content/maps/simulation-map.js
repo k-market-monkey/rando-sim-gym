@@ -82,12 +82,8 @@ export const SIMULATION_MAP_V2 = {
 export const SIMULATION_MAP = {
   ...SIMULATION_MAP_V2,
   revision: 3,
-  width: 440,
-  height: 440,
   walls: [
     { x: 120, y: 120, w: 40, h: 40 },
-    { x: 280, y: 280, w: 40, h: 40 },
+    { x: 240, y: 240, w: 40, h: 40 },
   ],
-  spawnSets: {2:[[80,220],[360,220]],3:[[80,80],[360,360],[360,80]],4:[[80,80],[360,360],[360,80],[80,360]]},
-  respawnCandidates:[[80,80],[360,360],[360,80],[80,360],[80,220],[360,220]],
 };

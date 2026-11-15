@@ -12,7 +12,6 @@ import { legalFighterPosition } from '../arena-physics.js';
 import { hypot, square } from '../exact-math.js';
 import { itemPace } from './items.js';
 import { teleportAim } from './teleport-aim.js';
-import { commits, noticed, tactical } from './bot-skill.js';
 
 /** How far a lob's landing spawns reach: the widest shape its terminal events place. */
 function lobBlast(move, template) {
@@ -63,7 +62,7 @@ export function readyCombatPlans(state, player, target) {
         !resource.overheated &&
         resource.sequence !== 2 &&
         (!['charges', 'magazine'].includes(move.resource.kind) || resource.ammo > 0) &&
-        (tactical(state) && move.casterAction.kind === 'teleport'
+        (state.botDifficulty === 'hard' && move.casterAction.kind === 'teleport'
           ? teleportReady(state, player, move, target)
           : (resource.sequence === 1 ||
               distance <
@@ -74,7 +73,7 @@ export function readyCombatPlans(state, player, target) {
     )
     .sort(
       (a, b) =>
-        (tactical(state)
+        (state.botDifficulty === 'hard'
           ? Number(b.move.casterAction.kind === 'teleport') -
             Number(a.move.casterAction.kind === 'teleport')
           : 0) ||
@@ -110,7 +109,6 @@ export function hardDefense(state, player, original) {
       .sort((a, b) => a.id - b.id)
       .filter((entity) => {
         if (entity.removed || entity.ttl <= 0 || entity.arm - entity.age > 3) return false;
-        if (!noticed(state, player, entity)) return false;
         const owner = state.players.find((candidate) => candidate.id === entity.owner);
         if (
           entity.owner === player.id
@@ -188,12 +186,7 @@ export function hardDefense(state, player, original) {
       return total;
     },
     directions = DIRECTIONS;
-  const parry = builtinParry(
-    state,
-    player,
-    input,
-    threats.filter((entity) => commits(state, player, 'parry', entity.id)),
-  );
+  const parry = builtinParry(state, player, input, threats);
   if (parry) return parry;
   input.x = desired[0];
   input.y = desired[1];
@@ -213,15 +206,14 @@ export function hardDefense(state, player, original) {
     );
   const best = choices[0];
   if (best?.risk === 0) return { ...input, x: best.vector[0], y: best.vector[1] };
-  if (shieldReady(state, player) && player.shield > 30 && commits(state, player, 'shield'))
+  if (shieldReady(state, player) && player.shield > 30)
     return { ...input, x: best?.vector[0] || 0, y: best?.vector[1] || 0, shield: true };
   if (
     state.dashEnabled !== false &&
     !player.dashCooldown &&
     !player.shieldRelease &&
     !player.shielding &&
-    !circling(state, player.id) &&
-    commits(state, player, 'dash')
+    !circling(state, player.id)
   ) {
     const escape = directions
       .slice(1)

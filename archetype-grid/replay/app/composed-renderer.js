@@ -20,7 +20,6 @@ import {
   drawSlash,
   drawThrust,
   drawBeam,
-  isBloomBeam,
   drawLob,
   drawLobTelegraph,
 } from './composed-effects.js';
@@ -58,9 +57,6 @@ function footprint(ctx, g, linkLength) {
     ctx.closePath();
   }
 }
-/** A free beam's full length, which its taper is measured against (as `beamLength` in the simulation). */
-const beamFullLength = (template) =>
-  template?.ray?.kind === 'reflect' ? template.ray.range : (template?.geometry?.[0]?.length ?? 0);
 function glyph(ctx, move, color) {
   if (!move.sprite) return;
   for (let y = 0; y < 8; y++)
@@ -187,10 +183,7 @@ export function drawComposedEntity(ctx, e, t, drawCharacter, state, displayColor
   // Labels follow the body, which a lob draws above its true position.
   let body = { x: e.x, y: e.y };
   // A traced beam draws its path, which is empty when it starts inside a wall.
-  // A growing or tapered one blooms along that path.
-  if (e.raySegments && style === 'beam')
-    drawBeam(ctx, e, color, e.linkTo ? 0 : beamFullLength(template));
-  else if (e.raySegments) drawReflectedRay(ctx, e, color);
+  if (e.raySegments) drawReflectedRay(ctx, e, color);
   else if (e.actor?.kind === 'decoy' && drawCharacter) {
     ctx.save();
     ctx.globalAlpha = waiting ? 0.45 : 1;
@@ -221,6 +214,7 @@ export function drawComposedEntity(ctx, e, t, drawCharacter, state, displayColor
     // Armed melee gets its strike; while waiting it shows the plain warning.
     if (style === 'slash' && !waiting) drawSlash(ctx, e, template, color, footprint);
     else if (style === 'thrust' && !waiting) drawThrust(ctx, e, template, color, footprint);
+    else if (style === 'beam') drawBeam(ctx, e, color, footprint, linkLength);
     else
       for (const g of e.geometries || [e.geometry]) {
         footprint(ctx, g, linkLength);
@@ -423,9 +417,7 @@ export function drawComposedTelegraphs(ctx, state, attackColors) {
         ctx.stroke();
         ctx.restore();
       }
-      const preview = { raySegments, warning: true, geometries: root.geometry };
-      if (isBloomBeam(root.geometry[0])) drawBeam(ctx, preview, color, beamFullLength(root));
-      else drawReflectedRay(ctx, preview, color);
+      drawReflectedRay(ctx, { raySegments, warning: true, geometries: root.geometry }, color);
       continue;
     }
     const angle = direction(attack.aimX - p.x, attack.aimY - p.y),

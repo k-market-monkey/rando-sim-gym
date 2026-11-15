@@ -30,7 +30,7 @@ export function simulationOptions(options) {
     shieldEnabled: true,
     swipeEnabled: true,
     shootEnabled: true,
-    botDifficulty: 'moderate',
+    botDifficulty: 'hard',
   };
 }
 // Independent deterministic draws: side assignment, then each player's x/y.
@@ -51,7 +51,7 @@ export function simulationSpawn(state, index, deaths = 0) {
   return [right ? map.width - x : x, y];
 }
 /** Deaths are primary. Dead fighters have no health until they respawn. */
-export const simulationHealth = (player) => (player.dead ? player.maxHp : player.hp);
+export const simulationHealth = (player) => (player.dead ? 0 : player.hp);
 /** Positive means a wins; health can never outweigh even one death. */
 export const simulationComparison = (a, b) =>
   b.deaths - a.deaths || simulationHealth(a) - simulationHealth(b);

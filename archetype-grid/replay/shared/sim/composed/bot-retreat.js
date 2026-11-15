@@ -1,8 +1,7 @@
 // Hard-bot retreat direction. Instead of backing straight away from the target into
-// a wall, the arena edge or the closing survival ring, the bot scores the eight
-// directions it can walk (threat avoidance snaps input to them) by the open floor
-// in front of them. Open retreats win; a blocked one turns lateral; a cornered bot
-// slides out past the target's side. Only the walking
+// a wall, the arena edge or the closing survival ring, the bot scores sixteen
+// directions by the open floor in front of them. Open retreats win; a blocked one
+// turns lateral; a cornered bot slides out past the target's side. Only the walking
 // direction changes, so attacks, Dash and Shield stay with the shared policy.
 import { legalFighterPosition } from '../arena-physics.js';
 import { survivalBounds } from '../survival.js';
@@ -14,9 +13,8 @@ export const REACH = 90;
 const STEP = 15,
   // Less open floor than this straight back means the bot is cornered.
   CORNERED = 40,
-  // The previous direction's head start, about one step of open floor plus the
-  // difference between backing straight away and going sideways.
-  KEEP = 40;
+  // A new direction must beat the previous one by this much to replace it.
+  KEEP = 12;
 
 /** Steps the bot may stand on: legal floor, inside the survival ring if one closes. */
 function standable(state, map, walls) {
@@ -46,7 +44,7 @@ export function retreatDirection({ state, map, walls, player, target, memory, si
   const ok = standable(state, map, walls),
     [ax, ay] = unit(player.x - target.x, player.y - target.y),
     directions = [];
-  for (let i = 0; i < 32; i += 4) {
+  for (let i = 0; i < 32; i += 2) {
     const [x, y] = dir(i);
     directions.push({ x, y, away: x * ax + y * ay, lateral: (ay * x - ax * y) * side });
   }
@@ -55,9 +53,8 @@ export function retreatDirection({ state, map, walls, player, target, memory, si
     previous = memory.retreat;
   let best = null;
   for (const d of directions) {
-    // Retreats stay on the far side of the target; a cornered bot may slide past it,
-    // but not walk straight at it.
-    if (d.away < (cornered ? -0.8 : 0)) continue;
+    // Retreats stay on the far side of the target; a cornered bot may slide past it.
+    if (d.away < (cornered ? -0.5 : 0)) continue;
     const open = room(ok, player, d.x, d.y);
     if (open < STEP) continue;
     // Like strafing, a retreat never walks an open shot back behind a wall; the
@@ -67,13 +64,11 @@ export function retreatDirection({ state, map, walls, player, target, memory, si
       sightBlocked(walls, { x: player.x + d.x * STEP, y: player.y + d.y * STEP }, target)
     )
       continue;
-    // The previous direction keeps a head start, so scores that trade places from
-    // one step to the next cannot turn the retreat back every tick.
     const score =
       open +
       d.away * (cornered ? 10 : 40) +
       d.lateral * 8 +
-      (previous && d.x === previous.x && d.y === previous.y ? KEEP : 0);
+      (previous && d.x * previous.x + d.y * previous.y > 0.9 ? KEEP : 0);
     if (!best || score > best.score) best = { ...d, score };
   }
   memory.retreat = best && { x: best.x, y: best.y };

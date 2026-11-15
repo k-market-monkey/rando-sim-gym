@@ -12,7 +12,6 @@ import { legalFighterPosition, routeOnFloor } from '../arena-physics.js';
 import { hypot, square } from '../exact-math.js';
 import { allWalls, circling } from './queries.js';
 import { closestEnemy, hardMoveSlot, hardDefense } from './hard-bot.js';
-import { tactical } from './bot-skill.js';
 import { hardMovement, noteHardInput } from './bot-movement.js';
 import {
   builtinsAvailable,
@@ -212,10 +211,10 @@ function normalInput(s, id, preferredSlot, context = {}) {
 export function botInput(state, id) {
   const player = state.players.find((candidate) => candidate.id === id);
   if (!player || player.dead) return {};
-  const selected = tactical(state) ? hardMoveSlot(state, player) : undefined;
+  const selected = state.botDifficulty === 'hard' ? hardMoveSlot(state, player) : undefined;
   const context = {};
   let input = normalInput(state, id, selected, context);
-  if (tactical(state)) {
+  if (state.botDifficulty === 'hard') {
     if (selected === undefined) {
       input.pressedSlots = [];
       if (player.channel == null) input.heldSlots = [];
@@ -223,7 +222,8 @@ export function botInput(state, id) {
     input = hardMovement(state, player, input, context);
     input = hardDefense(state, player, input);
   }
-  if (!tactical(state) && state.tick % 3 === 0) input = builtinParry(state, player, input) || input;
+  if (state.botDifficulty !== 'hard' && state.tick % 3 === 0)
+    input = builtinParry(state, player, input) || input;
   const target = closestEnemy(state, player);
   input = builtinOffense(state, player, target, input);
   const safe = survivalInput(state, player, input, getStateMap(state), allWalls(state));
@@ -233,7 +233,7 @@ export function botInput(state, id) {
     safe.pressedSlots = safe.pressedSlots?.filter(stays);
     safe.heldSlots = safe.heldSlots?.filter(stays);
   }
-  if (tactical(state)) noteHardInput(state, player, safe);
+  if (state.botDifficulty === 'hard') noteHardInput(state, player, safe);
   return safe;
 }
 /** A bot teleports to a legal point beside its goal instead of aiming at the target. */

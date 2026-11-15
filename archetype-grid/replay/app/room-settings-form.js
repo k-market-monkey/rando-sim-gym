@@ -40,7 +40,7 @@ export function roomSettingsFormMarkup(settings, { host, custom = {}, advancedOp
   const advanced = rows(true);
   const rules =
     settings.mechanicsVersion === 'composed'
-      ? `Bots: ${(settings.botDifficulty || 'normal')[0].toUpperCase() + (settings.botDifficulty || 'normal').slice(1)}`
+      ? `Bots: ${settings.botDifficulty === 'hard' ? 'Hard' : 'Normal'}`
       : 'Classic uses Most kills instead of Capture the flag.';
   const objective =
     settings.mode === 'ctf'
