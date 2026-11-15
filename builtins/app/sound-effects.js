@@ -173,6 +173,13 @@ export function playCombatSounds(context, state, previousState, { localId } = {}
     } else if (event.type === 'deflect') {
       spec = { wave: 'square', frequency: 1180, slide: 520, duration: 70 };
       level = local ? 0.05 : 0.035;
+    } else if (event.type === 'shot-break') {
+      spec = { wave: 'square', frequency: 900, slide: -700, duration: 60 };
+      level = local ? 0.045 : 0.03;
+    } else if (event.type === 'perfect-block') {
+      spec = { wave: 'triangle', frequency: 1320, slide: 380, duration: 130 };
+      options.kind = 'orbit';
+      level = local ? 0.06 : 0.04;
     } else if (event.type === 'shieldbreak') {
       spec = { frequency: 540, slide: -410, duration: 240 };
       options.kind = 'wall';

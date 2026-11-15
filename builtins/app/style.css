@@ -834,6 +834,9 @@ select {
 .bar.shield div {
   background: var(--blue);
 }
+.bar.shield div[data-state='broken'] {
+  background: #e0483b;
+}
 .ability-list {
   display: flex;
   gap: 8px;

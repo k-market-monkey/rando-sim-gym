@@ -1,5 +1,5 @@
 import { createReplayPlayer, replayEnginePath, replayTime } from './replay-player.js';
-import { renderArena } from './renderer.js';
+import { renderArena, receiveEffects } from './renderer.js';
 const $ = (id) => document.getElementById(id);
 const base = new URL('../', import.meta.url);
 let report,
@@ -35,6 +35,7 @@ function chooseGame(index) {
     row = pair.games[index];
   $('verification').textContent = 'Verifying replay…';
   player = createReplayPlayer(engine, row.game, {
+    onStep: (state) => receiveEffects(state.events),
     onMismatch: ({ tick }) => {
       $('verification').textContent = `Replay verification failed at tick ${tick}.`;
     },

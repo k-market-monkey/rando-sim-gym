@@ -102,11 +102,17 @@ export function updateHUD() {
     $('#hp-bar').style.width = Math.max(0, Math.min(100, (me.hp / (me.maxHp || 100)) * 100)) + '%';
     $('#shield-number').textContent = Math.ceil(me.shield);
     $('#shield-label').textContent = me.shieldLocked
-      ? 'SHIELD · RECHARGING'
+      ? 'SHIELD · BROKEN'
       : !me.shielding && me.shieldRelease > 0
         ? 'SHIELD · LOWERING'
-        : 'SHIELD';
+        : !me.shielding && me.shieldCooldown > 0
+          ? 'SHIELD · COOLDOWN'
+          : me.shieldPerfect > 0
+            ? 'SHIELD · PERFECT'
+            : 'SHIELD';
     $('#shield-bar').style.width = me.shield + '%';
+    // A broken shield refills in red until it can be raised again.
+    $('#shield-bar').dataset.state = me.shieldLocked ? 'broken' : '';
     if ($('#dash-status'))
       $('#dash-status').textContent = dashStatus(me, store.state.entities, TICK_RATE);
     $('#abilities').innerHTML = me.loadout

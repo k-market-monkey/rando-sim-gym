@@ -9,6 +9,7 @@ import { receiveEmotes, drawEmotes } from './emote-sprites.js';
 import { CHARACTER_SPRITES, sanitizeProfile } from '/rando-sim-gym/builtins/shared/content/characters.js';
 import { arenaSize } from './arena-size.js';
 import { SWIPE } from '/rando-sim-gym/builtins/shared/sim/composed/swipe.js';
+import { SHIELD } from '/rando-sim-gym/builtins/shared/sim/composed/shield.js';
 const bodies = CHARACTER_SPRITES;
 export function drawCharacter(ctx, p, x, y, scale = 3, t = 0, label = false) {
   ctx.save();
@@ -149,9 +150,17 @@ export function receiveEffects(events = []) {
   const now = performance.now();
   for (const event of events) {
     if (
-      ['hit', 'kill', 'shieldbreak', 'dash', 'teleport', 'swipe-contact', 'deflect'].includes(
-        event.type,
-      )
+      [
+        'hit',
+        'kill',
+        'shieldbreak',
+        'perfect-block',
+        'dash',
+        'teleport',
+        'swipe-contact',
+        'deflect',
+        'shot-break',
+      ].includes(event.type)
     )
       impactEffects.push({ ...event, born: now });
     else if (event.type === 'item')
@@ -183,6 +192,20 @@ function drawStrike(ctx, e, f, color = '#ffffff') {
     ctx.beginPath();
     ctx.arc(0, 0, reach, Math.max(-Math.PI / 4, sweep - 0.5), sweep);
     ctx.stroke();
+  } else if (e.type === 'shot-break') {
+    // A shot struck twice crumbles into a puff of fragments.
+    ctx.globalAlpha = 1 - f;
+    ctx.strokeStyle = '#d8d2c0';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, 3 + f * 10, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#fff6c2';
+    for (let i = 0; i < 6; i++) {
+      const angle = (i * Math.PI) / 3 + 0.4,
+        dist = 4 + f * 16;
+      ctx.fillRect(Math.cos(angle) * dist - 1.5, Math.sin(angle) * dist - 1.5, 3, 3);
+    }
   } else {
     // A bright spark with streaks pointing where the shot now flies.
     ctx.globalAlpha = 1 - f;
@@ -200,18 +223,91 @@ function drawStrike(ctx, e, f, color = '#ffffff') {
   }
   ctx.restore();
 }
+// Shield outcomes at the fighter's shield radius.
+const GUARD_EFFECTS = { 'perfect-block': 0.35, shieldbreak: 0.6 };
+function drawGuardEffect(ctx, e, f) {
+  ctx.save();
+  ctx.translate(e.x, e.y - 4);
+  if (e.type === 'shieldbreak') {
+    // The shield shatters: a red flash and shards flying outward.
+    ctx.globalAlpha = 0.35 * (1 - f * 3);
+    if (f < 1 / 3) {
+      ctx.fillStyle = '#ff4a3d';
+      ctx.beginPath();
+      ctx.arc(0, 0, 29, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1 - f;
+    ctx.strokeStyle = '#ff4a3d';
+    ctx.lineWidth = 3 * (1 - f) + 1;
+    ctx.beginPath();
+    ctx.arc(0, 0, 29 + f * 30, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#ff7a6b';
+    for (let i = 0; i < 10; i++) {
+      const angle = (i * Math.PI) / 5 + 0.3,
+        dist = 29 + f * (26 + (i % 3) * 9);
+      ctx.save();
+      ctx.translate(Math.cos(angle) * dist, Math.sin(angle) * dist);
+      ctx.rotate(angle + f * 4);
+      ctx.beginPath();
+      ctx.moveTo(-4, -2);
+      ctx.lineTo(5, 0);
+      ctx.lineTo(-3, 3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+    return;
+  }
+  // A clean flash: two bright rings and a four-point glint.
+  ctx.globalAlpha = 1 - f;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 3 * (1 - f) + 1;
+  ctx.beginPath();
+  ctx.arc(0, 0, 29 + f * 10, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = '#ffe9a3';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, 33 + f * 22, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = '#ffffff';
+  const glint = 10 + 8 * (1 - f);
+  for (let i = 0; i < 4; i++) {
+    ctx.rotate(Math.PI / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, -glint);
+    ctx.lineTo(2, 0);
+    ctx.lineTo(-2, 0);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
 function drawEffects(ctx, attackColors) {
   const now = performance.now();
   for (let i = impactEffects.length - 1; i >= 0; i--) {
     const e = impactEffects[i],
       age = (now - e.born) / 1000,
-      duration = e.type === 'kill' ? 0.65 : e.type === 'swipe-contact' ? 0.22 : 0.4;
+      duration =
+        GUARD_EFFECTS[e.type] ??
+        (e.type === 'kill'
+          ? 0.65
+          : e.type === 'swipe-contact' || e.type === 'shot-break'
+            ? 0.22
+            : 0.4);
     if (age > duration) {
       impactEffects.splice(i, 1);
       continue;
     }
-    if (e.type === 'swipe-contact' || e.type === 'deflect') {
+    if (e.type === 'swipe-contact' || e.type === 'deflect' || e.type === 'shot-break') {
       drawStrike(ctx, e, age / duration, attackColors?.get(e.playerId));
+      continue;
+    }
+    if (GUARD_EFFECTS[e.type]) {
+      drawGuardEffect(ctx, e, age / duration);
       continue;
     }
     const f = age / duration,
@@ -252,8 +348,9 @@ function drawEffects(ctx, attackColors) {
     ctx.restore();
   }
 }
-// The simulation blocks attacks for eight ticks after lowering a shield.
-const SHIELD_RELEASE_TICKS = 8,
+// The simulation blocks attacks for a few ticks after lowering a shield.
+const SHIELD_RELEASE_TICKS = SHIELD.release,
+  SHIELD_PERFECT_TICKS = SHIELD.perfect,
   shieldTransitions = new WeakMap();
 function drawShield(ctx, canvas, p, t) {
   let transitions = shieldTransitions.get(canvas);
@@ -271,6 +368,16 @@ function drawShield(ctx, canvas, p, t) {
     ctx.arc(p.x, p.y - 4, 29, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+    // The perfect-block window: a bright outer ring that closes as it ends.
+    if (p.shieldPerfect > 0) {
+      const left = Math.min(1, p.shieldPerfect / SHIELD_PERFECT_TICKS);
+      ctx.globalAlpha = 0.35 + 0.65 * left;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y - 4, 31 + 4 * left, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.restore();
     return;
   }
