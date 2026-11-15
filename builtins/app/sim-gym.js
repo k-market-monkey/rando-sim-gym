@@ -14,6 +14,30 @@ function fighterName(id, pair = report.pairs[pairIndex]) {
 function stats(f) {
   return `${f.deaths} deaths · ${f.dead ? 0 : f.hp} HP · ${Math.round(f.shield)} shield`;
 }
+function scoreCell(fighter, winner, seat) {
+  const cell = document.createElement('td'),
+    result = winner === null ? 'draw' : winner === fighter.id ? 'win' : 'loss',
+    health = fighter.dead ? 0 : fighter.hp,
+    badge = document.createElement('span'),
+    deaths = document.createElement('div'),
+    count = document.createElement('strong'),
+    hp = document.createElement('div'),
+    bar = document.createElement('progress');
+  cell.className = `gym-score gym-score-${seat}`;
+  cell.dataset.result = result;
+  badge.className = 'gym-result';
+  badge.textContent = result === 'win' ? 'Win' : result === 'loss' ? 'Loss' : 'Draw';
+  count.textContent = String(fighter.deaths);
+  deaths.className = 'gym-deaths';
+  deaths.append(count, ` ${fighter.deaths === 1 ? 'death' : 'deaths'}`);
+  hp.className = 'gym-health';
+  hp.textContent = `${Math.round(health * 10) / 10} / ${fighter.maxHp} HP`;
+  bar.max = fighter.maxHp;
+  bar.value = health;
+  bar.setAttribute('aria-label', `${fighterName(fighter.id)} remaining health`);
+  cell.append(badge, deaths, hp, bar);
+  return cell;
+}
 function draw() {
   if (!player) return;
   renderArena($('gym-canvas'), player.state, { labels: true });
@@ -102,16 +126,12 @@ function choosePair(index, game = 0) {
     button.addEventListener('click', () => chooseGame(i));
     td.append(button);
     tr.append(td);
-    for (const value of [
-      fighterName(row.winner),
-      stats(row.fighters[0]),
-      stats(row.fighters[1]),
-      row.seed,
-    ]) {
-      const cell = document.createElement('td');
-      cell.textContent = String(value);
-      tr.append(cell);
-    }
+    tr.append(scoreCell(row.fighters[0], row.winner, 'a'));
+    tr.append(scoreCell(row.fighters[1], row.winner, 'b'));
+    const seed = document.createElement('td');
+    seed.className = 'gym-seed';
+    seed.textContent = String(row.seed);
+    tr.append(seed);
     $('games').append(tr);
   });
   $('viewer').hidden = false;

@@ -6,7 +6,7 @@
     <title>Sim gym — RANDO</title>
     <link rel="stylesheet" href="./app/style.css" />
     <link rel="stylesheet" href="./app/replay.css" />
-    <link rel="stylesheet" href="./app/sim-gym.css" />
+    <link rel="stylesheet" href="./app/sim-gym.css?v=scores" />
   </head>
   <body class="replay-page">
     <main class="replay-main">
@@ -23,14 +23,13 @@
         <div class="gym-table-wrap">
           <table>
             <caption>
-              Games in this pair
+              Fewer deaths wins · Remaining health breaks ties
             </caption>
             <thead>
               <tr>
                 <th>Game</th>
-                <th>Winner</th>
-                <th id="a-heading"></th>
-                <th id="b-heading"></th>
+                <th id="a-heading" class="gym-score-a" scope="col"></th>
+                <th id="b-heading" class="gym-score-b" scope="col"></th>
                 <th>Seed</th>
               </tr>
             </thead>
@@ -69,6 +68,6 @@
         </details>
       </section>
     </main>
-    <script type="module" src="./app/sim-gym.js"></script>
+    <script type="module" src="./app/sim-gym.js?v=scores"></script>
   </body>
 </html>
