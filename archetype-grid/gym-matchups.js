@@ -8,7 +8,26 @@ function node(tag, text, className) {
 function health(fighter) {
   return Math.round((fighter.dead ? 0 : fighter.hp) * 10) / 10;
 }
+const replayDialog = $('replay-dialog');
+const replayFrame = $('replay-frame');
+$('close-replay').addEventListener('click', () => replayDialog.close());
+replayDialog.addEventListener('close', () => {
+  replayFrame.src = 'about:blank';
+});
+replayFrame.addEventListener('load', () => {
+  const doc = replayFrame.contentDocument;
+  if (!doc) return;
+  const style = doc.createElement('style');
+  style.textContent = `h1,#overview,#match-title,#verdict,#live-stats,details{display:none}
+    .replay-main{padding:4px!important;margin:0 auto!important}
+    #gym-canvas{width:min(100%,calc(100vh - 150px));height:auto;margin:0 auto}
+    .replay-controls{margin-top:8px}`;
+  doc.head.append(style);
+});
 function render(report, group) {
+  const expectedRow = group.id === 'melee-anti';
+  $('results').style.setProperty('--row', expectedRow ? '#78f0c5' : '#f574a5');
+  $('results').style.setProperty('--column', expectedRow ? '#f574a5' : '#78f0c5');
   for (const button of $('matchups').children)
     button.setAttribute('aria-pressed', String(button.dataset.id === group.id));
   $('heading').textContent = group.label;
@@ -21,7 +40,7 @@ function render(report, group) {
     node('span', `${group.rowCode} = ${group.rowLabel}`, 'row-color'),
     node('span', ' · '),
     node('span', `${group.columnCode} = ${group.columnLabel}`, 'column-color'),
-    node('span', ' · D = draw'),
+    node('span', ' · D = draw · Blue/green = expected winner; magenta = other archetype'),
   );
   const grid = $('grid');
   grid.replaceChildren();
@@ -61,6 +80,14 @@ function render(report, group) {
         url.searchParams.set('pair', pair.id);
         url.searchParams.set('game', game.id);
         link.href = url.href;
+        link.addEventListener('click', (event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          $('replay-title').textContent = `${pair.moves.join(' vs ')} · Game ${game.id}`;
+          replayFrame.title = $('replay-title').textContent;
+          replayFrame.src = url.href;
+          replayDialog.showModal();
+        });
         const [a, b] = game.fighters;
         link.setAttribute(
           'aria-label',

@@ -153,3 +153,39 @@ td {
     text-align: left;
   }
 }
+
+#replay-dialog {
+  width: min(840px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100dvh - 24px);
+  padding: 12px;
+  border: 1px solid #49503f;
+  border-radius: 8px;
+  background: #141712;
+  color: #f0f3e9;
+  overflow: hidden;
+}
+#replay-dialog::backdrop {
+  background: #000c;
+}
+.replay-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.replay-heading h2 {
+  margin: 0;
+  font-size: 16px;
+}
+#close-replay {
+  flex-shrink: 0;
+  padding: 8px 10px;
+}
+#replay-frame {
+  display: block;
+  width: 100%;
+  height: min(850px, calc(100dvh - 120px));
+  border: 0;
+}
