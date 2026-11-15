@@ -1,0 +1,175 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #10181f;
+  color: #ecf0f4;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 1280px;
+  margin: auto;
+  padding: 32px 24px 64px;
+}
+h1 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  margin: 8px 0;
+  letter-spacing: -0.04em;
+}
+h2 {
+  margin-bottom: 10px;
+}
+p {
+  line-height: 1.55;
+}
+header {
+  border-bottom: 1px solid #42505c;
+  padding-bottom: 16px;
+}
+.eyebrow {
+  color: #96c8de;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.caution {
+  color: #f6d69c;
+}
+.muted,
+caption {
+  color: #b6c3ce;
+}
+section {
+  margin-top: 32px;
+}
+.arena-control {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 24px 0;
+}
+select {
+  font: inherit;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #879ba8;
+  background: #202f3a;
+  color: inherit;
+}
+.arena-control p {
+  margin: 0;
+}
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid #42505c;
+  border-radius: 8px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+caption {
+  text-align: left;
+  padding: 12px;
+}
+th,
+td {
+  border: 1px solid #42505c;
+  text-align: center;
+  padding: 0;
+}
+th {
+  background: #1c2933;
+  padding: 12px 8px;
+  min-width: 100px;
+}
+tbody th {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+td {
+  min-width: 80px;
+}
+td a,
+td span {
+  display: block;
+  padding: 16px 8px;
+  color: #fff;
+  font-weight: 700;
+}
+a:hover {
+  background: #ffffff18;
+}
+:focus-visible {
+  outline: 3px solid #ffdd8b;
+  outline-offset: -3px;
+}
+.legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, hsl(0 42% 23%), hsl(110 42% 23%), hsl(220 42% 23%));
+  border-radius: 8px;
+  margin: 16px 0;
+  font-size: 0.8rem;
+  color: #fff;
+}
+#diagnostics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: 16px;
+}
+article {
+  min-width: 0;
+  padding: 18px;
+  background: #1c2933;
+  border: 1px solid #42505c;
+  border-radius: 8px;
+}
+article h3 {
+  margin: 0;
+}
+article p {
+  margin: 6px 0 16px;
+}
+dl {
+  margin: 0;
+}
+dt {
+  color: #b6c3ce;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+dd {
+  margin: 4px 0 0;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+#provenance,
+#definitions {
+  padding: 0 0 12px;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  main {
+    padding: 20px 12px 40px;
+  }
+  th {
+    min-width: 84px;
+  }
+  .legend {
+    font-size: 0.7rem;
+  }
+}
