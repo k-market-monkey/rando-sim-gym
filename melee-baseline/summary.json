@@ -1,0 +1,3480 @@
+{
+  "format": 1,
+  "sourceCommit": "41503c6",
+  "seed": 240913285,
+  "engineBuild": "composed-b9001",
+  "engineFingerprint": "5ab124d88562c3be3af02ae4c3f5501cf056192c4fd697d0c0fbeb7de14b34f4",
+  "inputPolicy": {
+    "revision": "composed-builtins-styles-v2",
+    "style": "balanced"
+  },
+  "gamesPerPair": 24,
+  "rules": {
+    "ticks": 750,
+    "seconds": 25,
+    "map": "balance-foundry",
+    "width": 440,
+    "height": 440,
+    "botDifficulty": "moderate",
+    "movementStyle": "balanced",
+    "respawnScoringHealth": "full",
+    "builtins": [
+      "dash",
+      "shield",
+      "swipe",
+      "shoot"
+    ]
+  },
+  "pairs": [
+    {
+      "id": 1,
+      "moves": [
+        "lunge slash",
+        "spinning sweep"
+      ],
+      "wins": {
+        "a": 14,
+        "b": 7,
+        "draws": 3
+      },
+      "games": [
+        {
+          "id": 1,
+          "seed": 240914294,
+          "winner": null,
+          "firstMoveSeat": "a",
+          "score": 0.5,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 116,
+              "builtin": 84,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "seed": 240922213,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 112,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 136,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 92,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 92
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "seed": 240930132,
+          "winner": null,
+          "firstMoveSeat": "a",
+          "score": 0.5,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 120,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 100,
+              "builtin": 100,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "seed": 240938051,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 100,
+              "builtin": 116,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 68,
+              "builtin": 132,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 84,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 84
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "seed": 240945970,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 144,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 80,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 84,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 84
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "seed": 240953889,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 64,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 184,
+              "builtin": 84,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 12
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "seed": 240961808,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 124,
+              "builtin": 96,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 84,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 40,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 40
+            },
+            {
+              "id": "b",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 80
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "seed": 240969727,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 84,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 44,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 44
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "seed": 240977646,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 104,
+              "builtin": 52,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 128,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 68,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 68
+            },
+            {
+              "id": "b",
+              "hp": 44,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 44
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "seed": 240985565,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 120,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 124,
+              "builtin": 44,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "seed": 240993484,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 180,
+              "builtin": 120,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 84,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 4,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 4
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "seed": 241001403,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 96,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 124,
+              "builtin": 68,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 8,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 8
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "seed": 241009322,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 96,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 76,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 24,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 24
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "seed": 241017241,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 68,
+              "builtin": 96,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 116,
+              "builtin": 112,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 72,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 72
+            },
+            {
+              "id": "b",
+              "hp": 36,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 36
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "seed": 241025160,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 120,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 84,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 44,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 44
+            },
+            {
+              "id": "b",
+              "hp": 72,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 72
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "seed": 241033079,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 80,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 140,
+              "builtin": 60,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 44,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 44
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "seed": 241040998,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 156,
+              "builtin": 84,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 64,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 95,
+              "scoringHp": 12
+            },
+            {
+              "id": "b",
+              "hp": 60,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 60
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "seed": 241048917,
+          "winner": null,
+          "firstMoveSeat": "b",
+          "score": 0.5,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 108,
+              "builtin": 92,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 92,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "seed": 241056836,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 56,
+              "builtin": 128,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 60,
+              "builtin": 164,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 76,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 95.5,
+              "scoringHp": 76
+            },
+            {
+              "id": "b",
+              "hp": 16,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 16
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "seed": 241064755,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 112,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 176,
+              "builtin": 44,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 97.5,
+              "scoringHp": 80
+            },
+            {
+              "id": "b",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 12
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "seed": 241072674,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 140,
+              "builtin": 60,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 96,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 28,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 28
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "seed": 241080593,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 124,
+              "builtin": 92,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 100,
+              "builtin": 68,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 84,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 84
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "seed": 241088512,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 144,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 12
+            },
+            {
+              "id": "b",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 95,
+              "scoringHp": 32
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "seed": 241096431,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 96,
+              "builtin": 96,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 100,
+              "builtin": 120,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 80
+            },
+            {
+              "id": "b",
+              "hp": 8,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "moves": [
+        "lunge slash",
+        "spear thrust"
+      ],
+      "wins": {
+        "a": 5,
+        "b": 15,
+        "draws": 4
+      },
+      "games": [
+        {
+          "id": 1,
+          "seed": 240915303,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 140,
+              "builtin": 36,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 166,
+              "builtin": 86,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 48,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 48
+            },
+            {
+              "id": "b",
+              "hp": 24,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 24
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "seed": 240923222,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 110,
+              "builtin": 90,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 120,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 16,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 16
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "seed": 240931141,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 200,
+              "builtin": 0,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 186,
+              "builtin": 86,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 28,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 28
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "seed": 240939060,
+          "winner": null,
+          "firstMoveSeat": "b",
+          "score": 0.5,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 156,
+              "builtin": 44,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 160,
+              "builtin": 40,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "seed": 240946979,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 208,
+              "builtin": 32,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 98,
+              "builtin": 110,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 92,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 92
+            },
+            {
+              "id": "b",
+              "hp": 60,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 60
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "seed": 240954898,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 132,
+              "builtin": 116,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 176,
+              "builtin": 92,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 52,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 52
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "seed": 240962817,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 108,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 184,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 36,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 36
+            },
+            {
+              "id": "b",
+              "hp": 4,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 95.5,
+              "scoringHp": 4
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "seed": 240970736,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 122,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 136,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 52,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 52
+            },
+            {
+              "id": "b",
+              "hp": 70,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 70
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "seed": 240978655,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 160,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 106,
+              "builtin": 94,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 60,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 60
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "seed": 240986574,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 204,
+              "builtin": 48,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 140,
+              "builtin": 60,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 48,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 48
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "seed": 240994493,
+          "winner": null,
+          "firstMoveSeat": "a",
+          "score": 0.5,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 88,
+              "builtin": 112,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 110,
+              "builtin": 90,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "seed": 241002412,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 164,
+              "builtin": 58,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 168,
+              "builtin": 32,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 78,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 78
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "seed": 241010331,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 108,
+              "builtin": 92,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 170,
+              "builtin": 60,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 70,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 70
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "seed": 241018250,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 128,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 104,
+              "builtin": 96,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 64,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 64
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "seed": 241026169,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 84,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 106,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 70,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 70
+            },
+            {
+              "id": "b",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 12
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "seed": 241034088,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 132,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 160,
+              "builtin": 36,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 4,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 85,
+              "scoringHp": 4
+            },
+            {
+              "id": "b",
+              "hp": 92,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 92
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "seed": 241042007,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 144,
+              "builtin": 56,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 170,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 58,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 58
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "seed": 241049926,
+          "winner": "b",
+          "firstMoveSeat": "b",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 144,
+              "builtin": 56,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 112,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 80
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "seed": 241057845,
+          "winner": null,
+          "firstMoveSeat": "a",
+          "score": 0.5,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 124,
+              "builtin": 76,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 110,
+              "builtin": 90,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "seed": 241065764,
+          "winner": null,
+          "firstMoveSeat": "b",
+          "score": 0.5,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 92,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 156,
+              "builtin": 44,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "seed": 241073683,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 92,
+              "builtin": 108,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 164,
+              "builtin": 94,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 42,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 42
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "seed": 241081602,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 84,
+              "builtin": 116,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 56,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 72,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 72
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "seed": 241089521,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 132,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 226,
+              "builtin": 56,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 18,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 18
+            },
+            {
+              "id": "b",
+              "hp": 4,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 97,
+              "scoringHp": 4
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "seed": 241097440,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 220,
+              "builtin": 80,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 136,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 3,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "moves": [
+        "spinning sweep",
+        "spear thrust"
+      ],
+      "wins": {
+        "a": 1,
+        "b": 23,
+        "draws": 0
+      },
+      "games": [
+        {
+          "id": 1,
+          "seed": 240916312,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 32,
+              "builtin": 144,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 172,
+              "builtin": 128,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 24,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 24
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "seed": 240924231,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 114,
+              "builtin": 128,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 48,
+              "builtin": 140,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 12,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 12
+            },
+            {
+              "id": "b",
+              "hp": 58,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 58
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "seed": 240932150,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 108,
+              "builtin": 136,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 106,
+              "builtin": 194,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 56,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 56
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "seed": 240940069,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 104,
+              "builtin": 140,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 96,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 56,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 56
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "seed": 240947988,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 68,
+              "builtin": 176,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 170,
+              "builtin": 130,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 56,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 56
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "seed": 240955907,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 112,
+              "builtin": 116,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 84,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 52,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 99,
+              "scoringHp": 52
+            },
+            {
+              "id": "b",
+              "hp": 72,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 72
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "seed": 240963826,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 40,
+              "builtin": 112,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 208,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 28,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 28
+            },
+            {
+              "id": "b",
+              "hp": 48,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 48
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "seed": 240971745,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 108,
+              "builtin": 192,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 64,
+              "builtin": 92,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 44,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 44
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "seed": 240979664,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 72,
+              "builtin": 64,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 126,
+              "builtin": 114,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 60,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 60
+            },
+            {
+              "id": "b",
+              "hp": 64,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 64
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "seed": 240987583,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 142,
+              "builtin": 144,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 64,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 48,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 48
+            },
+            {
+              "id": "b",
+              "hp": 14,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 14
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "seed": 240995502,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 40,
+              "builtin": 140,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 140,
+              "builtin": 134,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 26,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 26
+            },
+            {
+              "id": "b",
+              "hp": 20,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 20
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "seed": 241003421,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 158,
+              "builtin": 106,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 76,
+              "builtin": 124,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 36,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 36
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "seed": 241011340,
+          "winner": "a",
+          "firstMoveSeat": "a",
+          "score": 1,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 96,
+              "builtin": 180,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 44,
+              "builtin": 224,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 32,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 93.5,
+              "scoringHp": 32
+            },
+            {
+              "id": "b",
+              "hp": 24,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 24
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "seed": 241019259,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 204,
+              "builtin": 90,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 80,
+              "builtin": 100,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 20,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 20
+            },
+            {
+              "id": "b",
+              "hp": 6,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 87.5,
+              "scoringHp": 6
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "seed": 241027178,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 64,
+              "builtin": 132,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 154,
+              "builtin": 116,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 30,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 30
+            },
+            {
+              "id": "b",
+              "hp": 4,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 4
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "seed": 241035097,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 164,
+              "builtin": 122,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 80,
+              "builtin": 120,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 14,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 14
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "seed": 241043016,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 88,
+              "builtin": 84,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 140,
+              "builtin": 160,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 28,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 28
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "seed": 241050935,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 88,
+              "builtin": 132,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 48,
+              "builtin": 152,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 80
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "seed": 241058854,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 48,
+              "builtin": 72,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 116,
+              "builtin": 126,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 58,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 58
+            },
+            {
+              "id": "b",
+              "hp": 80,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 80
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "seed": 241066773,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 132,
+              "builtin": 168,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 32,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 64,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 64
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "seed": 241074692,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 48,
+              "builtin": 68,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 132,
+              "builtin": 168,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 84,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 84
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "seed": 241082611,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "right",
+            "b": "left"
+          },
+          "damage": {
+            "a": {
+              "special": 196,
+              "builtin": 104,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 48,
+              "builtin": 88,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 64,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 64
+            },
+            {
+              "id": "b",
+              "hp": 0,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": true,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "seed": 241090530,
+          "winner": "b",
+          "firstMoveSeat": "a",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 48,
+              "builtin": 128,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 132,
+              "builtin": 132,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 36,
+              "maxHp": 100,
+              "deaths": 2,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 36
+            },
+            {
+              "id": "b",
+              "hp": 24,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 2,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 24
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "seed": 241098449,
+          "winner": "a",
+          "firstMoveSeat": "b",
+          "score": 0,
+          "initialSides": {
+            "a": "left",
+            "b": "right"
+          },
+          "damage": {
+            "a": {
+              "special": 104,
+              "builtin": 196,
+              "reflected": 0,
+              "self": 0
+            },
+            "b": {
+              "special": 32,
+              "builtin": 68,
+              "reflected": 0,
+              "self": 0
+            }
+          },
+          "fighters": [
+            {
+              "id": "a",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 1,
+              "kills": 3,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            },
+            {
+              "id": "b",
+              "hp": 100,
+              "maxHp": 100,
+              "deaths": 3,
+              "kills": 1,
+              "dead": false,
+              "shield": 100,
+              "scoringHp": 100
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "elapsedSeconds": 5.864538403,
+  "totals": {
+    "lunge slash": {
+      "points": 22.5,
+      "games": 48,
+      "special": 6160,
+      "builtin": 3780,
+      "self": 0
+    },
+    "spinning sweep": {
+      "points": 9.5,
+      "games": 48,
+      "special": 3776,
+      "builtin": 4968,
+      "self": 0
+    },
+    "spear thrust": {
+      "points": 40,
+      "games": 48,
+      "special": 6750,
+      "builtin": 5378,
+      "self": 0
+    }
+  }
+}
