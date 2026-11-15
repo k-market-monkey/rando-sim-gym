@@ -161,7 +161,7 @@ async function load() {
   replay = await response.json();
   if (replay?.replay !== 1 || replay.id !== id || !Array.isArray(replay.round?.players))
     throw new Error('This replay has an unsupported recording format.');
-  const manifestResponse = await fetch('/rando-game/shared/sim/builds.json', { cache: 'no-cache' });
+  const manifestResponse = await fetch('/rando-sim-gym/shared/sim/builds.json', { cache: 'no-cache' });
   if (!manifestResponse.ok)
     throw new Error('The replay engine could not be loaded. Please try again.');
   const path = replayEnginePath(await manifestResponse.json(), replay.game?.engineBuild);

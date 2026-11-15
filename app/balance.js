@@ -284,7 +284,7 @@ async function loadCase(id) {
         retry(response.message || 'Test replay is still preparing.', () => loadCase(id));
       return;
     }
-    const manifest = await request('/rando-game/shared/sim/builds.json', signal);
+    const manifest = await request('/rando-sim-gym/shared/sim/builds.json', signal);
     const engine = await import(replayEnginePath(manifest, response.game.engineBuild));
     if (signal.aborted) return;
     player = createReplayPlayer(engine, response.game, {

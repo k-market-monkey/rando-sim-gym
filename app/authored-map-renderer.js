@@ -1,4 +1,4 @@
-import { getStateMap } from '/rando-game/shared/sim/map-state.js';
+import { getStateMap } from '/rando-sim-gym/shared/sim/map-state.js';
 import { arenaSize } from './arena-size.js';
 
 const palettes = {

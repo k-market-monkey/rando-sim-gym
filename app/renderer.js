@@ -1,12 +1,12 @@
 import { drawSurvivalRing } from './survival-renderer.js';
 import { drawItems, drawItemEffects, itemColor } from './item-renderer.js';
-import { getStateMap } from '/rando-game/shared/sim/map-state.js';
-import { TICK_RATE } from '/rando-game/shared/sim/classic/engine.js';
+import { getStateMap } from '/rando-sim-gym/shared/sim/map-state.js';
+import { TICK_RATE } from '/rando-sim-gym/shared/sim/classic/engine.js';
 import { drawMapDetails, drawAuthoredMap } from './map-renderer.js';
 import { getEngineView } from './engine-view.js';
 import { pixelSprite } from './sprite-renderer.js';
 import { receiveEmotes, drawEmotes } from './emote-sprites.js';
-import { CHARACTER_SPRITES, sanitizeProfile } from '/rando-game/shared/content/characters.js';
+import { CHARACTER_SPRITES, sanitizeProfile } from '/rando-sim-gym/shared/content/characters.js';
 import { arenaSize } from './arena-size.js';
 const bodies = CHARACTER_SPRITES;
 export function drawCharacter(ctx, p, x, y, scale = 3, t = 0, label = false) {

@@ -1,4 +1,4 @@
-import { getStateMap } from '/rando-game/shared/sim/map-state.js';
+import { getStateMap } from '/rando-sim-gym/shared/sim/map-state.js';
 
 function cover(ctx, r, industrial) {
   ctx.fillStyle = industrial ? '#505b62' : '#777d68';

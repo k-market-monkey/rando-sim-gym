@@ -1,7 +1,7 @@
-import { getSelectableMaps } from '/rando-game/shared/content/maps/catalog.js';
-import { WIDTH, HEIGHT } from '/rando-game/shared/content/arena.js';
-import { createMapState } from '/rando-game/shared/sim/map-state.js';
-import { LEGACY_MECHANICS_VERSION, normalizeMechanicsVersion } from '/rando-game/shared/protocol/versions.js';
+import { getSelectableMaps } from '/rando-sim-gym/shared/content/maps/catalog.js';
+import { WIDTH, HEIGHT } from '/rando-sim-gym/shared/content/arena.js';
+import { createMapState } from '/rando-sim-gym/shared/sim/map-state.js';
+import { LEGACY_MECHANICS_VERSION, normalizeMechanicsVersion } from '/rando-sim-gym/shared/protocol/versions.js';
 import { renderArena } from './renderer.js';
 const esc = (value) =>
   String(value).replace(

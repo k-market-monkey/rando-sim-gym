@@ -1,11 +1,11 @@
-import { NAME_LENGTH } from '/rando-game/shared/protocol/message-constants.js';
-import { CHARACTER_LOOKS, sanitizeProfile } from '/rando-game/shared/content/characters.js';
+import { NAME_LENGTH } from '/rando-sim-gym/shared/protocol/message-constants.js';
+import { CHARACTER_LOOKS, sanitizeProfile } from '/rando-sim-gym/shared/content/characters.js';
 import {
   normalizeTeam,
   resolveAppearance,
   teamAccentColor,
   teamAccentShade,
-} from '/rando-game/shared/sim/teams.js';
+} from '/rando-sim-gym/shared/sim/teams.js';
 import { drawAvatar } from './renderer.js';
 const esc = (value) =>
   String(value).replace(

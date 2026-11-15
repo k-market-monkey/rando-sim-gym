@@ -1,7 +1,7 @@
-import { MAP_CATALOG } from '/rando-game/shared/content/maps/catalog.js';
-import { WIDTH, HEIGHT } from '/rando-game/shared/content/arena.js';
-import { TICK_RATE } from '/rando-game/shared/sim/classic/engine.js';
-import { teamStandings } from '/rando-game/shared/sim/teams.js';
+import { MAP_CATALOG } from '/rando-sim-gym/shared/content/maps/catalog.js';
+import { WIDTH, HEIGHT } from '/rando-sim-gym/shared/content/arena.js';
+import { TICK_RATE } from '/rando-sim-gym/shared/sim/classic/engine.js';
+import { teamStandings } from '/rando-sim-gym/shared/sim/teams.js';
 import { getEngineView } from '../engine-view.js';
 import { withEnemyColors } from '../player-settings.js';
 import { combatStreamMarkup, createCombatStream } from '../combat-stream.js';
