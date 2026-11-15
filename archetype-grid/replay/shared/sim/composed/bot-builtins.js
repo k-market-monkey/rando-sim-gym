@@ -8,6 +8,7 @@ import { deflectable } from './deflection.js';
 import { previewPlacement } from './runtime.js';
 import { allWalls } from './queries.js';
 import { hypot } from '../exact-math.js';
+import { tactical } from './bot-skill.js';
 
 export const builtinsAvailable = (state) =>
   state.shootEnabled === true || state.swipeEnabled === true;
@@ -92,14 +93,31 @@ export function builtinOffense(state, player, target, original) {
 const swipeAnswers = (effect) =>
   deflectable(effect) || (effect.speed > 0 && effect.maxHp > 0 && effect.hp <= SWIPE.damage);
 
-/** Intercept a hostile shot only when Swipe will contact before the shot hits.
+/** A ready generated melee blade: a plain press whose root rides the caster and damages. */
+function readyBlade(player) {
+  for (const [slot, m] of player.loadout.entries()) {
+    const root = m.templates.find((t) => t.id === m.root);
+    if (
+      m.activation.mode === 'press' &&
+      m.casterAction.kind === 'none' &&
+      m.setup.kind !== 'pair' &&
+      root.motion.kind === 'caster_attached' &&
+      root.damage.amount > 0 &&
+      generatedReady(player, m)
+    ) {
+      const reach = Math.max(...root.geometry.map((g) => g.radius)) + root.motion.offset;
+      return { slot, m, root, reach };
+    }
+  }
+  return null;
+}
+
+/** Where the first hostile shot that a strike can meet will be after `horizon` ticks.
  * Resolve happens after projectile motion, including the commit tick. */
-export function builtinParry(state, player, original, effects = state.entities) {
-  if (!swipeReady(state, player) || attackBusy(player)) return null;
-  const walls = allWalls(state),
-    horizon = SWIPE.windup + 1;
+function interceptPoint(state, player, effects, horizon, answers, meets) {
+  const walls = allWalls(state);
   for (const effect of effects.slice(0, 96)) {
-    if (effect.owner === player.id || effect.age < effect.arm || !swipeAnswers(effect)) continue;
+    if (effect.owner === player.id || effect.age < effect.arm || !answers(effect)) continue;
     const owner = state.players.find((p) => p.id === effect.owner);
     if (state.teamBattle && owner?.team === player.team) continue;
     const [dx, dy] = dir(effect.angle),
@@ -138,20 +156,64 @@ export function builtinParry(state, player, original, effects = state.entities) 
       )
     )
       continue;
-    if (!swipeContact(player, end, direction(end.x - player.x, end.y - player.y), walls)) continue;
-    return {
-      ...original,
-      x: 0,
-      y: 0,
-      aimX: end.x,
-      aimY: end.y,
-      shield: false,
-      dash: false,
-      pressedSlots: [],
-      heldSlots: [],
-      swipe: true,
-      shoot: false,
-    };
+    if (meets(end, walls)) return end;
   }
   return null;
+}
+
+const parryInput = (original, aimX, aimY) => ({
+  ...original,
+  x: 0,
+  y: 0,
+  aimX,
+  aimY,
+  shield: false,
+  dash: false,
+  pressedSlots: [],
+  heldSlots: [],
+  swipe: false,
+  shoot: false,
+});
+
+/** Intercept a hostile shot when Swipe, or else (hard bots) a ready generated melee blade, meets
+ * it before it hits. A blade is aimed so its opening sweep frame faces the shot. */
+export function builtinParry(state, player, original, effects = state.entities) {
+  if (attackBusy(player)) return null;
+  if (swipeReady(state, player)) {
+    const end = interceptPoint(
+      state,
+      player,
+      effects,
+      SWIPE.windup + 1,
+      swipeAnswers,
+      (point, walls) =>
+        swipeContact(player, point, direction(point.x - player.x, point.y - player.y), walls),
+    );
+    if (end) return { ...parryInput(original, end.x, end.y), swipe: true };
+  }
+  // Normal bots stay pinned to their frozen decisions; only tactical bots parry with blades.
+  const blade = tactical(state) && readyBlade(player);
+  if (!blade) return null;
+  const answers = (effect) =>
+      deflectable(effect) ||
+      (effect.speed > 0 && effect.maxHp > 0 && effect.hp <= blade.root.damage.amount),
+    end = interceptPoint(
+      state,
+      player,
+      effects,
+      // The blade spawns at commit and first strikes on the following tick.
+      blade.m.activation.windup + 2,
+      answers,
+      (point, walls) =>
+        hypot(point.x - player.x, point.y - player.y) <= blade.reach &&
+        !blockedSegment(player.x, player.y, point.x, point.y, walls),
+    );
+  if (!end) return null;
+  const [ax, ay] = dir(
+    direction(end.x - player.x, end.y - player.y) + Math.round(blade.root.motion.sweep / 2),
+  );
+  return {
+    ...parryInput(original, player.x + ax * 64, player.y + ay * 64),
+    pressedSlots: [blade.slot],
+  };
 }

@@ -439,7 +439,7 @@ const roundMessage = z.strictObject({
   mode: z.enum(['timed', 'lives', 'hill', 'ctf']),
   swipeEnabled: z.boolean().optional(),
   shootEnabled: z.boolean().optional(),
-  botDifficulty: z.enum(['normal', 'hard']).optional(),
+  botDifficulty: z.enum(['normal', 'moderate', 'hard']).optional(),
   flagBases: z
     .array(z.strictObject({ team, x: z.number(), y: z.number() }))
     .max(4)

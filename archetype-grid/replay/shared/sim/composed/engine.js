@@ -45,6 +45,7 @@ import { resetShoot, tickShoot, processShoot } from './shoot.js';
 import { resetShield, raiseShield, holdShield } from './shield.js';
 import { startFlags, advanceFlags, chooseFlagSpawn, flagOutcome } from './flags.js';
 import { allWalls, circling } from './queries.js';
+import { BOT_DIFFICULTIES } from './bot-skill.js';
 export { circling } from './queries.js';
 export { botInput } from './bot.js';
 export { clearOwned };
@@ -82,7 +83,9 @@ export function createMatch(options = {}) {
     teamBattle,
     swipeEnabled: options.swipeEnabled !== false,
     shootEnabled: options.shootEnabled !== false,
-    botDifficulty: options.botDifficulty === 'hard' ? 'hard' : 'normal',
+    botDifficulty: BOT_DIFFICULTIES.includes(options.botDifficulty)
+      ? options.botDifficulty
+      : 'normal',
     teamScores: {},
     map: createMapState(map),
     stage: map.id,

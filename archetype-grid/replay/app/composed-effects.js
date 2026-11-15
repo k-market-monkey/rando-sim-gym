@@ -2,6 +2,8 @@
 // and lobbed projectiles. Presentation only: these read entity state and the
 // move definition and never change the simulation. Hit areas stay visible as a
 // faint footprint under each effect so the style never hides what can hit.
+import { beamHalfWidth } from '../shared/sim/composed/geometry.js';
+
 const TAU = Math.PI * 2;
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 const easeOut = (value) => 1 - (1 - value) * (1 - value);
@@ -209,34 +211,46 @@ export function drawThrust(ctx, e, template, color, footprint) {
 
 /**
  * A beam that shoots out as a thin line over `extend` ticks, then blooms into
- * its tapered width: `width` at the origin, `endWidth` at the far end.
+ * its tapered width: `width` at the origin, `endWidth` at the far end. Drawn
+ * along the entity's simulated `raySegments` in world coordinates, so it stops
+ * at walls and turns where the ray turns. Each point's half-width is the one
+ * the hit test uses: `beamHalfWidth` at its distance along the path out of the
+ * beam's full length `full` (0 keeps the base width, as for a linked beam). A
+ * warning draws the whole marked area as a dashed outline.
  */
-export function drawBeam(ctx, e, color, footprint, linkLength) {
-  const age = e.age ?? 0,
-    fadeOut = clamp01((e.ttl ?? 4) / 4);
+export function drawBeam(ctx, e, color, full) {
+  const g = (e.geometries || [e.geometry])[0],
+    age = e.age ?? 0,
+    extend = g.extend || 0,
+    fadeOut = clamp01((e.ttl ?? 4) / 4),
+    bloom = e.warning ? 0 : easeOut(clamp01((age - extend + 1) / 4)),
+    extending = !e.warning && age < extend,
+    segments = e.raySegments || [];
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
   ctx.lineCap = 'round';
-  for (const g of e.geometries || [e.geometry]) {
-    if (!isBloomBeam(g)) {
-      footprint(ctx, g, linkLength);
-      ctx.globalAlpha = 0.25 * fadeOut;
-      ctx.fill();
-      ctx.globalAlpha = fadeOut;
-      ctx.stroke();
-      continue;
-    }
-    const extend = g.extend || 0,
-      length = (linkLength ?? g.length) * (extend ? clamp01(age / extend) : 1),
-      grown = extend ? length / Math.max(1, linkLength ?? g.length) : 1,
-      r0 = g.width / 2,
-      r1 = (g.width + ((g.endWidth ?? g.width) - g.width) * grown) / 2,
-      bloom = e.warning ? 0 : easeOut(clamp01((age - extend + 1) / 4));
+  ctx.lineJoin = 'round';
+  ctx.setLineDash([]);
+  let start = 0;
+  segments.forEach((segment, index) => {
+    const length = Math.hypot(segment.endX - segment.x, segment.endY - segment.y),
+      r0 = beamHalfWidth(g, start, full),
+      r1 = beamHalfWidth(g, start + length, full);
+    start += length;
+    ctx.save();
+    ctx.translate(segment.x, segment.y);
+    ctx.rotate(Math.atan2(segment.endY - segment.y, segment.endX - segment.x));
     // The true hit area so far.
     taperPath(ctx, length, r0, r1);
-    ctx.globalAlpha = (e.warning ? 0.08 : 0.14) * fadeOut;
+    ctx.globalAlpha = (e.warning ? 0.12 : 0.16) * fadeOut;
     ctx.fill();
     if (e.warning) {
-      ctx.globalAlpha = 0.5;
+      ctx.setLineDash([5, 4]);
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.6;
       ctx.stroke();
+      ctx.setLineDash([]);
     }
     if (bloom > 0) {
       taperPath(ctx, length, Math.max(1, r0 * bloom), Math.max(1, r1 * bloom));
@@ -247,8 +261,6 @@ export function drawBeam(ctx, e, color, footprint, linkLength) {
       ctx.stroke();
     }
     // The bright core line, with a glowing head while it still extends.
-    ctx.save();
-    ctx.setLineDash([]);
     ctx.strokeStyle = '#ffffff';
     ctx.globalAlpha = (e.warning ? 0.45 : 0.9) * fadeOut;
     ctx.lineWidth = e.warning ? 1 : 2 + bloom;
@@ -256,8 +268,10 @@ export function drawBeam(ctx, e, color, footprint, linkLength) {
     ctx.moveTo(0, 0);
     ctx.lineTo(length, 0);
     ctx.stroke();
-    if (!e.warning && length < (linkLength ?? g.length)) {
+    ctx.strokeStyle = color;
+    if (extending && index === segments.length - 1) {
       ctx.fillStyle = '#ffffff';
+      ctx.globalAlpha = 1;
       ctx.beginPath();
       ctx.arc(length, 0, 4, 0, TAU);
       ctx.fill();
@@ -268,7 +282,8 @@ export function drawBeam(ctx, e, color, footprint, linkLength) {
       ctx.fill();
     }
     ctx.restore();
-  }
+  });
+  ctx.restore();
 }
 
 /** Flight progress and height of a lobbed entity. */

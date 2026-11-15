@@ -4,12 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Archetype gym — RANDO</title>
-    <link rel="stylesheet" href="./gym-matchups.css?v=inline-1" />
+    <link rel="stylesheet" href="./gym-matchups.css?v=gym-11-moderate" />
   </head>
   <body>
     <main>
       <h1>Archetype gym</h1>
-      <p class="muted">Three games per combination · 10 × 10 arena · Small barriers</p>
+      <p class="muted">
+        Three games per combination · Moderate bots · 11 × 11 arena · Small barriers
+      </p>
       <nav id="matchups" aria-label="Archetype matchup"></nav>
       <p id="status" role="status">Loading games…</p>
       <section id="results" hidden>
@@ -21,7 +23,8 @@
         </div>
         <p class="muted">
           Each game opens its replay. Deaths and HP are shown as row move : column move. Fewer
-          deaths wins; health breaks ties.
+          deaths wins; health breaks ties. * Awaiting respawn: full respawn health counts for
+          scoring.
         </p>
       </section>
     </main>
@@ -32,6 +35,6 @@
       </div>
       <iframe id="replay-frame" title="Game replay" src="about:blank"></iframe>
     </dialog>
-    <script type="module" src="./gym-matchups.js?v=inline-1"></script>
+    <script type="module" src="./gym-matchups.js?v=gym-11-moderate"></script>
   </body>
 </html>

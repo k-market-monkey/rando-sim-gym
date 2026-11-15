@@ -12,7 +12,7 @@ function fighterName(id, pair = report.pairs[pairIndex]) {
   return id === 'a' ? pair.moves[0] : id === 'b' ? pair.moves[1] : 'Draw';
 }
 function stats(f) {
-  return `${f.deaths} deaths · ${f.dead ? 0 : f.hp} HP · ${Math.round(f.shield)} shield`;
+  return `${f.deaths} deaths · ${f.dead ? `${f.maxHp} respawn HP` : `${f.hp} HP`} · ${Math.round(f.shield)} shield`;
 }
 function scoreCell(fighter, winner, seat) {
   const cell = document.createElement('td'),
@@ -183,7 +183,7 @@ try {
     `${report.pairs.length} pairs · ${report.gamesPerPair} games each · ${report.engineBuild} · Experiment seed ${report.seed}`;
   if (report.rules.builtins)
     $('rules').textContent =
-      '25-second duels · Hard/balanced bots · One special move each · Dash, Shield, Swipe and Shoot enabled. Fewer deaths wins; remaining health breaks ties.';
+      '25-second duels · Moderate bots · One special move each · Dash, Shield, Swipe and Shoot enabled. Fewer deaths wins; remaining health breaks ties.';
   report.pairs.forEach((pair, index) => {
     const button = document.createElement('button');
     button.dataset.pair = String(index);

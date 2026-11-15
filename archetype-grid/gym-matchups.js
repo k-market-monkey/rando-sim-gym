@@ -6,7 +6,7 @@ function node(tag, text, className) {
   return el;
 }
 function health(fighter) {
-  return Math.round((fighter.dead ? 0 : fighter.hp) * 10) / 10;
+  return Math.round((fighter.scoringHp ?? (fighter.dead ? 0 : fighter.hp)) * 10) / 10;
 }
 const replayDialog = $('replay-dialog');
 const replayFrame = $('replay-frame');
@@ -96,7 +96,10 @@ function render(report, group) {
         link.title = winner;
         link.append(
           node('strong', `Game ${game.id} · ${code}`),
-          node('span', `${a.deaths}:${b.deaths} deaths · ${health(a)}:${health(b)} HP`),
+          node(
+            'span',
+            `${a.deaths}:${b.deaths} deaths · ${health(a)}${a.dead ? '*' : ''}:${health(b)}${b.dead ? '*' : ''} HP`,
+          ),
         );
         cell.append(link);
       }
@@ -112,7 +115,7 @@ function render(report, group) {
   history.replaceState(null, '', url);
 }
 try {
-  const response = await fetch('./matchups.json');
+  const response = await fetch('./matchups.json', { cache: 'no-store' });
   if (!response.ok) throw Error('Could not load gym results');
   const report = await response.json();
   for (const group of report.groups) {
