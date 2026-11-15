@@ -1,0 +1,119 @@
+// A built-in action: no generated slot, resource, reservation or tuning path.
+import { direction, dir, blockedSegment, unit } from './geometry.js';
+import { square } from '../exact-math.js';
+import { componentWalls } from './mechanics.js';
+import { damagePlayer, damageEntity, count } from './runtime.js';
+import { SWIPE_MOVE, SWIPE_KEY } from './combat-identity.js';
+import { deflectable, deflect } from './deflection.js';
+
+export const SWIPE = Object.freeze({
+  windup: 2,
+  recovery: 4,
+  cooldown: 14,
+  range: 64,
+  damage: 20,
+  shieldDamage: 25,
+  impulse: 4,
+});
+
+export function resetSwipe(player) {
+  player.swipeCooldown = 0;
+  player.swipeRecovery = 0;
+  player.swipeAttack = null;
+}
+export function tickSwipe(player) {
+  player.swipeCooldown = Math.max(0, player.swipeCooldown - 1);
+  player.swipeRecovery = Math.max(0, player.swipeRecovery - 1);
+  if (player.swipeAttack) player.swipeAttack.remaining--;
+}
+export function swipeReady(state, player) {
+  return (
+    state.swipeEnabled &&
+    !player.dead &&
+    !player.shielding &&
+    !player.shieldRelease &&
+    !player.dashTicks &&
+    !player.attack &&
+    player.channel == null &&
+    !player.swipeAttack &&
+    !player.swipeCooldown &&
+    !player.swipeRecovery &&
+    !Object.values(player.moveResources).some((resource) => resource.recovery > 0)
+  );
+}
+export function processSwipe(state, player, input, generatedCommitted) {
+  if (!input.swipe || input.cancelAttack || generatedCommitted || !swipeReady(state, player))
+    return;
+  player.swipeCooldown = SWIPE.cooldown;
+  player.swipeAttack = {
+    remaining: SWIPE.windup,
+    direction: direction(player.aimX - player.x, player.aimY - player.y),
+  };
+  count(state, 'activations', SWIPE_MOVE);
+  const event = { playerId: player.id, x: player.x, y: player.y, moveKey: SWIPE_KEY };
+  state.events.push({ type: 'swipe-commit', ...event });
+  state.events.push({ type: 'cast', ...event, move: SWIPE_MOVE });
+}
+export function swipeContact(attacker, target, angle, walls) {
+  const x = target.x - attacker.x,
+    y = target.y - attacker.y,
+    [dx, dy] = dir(angle),
+    along = x * dx + y * dy,
+    across = -x * dy + y * dx;
+  return (
+    square(x) + square(y) <= square(SWIPE.range) &&
+    along >= Math.abs(across) &&
+    !blockedSegment(attacker.x, attacker.y, target.x, target.y, walls)
+  );
+}
+/** Existing generated effects have already resolved; dead attackers cannot strike. */
+export function resolveSwipe(state) {
+  const walls = componentWalls(state);
+  for (const player of state.players) {
+    if (player.dead || !player.swipeAttack || player.swipeAttack.remaining > 0) continue;
+    const angle = player.swipeAttack.direction;
+    player.swipeAttack = null;
+    player.swipeRecovery = SWIPE.recovery;
+    state.events.push({
+      type: 'swipe-contact',
+      playerId: player.id,
+      x: player.x,
+      y: player.y,
+      direction: angle,
+      moveKey: SWIPE_KEY,
+    });
+    for (const target of state.entities) {
+      if (
+        target.removed ||
+        target.owner === player.id ||
+        !(target.maxHp > 0 || deflectable(target)) ||
+        !swipeContact(
+          player,
+          target,
+          angle,
+          walls.filter((wall) => wall.entityId !== target.id),
+        )
+      )
+        continue;
+      // Objects with health break; shots are knocked away.
+      if (target.maxHp > 0) damageEntity(state, target, SWIPE.damage, player.id, SWIPE_MOVE);
+      else deflect(state, target, player, SWIPE_MOVE);
+    }
+    for (const target of state.players) {
+      if (target === player || target.dead || !swipeContact(player, target, angle, walls)) continue;
+      const [dx, dy] = unit(target.x - player.x, target.y - player.y);
+      damagePlayer(
+        state,
+        target,
+        SWIPE.damage,
+        dx,
+        dy,
+        SWIPE.impulse,
+        player.id,
+        SWIPE_MOVE,
+        'impact',
+        SWIPE.shieldDamage,
+      );
+    }
+  }
+}
