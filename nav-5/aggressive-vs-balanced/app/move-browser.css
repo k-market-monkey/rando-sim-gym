@@ -1,0 +1,47 @@
+.move-browser-page .replay-main {
+  max-width: 1160px;
+}
+.move-browser {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.move-browser-index input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.move-browser-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+}
+.move-browser-list a {
+  display: block;
+  padding: 8px 12px;
+  color: var(--ink);
+  font: 13px var(--mono);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.move-browser-list a:hover,
+.move-browser-list a[aria-current='page'] {
+  background: var(--panel);
+}
+.move-browser-detail h1 {
+  margin: 0 0 12px;
+}
+.move-browser-detail .helper {
+  margin-top: 12px;
+}
+@media (max-width: 720px) {
+  .move-browser {
+    grid-template-columns: 1fr;
+  }
+  .move-browser-list {
+    max-height: 30vh;
+  }
+}
