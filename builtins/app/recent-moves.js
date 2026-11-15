@@ -2,6 +2,7 @@
 // list for a minute; this module keeps its own copy for as long, so re-rendering
 // the home screen does not refetch it.
 import { useStylesheet } from './use-stylesheet.js';
+import { moveBrowserUrl } from './move-clip-loader.js';
 
 export const RECENT_MOVES_TTL_MS = 60_000;
 const RETRY_MS = 10_000;
@@ -39,7 +40,7 @@ function render(section, moves) {
   section.innerHTML = `<h2>RECENT MOVES</h2><ol class="recent-moves-list">${moves
     .map(
       (move) =>
-        `<li class="recent-move" data-recent-move="${esc(move.name)}" title="Created ${esc(new Date(move.createdAt).toLocaleString())}"><canvas width="16" height="16" aria-hidden="true"></canvas><span class="recent-move-name">${esc(move.name)}</span><span class="tag">${esc(EDITIONS[move.mechanicsVersion] || move.mechanicsVersion)}</span></li>`,
+        `<li class="recent-move" data-recent-move="${esc(move.name)}" title="Created ${esc(new Date(move.createdAt).toLocaleString())}"><canvas width="16" height="16" aria-hidden="true"></canvas><a class="recent-move-name" href="${esc(moveBrowserUrl(move.name, move.mechanicsVersion))}">${esc(move.name)}</a><span class="tag">${esc(EDITIONS[move.mechanicsVersion] || move.mechanicsVersion)}</span></li>`,
     )
     .join('')}</ol>`;
   section

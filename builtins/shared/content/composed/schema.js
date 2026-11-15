@@ -13,6 +13,11 @@ const obj = (properties) => ({
   properties,
   required: Object.keys(properties),
 });
+// Moves stored before a field existed omit it; the generator schema still requires it.
+const optional = (schema, ...keys) => ({
+  ...schema,
+  required: schema.required.filter((key) => !keys.includes(key)),
+});
 const arr = (items, min, max) => ({ type: 'array', items, minItems: min, maxItems: max });
 export const shapeSchema = obj({
   kind: en('circle', 'capsule', 'sector', 'segment', 'box'),
@@ -99,11 +104,16 @@ export const composedMoveSchema = obj({
   formatVersion: { type: 'integer', enum: [3] },
   coreColor: { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' },
   selfDamage: { type: 'boolean' },
-  activation: obj({
-    mode: en('press', 'hold', 'press_sequence'),
-    windup: int(0, 30),
-    recovery: int(0, 45),
-  }),
+  activation: optional(
+    obj({
+      mode: en('press', 'hold', 'press_sequence'),
+      windup: int(0, 30),
+      recovery: int(0, 45),
+      // Steady windups are not cancelled by impact hits. Absent means false.
+      steady: { type: 'boolean' },
+    }),
+    'steady',
+  ),
   resource: obj({
     kind: en('cooldown', 'magazine', 'heat', 'charges', 'fatigue'),
     cooldown: int(3, 180),

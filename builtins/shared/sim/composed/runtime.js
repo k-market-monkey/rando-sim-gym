@@ -24,7 +24,7 @@ import { compileMove } from './compiler.js';
 import { componentWalls as walls, isFixedBeam, fixedBeamPlacement } from './mechanics.js';
 import * as features from './features.js';
 import { hypot } from '../exact-math.js';
-import { combatMoveKey, builtinAction } from './combat-identity.js';
+import { combatMoveKey, builtinAction, SWIPE_MOVE } from './combat-identity.js';
 /** Adds to a telemetry counter, for the match and for the move. Built-in
  * actions count apart so generated-move balance evidence stays unchanged. */
 export const count = (s, name, m = null, n = 1) => {
@@ -274,7 +274,12 @@ function entity(s, p, m, templateId, pose, reservationId, parent = null) {
     eventCounts: Array(t.events.length).fill(0),
     contactIds: [],
     speed: t.motion.speed,
-    fatigueScale: m.resource.kind === 'fatigue' ? 1 / (1 + resource(p, m).fatigue * 0.22) : 1,
+    // Children keep their cast's scale; the owner's fatigue may have changed since.
+    fatigueScale: parent
+      ? parent.fatigueScale
+      : m.resource.kind === 'fatigue'
+        ? 1 / (1 + resource(p, m).fatigue * 0.22)
+        : 1,
   };
   s.entities.push(e);
   features.initializeEntity(s, e, p, t, api);
@@ -395,6 +400,13 @@ export function cancelAttack(s, p) {
   if (p.attack && !p.attack.continuation) release(s, p.attack.reservationId);
   p.attack = null;
   p.channel = null;
+}
+/** An impact hit cancels a windup, unless the winding-up move is steady. */
+function interrupt(s, p) {
+  const m = p.attack && p.loadout[p.attack.slot];
+  if (!(m ? !m.activation.steady : p.swipeAttack)) return;
+  count(s, 'interrupts', m || SWIPE_MOVE);
+  cancelAttack(s, p);
 }
 export function processAttack(s, p, input) {
   if (p.dead || p.shielding || p.shieldRelease > 0 || p.dashTicks > 0) {
@@ -640,7 +652,10 @@ export function damagePlayer(
   target.hp = q(Math.max(0, target.hp - amount));
   target.vx = q(target.vx + kx * impulse);
   target.vy = q(target.vy + ky * impulse);
-  if (policy === 'impact') target.impactRecovery = 8;
+  if (policy === 'impact') {
+    target.impactRecovery = 8;
+    if (amount > 0 && ownerId !== target.id) interrupt(s, target);
+  }
   target.lastHit = ownerId;
   target.lastHitTick = s.tick;
   count(s, 'hits', move);

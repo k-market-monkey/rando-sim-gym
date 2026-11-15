@@ -28,6 +28,7 @@
   gap: 8px;
 }
 .recent-move {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -43,6 +44,7 @@
   image-rendering: pixelated;
 }
 .recent-move-name {
+  text-decoration: none;
   flex: 1 0 14ch;
   white-space: nowrap;
   font: 13px var(--mono);
@@ -51,4 +53,14 @@
 .recent-move .tag {
   flex: none;
   font-size: 10px;
+}
+/* The whole card opens the move browser. */
+.recent-move-name::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.recent-move:hover,
+.recent-move:focus-within {
+  border-color: var(--ink);
 }

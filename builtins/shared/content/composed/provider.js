@@ -6,6 +6,10 @@ export const composedProviderMoveSchema = {
   ...composedMoveSchema,
   properties: {
     ...composedMoveSchema.properties,
+    activation: {
+      ...composedMoveSchema.properties.activation,
+      required: Object.keys(composedMoveSchema.properties.activation.properties),
+    },
     templates: {
       type: 'array',
       minItems: 1,

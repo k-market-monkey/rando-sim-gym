@@ -239,7 +239,7 @@ export function motion(state, entity, template, owner, api) {
     return true;
   }
   if (template.ray.kind === 'reflect') return true;
-  if (template.guidance.kind === 'homing') {
+  if (template.guidance.kind === 'homing' && !entity.deflected) {
     let target = findTarget(state, owner, entity.target);
     if (!target || entity.age % template.guidance.retargetEvery === 0)
       target = nearestTarget(state, owner, entity, template.guidance.acquireRadius);
