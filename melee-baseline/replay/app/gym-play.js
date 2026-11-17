@@ -2,7 +2,11 @@ import * as engine from './gym-engine.js?v=shield-hitboxes10';
 import { parryRemaining } from './gym-parry.js?v=shield-hitboxes10';
 import { createGymCombat } from './gym-combat.js?v=shield-hitboxes10';
 
-import { renderArena, receiveEffects, shieldVisualState } from './gym-renderer.js';
+import {
+  renderArena,
+  receiveEffects,
+  shieldVisualState,
+} from './gym-renderer.js?v=original-shield11';
 import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';
 import { receiveInput, consumeInput } from './gym-input-buffer.js';

@@ -1,7 +1,7 @@
-import { renderArena as renderBase } from './renderer.js';
+import { renderArena as renderBase } from './gym-base-renderer.js';
 import { SHIELD } from '../shared/sim/composed/shield.js';
 import { PLAYER_BODY_RADIUS } from './gym-collision.js';
-export { receiveEffects } from './renderer.js';
+export { receiveEffects } from './gym-base-renderer.js';
 
 /** Read actual simulation timers, so pause and game speed cannot desync the cue. */
 export function shieldVisualState(player) {
@@ -47,42 +47,19 @@ export function shieldVisualState(player) {
   };
 }
 export function renderArena(canvas, state, options = {}) {
-  // Replace the base release-only effect (8 ticks) with the entire readiness cue.
+  // Retain the original lowering animation through the full shield cooldown.
   const visualState = {
     ...state,
-    players: state.players.map((p) => (p.shieldRelease > 0 ? { ...p, shieldRelease: 0 } : p)),
+    players: state.players.map((p) => ({
+      ...p,
+      shieldRelease: Math.max(p.shieldRelease || 0, p.shieldCooldown || 0),
+    })),
   };
   renderBase(canvas, visualState, options);
   const ctx = canvas.getContext('2d');
   for (const player of state.players) {
     if (player.dead) continue;
-    const shield = shieldVisualState(player);
     ctx.save();
-    if (!player.shielding && shield.remaining > 0) {
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#252b2a';
-      ctx.beginPath();
-      ctx.arc(player.x, player.y - 4, 31, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.strokeStyle = shield.color;
-      ctx.beginPath();
-      ctx.arc(
-        player.x,
-        player.y - 4,
-        31,
-        -Math.PI / 2,
-        -Math.PI / 2 + (Math.PI * 2 * shield.remaining) / shield.total,
-      );
-      ctx.stroke();
-      ctx.font = 'bold 11px monospace';
-      ctx.textAlign = 'center';
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#101510';
-      ctx.fillStyle = shield.color;
-      const text = `${shield.remaining}f`;
-      ctx.strokeText(text, player.x, player.y - 40);
-      ctx.fillText(text, player.x, player.y - 40);
-    }
     if (options.showHitboxes) {
       ctx.fillStyle = '#6cffe522';
       ctx.strokeStyle = '#051b18';
