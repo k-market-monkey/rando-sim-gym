@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Play a gym matchup</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui;
+      background: #111510;
+      color: #eef2e8;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 12px;
+    }
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    select,
+    button,
+    a {
+      font: inherit;
+      color: inherit;
+    }
+    select,
+    button {
+      background: #242e1e;
+      border: 1px solid #617452;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    button {
+      cursor: pointer;
+    }
+    canvas {
+      display: block;
+      width: min(100%, calc(100vh - 255px));
+      height: auto;
+      min-width: 240px;
+      margin: auto;
+      outline: 2px solid #687b58;
+      border-radius: 4px;
+      touch-action: none;
+    }
+    canvas:focus {
+      outline-color: #78f0c5;
+    }
+    .help {
+      font-size: 13px;
+      color: #bbc9b1;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+    #status {
+      font-weight: 600;
+      margin: 10px 0;
+      min-height: 24px;
+    }
+    #score {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .fighter {
+      padding: 10px;
+      background: #1e2819;
+      border-top: 3px solid var(--color);
+      border-radius: 5px;
+    }
+    .fighter strong {
+      color: var(--color);
+    }
+    progress {
+      display: block;
+      width: 100%;
+      height: 12px;
+      accent-color: var(--color);
+    }
+    #ability {
+      font-size: 13px;
+      color: #bbd1b0;
+    }
+    a {
+      color: #78f0c5;
+    }
+  </style>
+  <main>
+    <h1 id="title">Loading matchup…</h1>
+    <div class="toolbar">
+      <label
+        >Enemy movement
+        <select id="style">
+          <option value="balanced">Balanced</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="ranged-strafing">Ranged strafing</option>
+          <option value="defensive">Defensive</option>
+        </select></label
+      ><label
+        >Game speed
+        <select id="speed">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+          <option value="3">3×</option>
+          <option value="4">4×</option>
+        </select></label
+      ><button id="restart">Restart (R)</button><button id="new-game">New spawns</button
+      ><button id="pause">Start</button><button id="sound">Sound</button
+      ><a id="switch" href="?">Switch sides</a><a href="./">Results</a>
+    </div>
+    <fieldset class="toolbar">
+      <legend>Combat tuning · both fighters</legend>
+      <label
+        >Gun knockback ×
+        <input
+          id="knockback"
+          type="number"
+          min="0"
+          max="10"
+          step="0.5"
+          value="3"
+          style="width: 75px" /></label
+      ><label
+        >Flinch (frames)
+        <input
+          id="flinch"
+          type="number"
+          min="0"
+          max="120"
+          step="1"
+          value="0"
+          style="width: 75px" /></label
+      ><output id="flinch-seconds">0.00s</output
+      ><small
+        >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
+        available. 30 frames = 1 simulation second. Changes apply immediately.</small
+      >
+    </fieldset>
+    <div id="score"></div>
+    <canvas
+      id="game-canvas"
+      width="440"
+      height="440"
+      tabindex="0"
+      aria-label="Playable gym arena"
+    ></canvas>
+    <div id="status" role="status">Loading…</div>
+    <div id="ability"></div>
+    <p class="help">
+      <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> V or 1 · <b>Shoot:</b> left
+      click · <b>Swipe:</b> C · <b>Dash:</b> Space · <b>Shield:</b> Shift · <b>Restart:</b> R ·
+      <b>Pause:</b> Esc<br />25 seconds · Moderate bot · 11×11 map · Fewer deaths wins; remaining
+      health breaks ties. Click the arena to start.
+    </p>
+  </main>
+  <script type="module" src="replay/app/gym-play.js?v=combat-tuning-5"></script>
+</html>

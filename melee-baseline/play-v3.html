@@ -113,10 +113,50 @@
           <option value="ranged-strafing">Ranged strafing</option>
           <option value="defensive">Defensive</option>
         </select></label
-      ><button id="restart">Restart</button><button id="new-game">New spawns</button
+      ><label
+        >Game speed
+        <select id="speed">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+          <option value="3">3×</option>
+          <option value="4">4×</option>
+        </select></label
+      ><button id="restart">Restart (R)</button><button id="new-game">New spawns</button
       ><button id="pause">Start</button><button id="sound">Sound</button
       ><a id="switch" href="?">Switch sides</a><a href="./">Results</a>
     </div>
+    <fieldset class="toolbar">
+      <legend>Combat tuning · both fighters</legend>
+      <label
+        >Gun knockback ×
+        <input
+          id="knockback"
+          type="number"
+          min="0"
+          max="10"
+          step="0.5"
+          value="3"
+          style="width: 75px" /></label
+      ><label
+        >Flinch (frames)
+        <input
+          id="flinch"
+          type="number"
+          min="0"
+          max="120"
+          step="1"
+          value="0"
+          style="width: 75px" /></label
+      ><output id="flinch-seconds">0.00s</output
+      ><small
+        >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
+        available. 30 frames = 1 simulation second. Changes apply immediately.</small
+      >
+    </fieldset>
     <div id="score"></div>
     <canvas
       id="game-canvas"
@@ -129,10 +169,10 @@
     <div id="ability"></div>
     <p class="help">
       <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> V or 1 · <b>Shoot:</b> left
-      click · <b>Swipe:</b> C · <b>Dash:</b> Space · <b>Shield:</b> Shift ·
-      <b>Pause:</b> Esc<br />Gun knockback ×3 · 25 seconds · Moderate bot · 11×11 map · Fewer deaths
-      wins; remaining health breaks ties. Click the arena to start.
+      click · <b>Swipe:</b> C · <b>Dash:</b> Space · <b>Shield:</b> Shift · <b>Restart:</b> R ·
+      <b>Pause:</b> Esc<br />25 seconds · Moderate bot · 11×11 map · Fewer deaths wins; remaining
+      health breaks ties. Click the arena to start.
     </p>
   </main>
-  <script type="module" src="replay/app/gym-play.js?v=gun-knockback-3"></script>
+  <script type="module" src="replay/app/gym-play.js?v=combat-tuning-5"></script>
 </html>
