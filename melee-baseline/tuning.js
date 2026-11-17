@@ -77,6 +77,7 @@ export function readRaw(text) {
 }
 export function playLink(pair, side, tuning) {
   const url = new URL('play-v17.html', new URL('.', import.meta.url));
+  url.searchParams.set('v', '17.1');
   url.searchParams.set('pair', pair);
   url.searchParams.set('side', side);
   url.searchParams.set('tune', JSON.stringify(tuning));

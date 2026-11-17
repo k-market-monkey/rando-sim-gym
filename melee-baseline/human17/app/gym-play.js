@@ -5,7 +5,7 @@ import { parryRemaining } from './gym-parry.js';
 import { createGymCombat } from './gym-combat.js';
 
 import { renderArena, receiveEffects, shieldVisualState } from './gym-renderer.js';
-import { renderTiming } from './gym-timing.js';
+import { renderTiming } from './gym-timing.js?v=17.1';
 import { configureSwipeCooldown } from './gym-swipe.js';
 import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';

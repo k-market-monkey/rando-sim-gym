@@ -1,4 +1,4 @@
-import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js';
+import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.1';
 import { renderScores, openReplay } from './score-view.js';
 const $ = (id) => document.getElementById(id),
   baseMoves = await fetch('moves.json').then((r) => r.json()),

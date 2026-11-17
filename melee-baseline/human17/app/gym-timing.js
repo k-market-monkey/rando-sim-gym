@@ -146,7 +146,12 @@ export function timingRows(state, player, { flinch = 0, flinchTotal = 6, parry =
           timer('Contact', 'active', 1, 1),
         timer('Recovery', 'recovery', player.swipeRecovery, SWIPE.recovery),
         timer('Other move recovery', 'blocked', resourceRecovery, recoveryTotal),
-        timer('Cooldown', 'cooldown', player.swipeCooldown, SWIPE.cooldown),
+        timer(
+          'Cooldown',
+          'cooldown',
+          player.swipeCooldown,
+          state.swipeCooldownFrames ?? SWIPE.cooldown,
+        ),
       ],
       state.events.some((e) => e.type === 'swipe-contact' && e.playerId === player.id)
         ? ['Contact this frame']
