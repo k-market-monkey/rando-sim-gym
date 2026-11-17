@@ -37,7 +37,7 @@ const controls = createInput({
     id: side,
     room,
     round: { engine: 'composed' },
-    hotkeys: ['KeyQ'],
+    hotkeys: ['KeyV'],
     builtinHotkeys: { dash: 'Space', shield: 'ShiftLeft', shoot: 'Mouse0', swipe: 'KeyC' },
     open: true,
     dockOpen: false,
@@ -87,7 +87,10 @@ function start() {
     code: 'GYM',
     phase: 'playing',
     roundNumber: ++round,
-    roundPlayers: players,
+    roundPlayers: players.map((player) => ({
+      ...player,
+      loadout: player.loadout.map((move) => move.name),
+    })),
     inputRevision: 0,
     pauseControllerId: side,
     paused: true,
@@ -147,7 +150,7 @@ function draw() {
   const human = state.players.find((p) => p.id === side);
   const cooldown = human.moveResources?.[matchup[side === 'a' ? 0 : 1].name]?.cooldown || 0;
   $('ability').textContent =
-    `Q / 1: ${matchup[side === 'a' ? 0 : 1].name} · ${cooldown ? 'cooldown ' + (cooldown / 30).toFixed(1) + 's' : 'ready'} · Enemy: ${style}`;
+    `V / 1: ${matchup[side === 'a' ? 0 : 1].name} · ${cooldown ? 'cooldown ' + (cooldown / 30).toFixed(1) + 's' : 'ready'} · Enemy: ${style}`;
 }
 $('style').addEventListener('change', () => {
   style = $('style').value;
