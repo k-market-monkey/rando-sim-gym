@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Gym replay</title
+  ><style>
+    :root {
+      color-scheme: dark;
+      font: 14px system-ui;
+      background: #111510;
+      color: #eef2e8;
+    }
+    body {
+      margin: 12px;
+    }
+    header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button,
+    select {
+      font: inherit;
+      color: inherit;
+      background: #263121;
+      padding: 6px;
+      border: 1px solid #627653;
+      border-radius: 4px;
+    }
+    #arena {
+      display: block;
+      width: min(100%, calc(100vh - 180px));
+      height: auto;
+      margin: 12px auto;
+    }
+    #seek {
+      width: 100%;
+    }
+    #fighters {
+      min-height: 38px;
+      line-height: 1.5;
+    }
+    #verification {
+      font-size: 12px;
+      color: #b9c9af;
+    }
+  </style>
+  <header>
+    <button id="play">Play</button
+    ><label
+      >Speed
+      <select id="speed">
+        <option value="0.25">0.25×</option>
+        <option value="0.5">0.5×</option>
+        <option value="0.75" selected>Normal (0.75×)</option>
+        <option value="1">Fast (1×)</option>
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+      </select></label
+    ><span id="position"></span><label><input id="hitboxes" type="checkbox" />Hit circles</label>
+  </header>
+  <div id="fighters"></div>
+  <canvas id="arena" width="440" height="440"></canvas
+  ><input id="seek" type="range" min="0" value="0" step="1" aria-label="Replay position" />
+  <p id="verification">Waiting for game…</p>
+  <script type="module" src="replay17.js"></script>
+</html>

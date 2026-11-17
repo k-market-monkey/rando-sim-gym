@@ -187,6 +187,39 @@
         max-width: 600px;
       }
     }
+    main {
+      overflow-anchor: none;
+    }
+    .fighter {
+      height: 126px;
+      overflow: hidden;
+    }
+    .fighter strong {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .fighter-info,
+    .shield-state {
+      height: 36px;
+      line-height: 18px;
+      overflow: hidden;
+    }
+    .timing-row {
+      height: 104px;
+      overflow: hidden;
+    }
+    .timing-status {
+      min-height: 30px;
+    }
+    .timing-details {
+      height: 32px;
+      overflow: hidden;
+    }
+    #status {
+      min-height: 64px;
+    }
   </style>
   <main>
     <h1 id="title">Loading matchup…</h1>
@@ -301,5 +334,5 @@
       difference. Click the arena to start.
     </p>
   </main>
-  <script type="module" src="human16/app/gym-play.js?v=moderate-defense16"></script>
+  <script type="module" src="human17/app/gym-play.js?v=tuning17"></script>
 </html>
