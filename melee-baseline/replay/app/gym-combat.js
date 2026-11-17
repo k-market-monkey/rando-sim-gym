@@ -1,14 +1,16 @@
-import * as engine from '../shared/sim/composed/engine.js';
+import * as engine from './gym-engine.js?v=contact-parry7';
 import { BUILTIN_SHOOT } from '../shared/content/composed/fixtures.js';
 import { cancelAttack } from '../shared/sim/composed/runtime.js';
+import { configureParry, recordParries, resetParries } from './gym-parry.js';
 
 // Experimental rules belong only to the playable page, never recorded replays.
 export function createGymCombat() {
   const flinching = new Map();
   let duration = 0;
-  function configure({ knockbackMultiplier, flinchFrames }) {
+  function configure({ knockbackMultiplier, flinchFrames, parryFrames = 6 }) {
     BUILTIN_SHOOT.templates[0].impulse = 2 * knockbackMultiplier;
     duration = flinchFrames;
+    configureParry(parryFrames);
     for (const [id, remaining] of flinching) flinching.set(id, Math.min(remaining, duration));
   }
   function step(state, inputs) {
@@ -37,6 +39,7 @@ export function createGymCombat() {
       flinching.set(player.id, remaining - 1);
     }
     engine.step(state, effective);
+    recordParries(state);
     if (!duration) return;
     for (const event of state.events) {
       if (event.type !== 'hit' || !(event.damage > 0) || event.owner === event.playerId) continue;
@@ -51,6 +54,9 @@ export function createGymCombat() {
     configure,
     step,
     remaining: (id) => flinching.get(id) || 0,
-    reset: () => flinching.clear(),
+    reset: () => {
+      flinching.clear();
+      resetParries();
+    },
   };
 }

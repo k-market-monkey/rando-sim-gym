@@ -1,8 +1,9 @@
-import * as engine from '../shared/sim/composed/engine.js';
-import { createGymCombat } from './gym-combat.js';
+import * as engine from './gym-engine.js?v=contact-parry7';
+import { parryRemaining } from './gym-parry.js';
+import { createGymCombat } from './gym-combat.js?v=contact-parry7';
 
 import { renderArena, receiveEffects } from './renderer.js';
-import { createInput } from './input.js';
+import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';
 import { receiveInput, consumeInput } from './gym-input-buffer.js';
 
@@ -13,7 +14,7 @@ const params = new URLSearchParams(location.search);
 const pair = Math.max(1, Math.min(3, Math.floor(Number(params.get('pair'))) || 1));
 const side = params.get('side') === 'b' ? 'b' : 'a';
 const enemy = side === 'a' ? 'b' : 'a';
-const styles = ['balanced', 'aggressive', 'ranged-strafing', 'defensive'];
+const styles = ['balanced', 'aggressive', 'ranged-strafing', 'defensive', 'stationary'];
 let style = styles.includes(params.get('style')) ? params.get('style') : 'balanced';
 let seed = Number(params.get('seed')) >>> 0 || 240914294;
 const speeds = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];
@@ -33,7 +34,8 @@ const bounded = (value, fallback, maximum) =>
     : fallback;
 let knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
 let flinchFrames = Math.round(bounded(params.get('flinch'), 0, 120));
-combat.configure({ knockbackMultiplier, flinchFrames });
+let parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
+combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
 const canvas = $('game-canvas');
 let state,
   room,
@@ -50,8 +52,8 @@ const controls = createInput({
     id: side,
     room,
     round: { engine: 'composed' },
-    hotkeys: ['KeyV'],
-    builtinHotkeys: { dash: 'Space', shield: 'ShiftLeft', shoot: 'Mouse0', swipe: 'KeyC' },
+    hotkeys: ['KeyC'],
+    builtinHotkeys: { dash: 'Space', shield: 'ShiftLeft', shoot: 'Mouse0', swipe: 'Mouse2' },
     open: true,
     dockOpen: false,
   }),
@@ -80,6 +82,7 @@ function updateUrl() {
     speed,
     knockback: knockbackMultiplier,
     flinch: flinchFrames,
+    parry: parryFrames,
   }))
     url.searchParams.set(key, value);
   history.replaceState(null, '', url);
@@ -123,6 +126,7 @@ function start() {
   $('speed').value = String(speed);
   $('knockback').value = String(knockbackMultiplier);
   $('flinch').value = String(flinchFrames);
+  $('parry').value = String(parryFrames);
   $('flinch-seconds').textContent = (flinchFrames / 30).toFixed(2) + 's';
   updateUrl();
   draw();
@@ -157,6 +161,8 @@ function draw() {
       name.textContent = p.name;
       const info = document.createElement('div');
       info.textContent = `${p.deaths} deaths · ${p.dead ? 'Respawning' : Math.round(p.hp) + ' / ' + p.maxHp + ' HP'}`;
+      if (parryRemaining(state, p))
+        info.textContent += ` · Parry counter ${parryRemaining(state, p)}f`;
       if (combat.remaining(p.id)) info.textContent += ` · Flinch ${combat.remaining(p.id)}f`;
       const bar = document.createElement('progress');
       bar.max = p.maxHp;
@@ -177,7 +183,13 @@ function draw() {
   const human = state.players.find((p) => p.id === side);
   const cooldown = human.moveResources?.[matchup[side === 'a' ? 0 : 1].name]?.cooldown || 0;
   $('ability').textContent =
-    `V / 1: ${matchup[side === 'a' ? 0 : 1].name} · ${cooldown ? 'cooldown ' + (cooldown / 30).toFixed(1) + 's' : 'ready'} · Enemy: ${style}`;
+    `C / 1: ${matchup[side === 'a' ? 0 : 1].name} · ${cooldown ? 'cooldown ' + (cooldown / 30).toFixed(1) + 's' : 'ready'} · Swipe (right-click / X): ${human.swipeCooldown ? (human.swipeCooldown / 30).toFixed(1) + 's' : 'ready'} · Enemy: ${style}`;
+}
+function enemyInput() {
+  const input = engine.botInput(state, enemy, {
+    movementStyle: style === 'stationary' ? 'balanced' : style,
+  });
+  return style === 'stationary' ? { ...input, x: 0, y: 0, dash: false } : input;
 }
 $('style').addEventListener('change', () => {
   style = $('style').value;
@@ -192,14 +204,17 @@ function restart() {
   if (resume) setPaused(false);
 }
 $('restart').addEventListener('click', restart);
-for (const id of ['knockback', 'flinch'])
+for (const id of ['knockback', 'flinch', 'parry'])
   $(id).addEventListener('change', () => {
     knockbackMultiplier = bounded($('knockback').value, 3, 10);
     flinchFrames = Math.round(bounded($('flinch').value, 0, 120));
+    parryFrames = Math.round(bounded($('parry').value, 6, 120));
+    $('parry').value = String(parryFrames);
     $('knockback').value = String(knockbackMultiplier);
     $('flinch').value = String(flinchFrames);
+    $('parry').value = String(parryFrames);
     $('flinch-seconds').textContent = (flinchFrames / 30).toFixed(2) + 's';
-    combat.configure({ knockbackMultiplier, flinchFrames });
+    combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
     updateUrl();
     controls.clearControls();
     canvas.focus();
@@ -252,7 +267,7 @@ function frame(time) {
       const previous = { tick: state.tick, ended: state.ended };
       combat.step(state, {
         [side]: consumeInput(packet, now),
-        [enemy]: engine.botInput(state, enemy, { movementStyle: style }),
+        [enemy]: enemyInput(),
       });
       receiveEffects(state.events);
       audio.playState(state, previous, side);

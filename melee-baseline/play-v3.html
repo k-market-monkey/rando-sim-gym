@@ -112,6 +112,7 @@
           <option value="aggressive">Aggressive</option>
           <option value="ranged-strafing">Ranged strafing</option>
           <option value="defensive">Defensive</option>
+          <option value="stationary">Stand still (attacks + guards)</option>
         </select></label
       ><label
         >Game speed
@@ -151,10 +152,22 @@
           step="1"
           value="0"
           style="width: 75px" /></label
+      ><label
+        >Parry release window (frames)
+        <input
+          id="parry"
+          type="number"
+          min="0"
+          max="120"
+          step="1"
+          value="6"
+          style="width: 75px" /></label
       ><output id="flinch-seconds">0.00s</output
       ><small
         >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
-        available. 30 frames = 1 simulation second. Changes apply immediately.</small
+        available. 30 frames = 1 simulation second. Release shield within the parry window after a
+        perfect block to attack/dash immediately; 0 disables this bonus. Changes apply
+        immediately.</small
       >
     </fieldset>
     <div id="score"></div>
@@ -168,11 +181,11 @@
     <div id="status" role="status">Loading…</div>
     <div id="ability"></div>
     <p class="help">
-      <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> V or 1 · <b>Shoot:</b> left
-      click · <b>Swipe:</b> C · <b>Dash:</b> Space · <b>Shield:</b> Shift · <b>Restart:</b> R ·
-      <b>Pause:</b> Esc<br />25 seconds · Moderate bot · 11×11 map · Fewer deaths wins; remaining
-      health breaks ties. Click the arena to start.
+      <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> C or 1 · <b>Shoot:</b> left
+      click · <b>Swipe:</b> right-click or X · <b>Dash:</b> Space · <b>Shield:</b> Shift ·
+      <b>Restart:</b> R · <b>Pause:</b> Esc<br />25 seconds · Moderate bot · 11×11 map · Fewer
+      deaths wins; remaining health breaks ties. Click the arena to start.
     </p>
   </main>
-  <script type="module" src="replay/app/gym-play.js?v=combat-tuning-5"></script>
+  <script type="module" src="replay/app/gym-play.js?v=body-parry-controls8"></script>
 </html>
