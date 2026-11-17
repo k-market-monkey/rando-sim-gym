@@ -420,7 +420,14 @@ function drawShield(ctx, canvas, p, t) {
 export function renderArena(
   canvas,
   state,
-  { localId = null, aim = null, labels = true, playerAttackColors = false } = {},
+  {
+    localId = null,
+    aim = null,
+    labels = true,
+    playerAttackColors = false,
+    flinchPlayers = new Map(),
+    flinchDuration = 6,
+  } = {},
 ) {
   if (!canvas || !state) return;
   const ctx = canvas.getContext('2d'),
@@ -481,7 +488,17 @@ export function renderArena(
       ctx.stroke();
     }
     drawItemEffects(ctx, p, t);
-    drawCharacter(ctx, p, p.x, p.y, 3, t, labels);
+    const flinch = flinchPlayers.get(p.id) || 0;
+    const flash = flinch > 0 && (flinchDuration - flinch) % 4 < 2;
+    drawCharacter(
+      ctx,
+      flash ? { ...p, color: '#ffffff', secondaryColor: '#ffffff' } : p,
+      p.x,
+      p.y,
+      3,
+      t,
+      labels,
+    );
     if (p.hp != null) {
       ctx.fillStyle = '#0e190e';
       ctx.fillRect(p.x - 19, p.y + 23, 38, 5);

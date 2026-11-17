@@ -1,7 +1,7 @@
-import { renderArena as renderBase } from './gym-base-renderer.js';
+import { renderArena as renderBase } from './gym-base-renderer.js?v=timing-flinch12';
 import { SHIELD } from '../shared/sim/composed/shield.js';
 import { PLAYER_BODY_RADIUS } from './gym-collision.js';
-export { receiveEffects } from './gym-base-renderer.js';
+export { receiveEffects } from './gym-base-renderer.js?v=timing-flinch12';
 
 /** Read actual simulation timers, so pause and game speed cannot desync the cue. */
 export function shieldVisualState(player) {

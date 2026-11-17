@@ -101,6 +101,92 @@
     a {
       color: #78f0c5;
     }
+    main {
+      max-width: 1100px;
+    }
+    .arena-layout {
+      display: grid;
+      gap: 16px;
+      align-items: start;
+    }
+    .timing-panel {
+      padding: 14px;
+      background: #1a2116;
+      border: 1px solid #425238;
+      border-radius: 8px;
+    }
+    .timing-panel h2 {
+      font-size: 16px;
+      margin: 0 0 6px;
+    }
+    .timing-panel p {
+      font-size: 12px;
+      color: #b7c5ae;
+      margin: 0 0 12px;
+    }
+    .timing-row {
+      --phase: #78f0c5;
+      padding: 10px 0;
+      border-top: 1px solid #34402e;
+    }
+    .timing-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .timing-heading kbd {
+      color: #c0ceb8;
+      font: 11px system-ui;
+      white-space: nowrap;
+    }
+    .timing-status {
+      font-size: 12px;
+      color: var(--phase);
+      margin: 5px 0;
+    }
+    .timing-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 3px;
+      background: #090f08;
+    }
+    .timing-fill {
+      height: 100%;
+      background: var(--phase);
+    }
+    .timing-details {
+      font-size: 11px;
+      color: #bbc8b3;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    .timing-row[data-phase='windup'] {
+      --phase: #eacb75;
+    }
+    .timing-row[data-phase='active'] {
+      --phase: #76bcff;
+    }
+    .timing-row[data-phase='recovery'] {
+      --phase: #f5a978;
+    }
+    .timing-row[data-phase='cooldown'] {
+      --phase: #b4a5f5;
+    }
+    .timing-row[data-phase='blocked'],
+    .timing-row[data-phase='overheated'] {
+      --phase: #f18db4;
+    }
+    @media (min-width: 760px) {
+      .arena-layout {
+        grid-template-columns: minmax(0, 1fr) 300px;
+      }
+      .arena-layout canvas {
+        width: 100%;
+        min-width: 0;
+        max-width: 600px;
+      }
+    }
   </style>
   <main>
     <h1 id="title">Loading matchup…</h1>
@@ -151,7 +237,7 @@
           min="0"
           max="120"
           step="1"
-          value="0"
+          value="6"
           style="width: 75px" /></label
       ><label
         >Parry release window (frames)
@@ -163,7 +249,7 @@
           step="1"
           value="6"
           style="width: 75px" /></label
-      ><output id="flinch-seconds">0.00s</output
+      ><output id="flinch-seconds">0.20s</output
       ><small
         >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
         available. 30 frames = 1 simulation second. Release shield within the parry window after a
@@ -172,13 +258,20 @@
       >
     </fieldset>
     <div id="score"></div>
-    <canvas
-      id="game-canvas"
-      width="440"
-      height="440"
-      tabindex="0"
-      aria-label="Playable gym arena"
-    ></canvas>
+    <div class="arena-layout">
+      <canvas
+        id="game-canvas"
+        width="440"
+        height="440"
+        tabindex="0"
+        aria-label="Playable gym arena"
+      ></canvas>
+      <section class="timing-panel" aria-label="Your move timing">
+        <h2>Your moves</h2>
+        <p>Simulation frames · 30f = 1s. Concurrent timers appear below each bar.</p>
+        <div id="timing-rows"></div>
+      </section>
+    </div>
     <div id="status" role="status">Loading…</div>
     <div id="ability"></div>
     <p class="help">
@@ -189,5 +282,5 @@
       Click the arena to start.
     </p>
   </main>
-  <script type="module" src="replay/app/gym-play.js?v=original-shield11"></script>
+  <script type="module" src="replay/app/gym-play.js?v=timing-flinch12"></script>
 </html>

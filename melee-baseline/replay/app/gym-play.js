@@ -6,7 +6,8 @@ import {
   renderArena,
   receiveEffects,
   shieldVisualState,
-} from './gym-renderer.js?v=original-shield11';
+} from './gym-renderer.js?v=timing-flinch12';
+import { renderTiming } from './gym-timing.js';
 import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';
 import { receiveInput, consumeInput } from './gym-input-buffer.js';
@@ -37,7 +38,7 @@ const bounded = (value, fallback, maximum) =>
     ? Math.max(0, Math.min(maximum, Number(value)))
     : fallback;
 let knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
-let flinchFrames = Math.round(bounded(params.get('flinch'), 0, 120));
+let flinchFrames = Math.round(bounded(params.get('flinch'), 6, 120));
 let parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
 combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
 let showHitboxes = params.get('hitboxes') === '1';
@@ -150,7 +151,13 @@ function setPaused(paused) {
   draw();
 }
 function draw() {
-  renderArena(canvas, state, { localId: side, aim: controls.aim, showHitboxes });
+  renderArena(canvas, state, {
+    localId: side,
+    aim: controls.aim,
+    showHitboxes,
+    flinchPlayers: new Map(state.players.map((p) => [p.id, combat.remaining(p.id)])),
+    flinchDuration: flinchFrames,
+  });
   $('pause').textContent = state.ended
     ? 'Finished'
     : room.paused
@@ -193,9 +200,13 @@ function draw() {
         : 'Ready · Click the arena or Start to play.'
       : `${Math.max(0, (750 - state.tick) / 30).toFixed(1)}s remaining`;
   const human = state.players.find((p) => p.id === side);
-  const cooldown = human.moveResources?.[matchup[side === 'a' ? 0 : 1].name]?.cooldown || 0;
+  const timing = renderTiming($('timing-rows'), state, human, {
+    flinch: combat.remaining(side),
+    flinchTotal: flinchFrames,
+    parry: parryRemaining(state, human),
+  });
   $('ability').textContent =
-    `C / 1: ${matchup[side === 'a' ? 0 : 1].name} · ${cooldown ? 'cooldown ' + (cooldown / 30).toFixed(1) + 's' : 'ready'} · Swipe (right-click / X): ${human.swipeCooldown ? (human.swipeCooldown / 30).toFixed(1) + 's' : 'ready'} · Enemy: ${style}`;
+    `C / 1: ${human.loadout[0].name} · ${timing[0].label.toLowerCase()} · Swipe: ${timing.find((row) => row.id === 'swipe').label.toLowerCase()} · Enemy: ${style}`;
 }
 function enemyInput() {
   const input = engine.botInput(state, enemy, {
@@ -226,7 +237,7 @@ $('restart').addEventListener('click', restart);
 for (const id of ['knockback', 'flinch', 'parry'])
   $(id).addEventListener('change', () => {
     knockbackMultiplier = bounded($('knockback').value, 3, 10);
-    flinchFrames = Math.round(bounded($('flinch').value, 0, 120));
+    flinchFrames = Math.round(bounded($('flinch').value, 6, 120));
     parryFrames = Math.round(bounded($('parry').value, 6, 120));
     $('parry').value = String(parryFrames);
     $('knockback').value = String(knockbackMultiplier);
