@@ -1,0 +1,85 @@
+.balance-page .replay-main {
+  max-width: 1160px;
+}
+.balance-table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.balance-page table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+.balance-page caption {
+  text-align: left;
+  font-weight: 700;
+  padding: 10px 0;
+}
+.balance-page th,
+.balance-page td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.balance-page tbody tr[data-mode] th {
+  padding-left: 30px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.balance-tests {
+  margin-top: 30px;
+}
+.balance-selectors {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.balance-selectors label {
+  flex: 1;
+  min-width: 180px;
+}
+.balance-selectors label:first-child {
+  flex: 0 1 180px;
+}
+.balance-selectors select {
+  width: 100%;
+}
+#balance-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #111612;
+  border-radius: 10px;
+  margin-top: 16px;
+}
+#balance-case-status {
+  color: var(--acid);
+}
+#balance-measurement {
+  font-weight: 700;
+}
+#balance-share {
+  margin-bottom: 2px;
+}
+@media (max-width: 640px) {
+  .balance-page .replay-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .balance-page .topbar {
+    padding: 0 16px;
+  }
+  .balance-page .replay-nav {
+    gap: 10px;
+  }
+}
+
+#balance-definitions pre {
+  max-height: 420px;
+  overflow: auto;
+  padding: 12px;
+  background: #111612;
+  font-size: 12px;
+}
