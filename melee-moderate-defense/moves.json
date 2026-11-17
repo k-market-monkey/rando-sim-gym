@@ -1,0 +1,359 @@
+[
+  {
+    "name": "lunge slash",
+    "formatVersion": 3,
+    "coreColor": "#7fd4ff",
+    "selfDamage": false,
+    "activation": {
+      "mode": "press",
+      "windup": 4,
+      "recovery": 6
+    },
+    "resource": {
+      "kind": "cooldown",
+      "cooldown": 24,
+      "capacity": 8,
+      "reload": 60,
+      "heatPerShot": 12,
+      "cooling": 1,
+      "threshold": 100
+    },
+    "root": "blade",
+    "setup": {
+      "kind": "none",
+      "linkTemplate": "none",
+      "minDistance": 60,
+      "maxDistance": 280,
+      "timeout": 150
+    },
+    "templates": [
+      {
+        "id": "blade",
+        "origin": "caster_center",
+        "motion": {
+          "kind": "caster_attached",
+          "speed": 0,
+          "acceleration": 0,
+          "sweep": 8,
+          "offset": 4,
+          "bounces": 0
+        },
+        "geometry": [
+          {
+            "kind": "sector",
+            "radius": 58,
+            "innerRadius": 10,
+            "length": 0,
+            "width": 10,
+            "arc": 10
+          }
+        ],
+        "lifetime": 6,
+        "arm": 0,
+        "physicalRadius": 1,
+        "health": 0,
+        "solid": false,
+        "damage": {
+          "amount": 20,
+          "shield": 25,
+          "policy": "impact",
+          "interval": 8,
+          "group": "hit"
+        },
+        "impulse": 6,
+        "force": {
+          "direction": "none",
+          "strength": 0,
+          "radius": 0
+        },
+        "terminalOn": {
+          "player": false,
+          "wall": false
+        },
+        "events": [],
+        "visual": "slash",
+        "guidance": {
+          "kind": "none",
+          "turnRate": 0,
+          "acquireRadius": 0,
+          "retargetEvery": 0
+        },
+        "ray": {
+          "kind": "none",
+          "range": 0,
+          "bounces": 0
+        },
+        "actor": {
+          "kind": "none",
+          "speed": 0,
+          "leash": 0
+        }
+      }
+    ],
+    "sprite": [
+      "00022000",
+      "00233200",
+      "02311320",
+      "23111132",
+      "23111132",
+      "02311320",
+      "00233200",
+      "00022000"
+    ],
+    "animation": "flicker",
+    "sound": {
+      "wave": "sawtooth",
+      "frequency": 520,
+      "slide": -300,
+      "duration": 90
+    },
+    "counterplay": [
+      "The caster dashes straight at the aim during a short windup; sidestep the line.",
+      "Shield the slash, or hit the caster to cancel the dash."
+    ],
+    "balanceReason": "Swipe-sized slash that closes 90 px at the cost of a committed windup.",
+    "colorLocked": false,
+    "casterAction": {
+      "kind": "lunge",
+      "range": 90
+    }
+  },
+  {
+    "name": "spinning sweep",
+    "formatVersion": 3,
+    "coreColor": "#c9a0ff",
+    "selfDamage": false,
+    "activation": {
+      "mode": "press",
+      "windup": 5,
+      "recovery": 8
+    },
+    "resource": {
+      "kind": "cooldown",
+      "cooldown": 30,
+      "capacity": 8,
+      "reload": 60,
+      "heatPerShot": 12,
+      "cooling": 1,
+      "threshold": 100
+    },
+    "root": "spin",
+    "setup": {
+      "kind": "none",
+      "linkTemplate": "none",
+      "minDistance": 60,
+      "maxDistance": 280,
+      "timeout": 150
+    },
+    "templates": [
+      {
+        "id": "spin",
+        "origin": "caster_center",
+        "motion": {
+          "kind": "caster_attached",
+          "speed": 0,
+          "acceleration": 0,
+          "sweep": 16,
+          "offset": 0,
+          "bounces": 0
+        },
+        "geometry": [
+          {
+            "kind": "sector",
+            "radius": 56,
+            "innerRadius": 6,
+            "length": 0,
+            "width": 10,
+            "arc": 16
+          }
+        ],
+        "lifetime": 8,
+        "arm": 0,
+        "physicalRadius": 1,
+        "health": 0,
+        "solid": false,
+        "damage": {
+          "amount": 16,
+          "shield": 20,
+          "policy": "impact",
+          "interval": 8,
+          "group": "hit"
+        },
+        "impulse": 9,
+        "force": {
+          "direction": "none",
+          "strength": 0,
+          "radius": 0
+        },
+        "terminalOn": {
+          "player": false,
+          "wall": false
+        },
+        "events": [],
+        "visual": "slash",
+        "guidance": {
+          "kind": "none",
+          "turnRate": 0,
+          "acquireRadius": 0,
+          "retargetEvery": 0
+        },
+        "ray": {
+          "kind": "none",
+          "range": 0,
+          "bounces": 0
+        },
+        "actor": {
+          "kind": "none",
+          "speed": 0,
+          "leash": 0
+        }
+      }
+    ],
+    "sprite": [
+      "00022000",
+      "00233200",
+      "02311320",
+      "23111132",
+      "23111132",
+      "02311320",
+      "00233200",
+      "00022000"
+    ],
+    "animation": "pulse",
+    "sound": {
+      "wave": "triangle",
+      "frequency": 360,
+      "slide": 240,
+      "duration": 140
+    },
+    "counterplay": [
+      "The spin covers every side but reaches only 56 px; stay out of reach.",
+      "Its long recovery leaves the caster open afterwards."
+    ],
+    "balanceReason": "All-round reach and knockback in exchange for lower damage and recovery.",
+    "colorLocked": false,
+    "casterAction": {
+      "kind": "none",
+      "range": 0
+    }
+  },
+  {
+    "name": "spear thrust",
+    "formatVersion": 3,
+    "coreColor": "#ffb070",
+    "selfDamage": false,
+    "activation": {
+      "mode": "press",
+      "windup": 4,
+      "recovery": 6
+    },
+    "resource": {
+      "kind": "cooldown",
+      "cooldown": 22,
+      "capacity": 8,
+      "reload": 60,
+      "heatPerShot": 12,
+      "cooling": 1,
+      "threshold": 100
+    },
+    "root": "spear",
+    "setup": {
+      "kind": "none",
+      "linkTemplate": "none",
+      "minDistance": 60,
+      "maxDistance": 280,
+      "timeout": 150
+    },
+    "templates": [
+      {
+        "id": "spear",
+        "origin": "caster_center",
+        "motion": {
+          "kind": "caster_attached",
+          "speed": 0,
+          "acceleration": 0,
+          "sweep": 0,
+          "offset": 8,
+          "bounces": 0
+        },
+        "geometry": [
+          {
+            "kind": "capsule",
+            "radius": 7,
+            "innerRadius": 0,
+            "length": 74,
+            "width": 14,
+            "arc": 16
+          }
+        ],
+        "lifetime": 5,
+        "arm": 0,
+        "physicalRadius": 1,
+        "health": 0,
+        "solid": false,
+        "damage": {
+          "amount": 22,
+          "shield": 27.5,
+          "policy": "impact",
+          "interval": 8,
+          "group": "hit"
+        },
+        "impulse": 8,
+        "force": {
+          "direction": "none",
+          "strength": 0,
+          "radius": 0
+        },
+        "terminalOn": {
+          "player": false,
+          "wall": false
+        },
+        "events": [],
+        "visual": "thrust",
+        "guidance": {
+          "kind": "none",
+          "turnRate": 0,
+          "acquireRadius": 0,
+          "retargetEvery": 0
+        },
+        "ray": {
+          "kind": "none",
+          "range": 0,
+          "bounces": 0
+        },
+        "actor": {
+          "kind": "none",
+          "speed": 0,
+          "leash": 0
+        }
+      }
+    ],
+    "sprite": [
+      "00022000",
+      "00233200",
+      "02311320",
+      "23111132",
+      "23111132",
+      "02311320",
+      "00233200",
+      "00022000"
+    ],
+    "animation": "pulse",
+    "sound": {
+      "wave": "square",
+      "frequency": 300,
+      "slide": 420,
+      "duration": 70
+    },
+    "counterplay": [
+      "The spear reaches far along one narrow line; step to the side.",
+      "Shield the tip or close inside its reach."
+    ],
+    "balanceReason": "Longer, narrower reach than the swipe on a similar cadence.",
+    "colorLocked": false,
+    "casterAction": {
+      "kind": "none",
+      "range": 0
+    }
+  }
+]
