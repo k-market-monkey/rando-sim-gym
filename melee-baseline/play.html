@@ -205,8 +205,8 @@
         <select id="speed">
           <option value="0.25">0.25×</option>
           <option value="0.5">0.5×</option>
-          <option value="0.75">0.75×</option>
-          <option value="1" selected>1×</option>
+          <option value="0.75" selected>Normal (0.75×)</option>
+          <option value="1">Fast (1×)</option>
           <option value="1.5">1.5×</option>
           <option value="2">2×</option>
           <option value="3">3×</option>
@@ -249,6 +249,16 @@
           step="1"
           value="6"
           style="width: 75px" /></label
+      ><label
+        >Swipe cooldown (frames)
+        <input
+          id="swipe-cooldown"
+          type="number"
+          min="0"
+          max="180"
+          step="1"
+          value="14"
+          style="width: 75px" /></label
       ><output id="flinch-seconds">0.20s</output
       ><small
         >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
@@ -278,9 +288,10 @@
       <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> C or 1 · <b>Shoot:</b> left
       click · <b>Swipe:</b> right-click or X · <b>Dash:</b> Space · <b>Shield:</b> Shift ·
       <b>Restart:</b> R · <b>Pause:</b> Esc<br />1,024-direction projectiles · No initial spawn
-      protection · Parry active frames 0–4 · 25 seconds · Moderate bot · 11×11 map · Fewer deaths
-      wins; remaining health breaks ties. Click the arena to start.
+      protection · Parry active frames 0–4 · 25 seconds · Moderate bot · 11×11 map · First death
+      fixes the winner; effects settle for 2 seconds. Score = winner HP; no-death timeout = HP
+      difference. Click the arena to start.
     </p>
   </main>
-  <script type="module" src="flight13/app/gym-play.js?v=projectile-headings13"></script>
+  <script type="module" src="duel14/app/gym-play.js?v=duel-scoring14"></script>
 </html>
