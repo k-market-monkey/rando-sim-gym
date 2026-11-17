@@ -1,8 +1,8 @@
-import * as engine from './gym-engine.js?v=recovery9';
-import { parryRemaining } from './gym-parry.js?v=recovery9';
-import { createGymCombat } from './gym-combat.js?v=recovery9';
+import * as engine from './gym-engine.js?v=shield-hitboxes10';
+import { parryRemaining } from './gym-parry.js?v=shield-hitboxes10';
+import { createGymCombat } from './gym-combat.js?v=shield-hitboxes10';
 
-import { renderArena, receiveEffects } from './renderer.js';
+import { renderArena, receiveEffects, shieldVisualState } from './gym-renderer.js';
 import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';
 import { receiveInput, consumeInput } from './gym-input-buffer.js';
@@ -36,6 +36,7 @@ let knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
 let flinchFrames = Math.round(bounded(params.get('flinch'), 0, 120));
 let parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
 combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
+let showHitboxes = params.get('hitboxes') === '1';
 const canvas = $('game-canvas');
 let state,
   room,
@@ -83,6 +84,7 @@ function updateUrl() {
     knockback: knockbackMultiplier,
     flinch: flinchFrames,
     parry: parryFrames,
+    hitboxes: showHitboxes ? 1 : 0,
   }))
     url.searchParams.set(key, value);
   history.replaceState(null, '', url);
@@ -123,6 +125,7 @@ function start() {
   controls.captureRoundBindings();
   $('title').textContent = `${matchup[0].name} vs ${matchup[1].name}`;
   $('style').value = style;
+  $('hitboxes').checked = showHitboxes;
   $('speed').value = String(speed);
   $('knockback').value = String(knockbackMultiplier);
   $('flinch').value = String(flinchFrames);
@@ -143,7 +146,7 @@ function setPaused(paused) {
   draw();
 }
 function draw() {
-  renderArena(canvas, state, { localId: side, aim: controls.aim });
+  renderArena(canvas, state, { localId: side, aim: controls.aim, showHitboxes });
   $('pause').textContent = state.ended
     ? 'Finished'
     : room.paused
@@ -168,7 +171,12 @@ function draw() {
       bar.max = p.maxHp;
       bar.value = p.dead ? 0 : p.hp;
       bar.setAttribute('aria-label', p.name + ' health');
-      card.append(name, info, bar);
+      const guard = document.createElement('div');
+      guard.className = 'shield-state';
+      const visual = shieldVisualState(p);
+      guard.textContent = visual.label;
+      guard.style.color = visual.blocked ? '#f2c56b' : '#a8dcff';
+      card.append(name, info, bar, guard);
       return card;
     }),
   );
@@ -191,6 +199,13 @@ function enemyInput() {
   });
   return style === 'stationary' ? { ...input, x: 0, y: 0, dash: false } : input;
 }
+$('hitboxes').addEventListener('change', () => {
+  showHitboxes = $('hitboxes').checked;
+  updateUrl();
+  controls.clearControls();
+  canvas.focus();
+  draw();
+});
 $('style').addEventListener('change', () => {
   style = $('style').value;
   updateUrl();

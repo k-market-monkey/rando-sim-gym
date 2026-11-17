@@ -128,6 +128,7 @@
         </select></label
       ><button id="restart">Restart (R)</button><button id="new-game">New spawns</button
       ><button id="pause">Start</button><button id="sound">Sound</button
+      ><label><input type="checkbox" id="hitboxes" /> Show player hit circles</label
       ><a id="switch" href="?">Switch sides</a><a href="./">Results</a>
     </div>
     <fieldset class="toolbar">
@@ -166,8 +167,8 @@
       ><small
         >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
         available. 30 frames = 1 simulation second. Release shield within the parry window after a
-        perfect block to attack/dash immediately; 0 disables this bonus. Shield cannot be raised
-        during attack recovery. Changes apply immediately.</small
+        perfect block to attack/dash or raise shield again immediately; 0 disables this bonus.
+        Shield cannot be raised during attack recovery. Changes apply immediately.</small
       >
     </fieldset>
     <div id="score"></div>
@@ -183,9 +184,10 @@
     <p class="help">
       <b>Move:</b> WASD / arrows · <b>Aim:</b> mouse · <b>Special:</b> C or 1 · <b>Shoot:</b> left
       click · <b>Swipe:</b> right-click or X · <b>Dash:</b> Space · <b>Shield:</b> Shift ·
-      <b>Restart:</b> R · <b>Pause:</b> Esc<br />25 seconds · Moderate bot · 11×11 map · Fewer
-      deaths wins; remaining health breaks ties. Click the arena to start.
+      <b>Restart:</b> R · <b>Pause:</b> Esc<br />No initial spawn protection · Parry active frames
+      0–4 · 25 seconds · Moderate bot · 11×11 map · Fewer deaths wins; remaining health breaks ties.
+      Click the arena to start.
     </p>
   </main>
-  <script type="module" src="replay/app/gym-play.js?v=recovery9"></script>
+  <script type="module" src="replay/app/gym-play.js?v=shield-hitboxes10"></script>
 </html>

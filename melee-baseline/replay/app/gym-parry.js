@@ -41,6 +41,7 @@ export function raiseShield(state, player, input) {
     parries.delete(player.id);
     if (canCounter && !input.shield && !player.dead && !player.shieldLocked && player.shield > 0) {
       player.shieldRelease = 0;
+      player.shieldCooldown = 0;
       state.events.push({ type: 'parry-release', playerId: player.id, x: player.x, y: player.y });
     }
   }

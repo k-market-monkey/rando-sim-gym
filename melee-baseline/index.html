@@ -10,7 +10,7 @@ for(const [index,card] of [...document.querySelectorAll('.matchup')].entries()){
  const links=document.createElement('div');links.className='play-links';
  for(const [seat,heading] of [...card.querySelectorAll('h3')].entries()){
   const link=document.createElement('a');link.dataset.playSide=seat?'b':'a';link.dataset.matchup=index+1;link.textContent='Play as '+heading.textContent;
-  link.href='play-v9.html?pair='+(index+1)+'&side='+link.dataset.playSide+'&style='+enemyStyle.value;
+  link.href='play-v10.html?pair='+(index+1)+'&side='+link.dataset.playSide+'&style='+enemyStyle.value;
   link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();active=link;document.getElementById('title').textContent=link.textContent;document.getElementById('replay-result').textContent='You vs Moderate bot · Enemy movement: '+enemyStyle.selectedOptions[0].textContent;frame.title=link.textContent;frame.src=link.href;dialog.showModal();});links.append(link);
  }
  card.querySelector('.games').before(links);

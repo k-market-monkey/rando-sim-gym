@@ -57,7 +57,7 @@ import { COMPOSED_STATE } from '../shared/sim/composed/state-fields.js';
 import { createCombatMoves } from '../shared/sim/composed/combat-identity.js';
 import { resetSwipe, tickSwipe, processSwipe, resolveSwipe } from './gym-swipe.js';
 import { resetShoot, tickShoot, processShoot } from '../shared/sim/composed/shoot.js';
-import { resetShield, raiseShield, holdShield } from './gym-parry.js?v=recovery9';
+import { resetShield, raiseShield, holdShield } from './gym-parry.js?v=shield-hitboxes10';
 import {
   startFlags,
   advanceFlags,
@@ -187,9 +187,9 @@ export function createMatch(options = {}) {
       hp: maxHp,
       maxHp,
       handicapPercent,
-      hardProtection: 30,
+      hardProtection: 0,
       impactRecovery: 0,
-      invuln: 30,
+      invuln: 0,
       dashCooldown: 0,
       dashTicks: 0,
       score: 0,
