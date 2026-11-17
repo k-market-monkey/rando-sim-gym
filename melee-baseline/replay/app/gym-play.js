@@ -1,8 +1,13 @@
 import * as engine from '../shared/sim/composed/engine.js';
+import { BUILTIN_SHOOT } from '../shared/content/composed/fixtures.js';
+
 import { renderArena, receiveEffects } from './renderer.js';
 import { createInput } from './input.js';
 import { createAudio } from './audio.js';
 import { receiveInput, consumeInput } from './gym-input-buffer.js';
+
+// Play-page-only experiment; archived replay pages keep the original impulse 2.
+BUILTIN_SHOOT.templates[0].impulse = 6;
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
