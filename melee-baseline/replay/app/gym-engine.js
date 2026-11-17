@@ -1,4 +1,4 @@
-// Playable gym fork: only swipe circle contact differs from the pinned engine.
+// Playable gym fork: circle swipe contact, parry counters and shield recovery rules.
 // The Composed engine: matches whose moves are built from components (format 3).
 import { getMechanicsVersion } from '../shared/protocol/versions.js';
 import { simulationOptions, simulationComparison } from '../shared/sim/calibration-rules.js';
@@ -57,7 +57,7 @@ import { COMPOSED_STATE } from '../shared/sim/composed/state-fields.js';
 import { createCombatMoves } from '../shared/sim/composed/combat-identity.js';
 import { resetSwipe, tickSwipe, processSwipe, resolveSwipe } from './gym-swipe.js';
 import { resetShoot, tickShoot, processShoot } from '../shared/sim/composed/shoot.js';
-import { resetShield, raiseShield, holdShield } from './gym-parry.js';
+import { resetShield, raiseShield, holdShield } from './gym-parry.js?v=recovery9';
 import {
   startFlags,
   advanceFlags,

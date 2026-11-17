@@ -1,7 +1,7 @@
-import * as engine from './gym-engine.js?v=contact-parry7';
+import * as engine from './gym-engine.js?v=recovery9';
 import { BUILTIN_SHOOT } from '../shared/content/composed/fixtures.js';
 import { cancelAttack } from '../shared/sim/composed/runtime.js';
-import { configureParry, recordParries, resetParries } from './gym-parry.js';
+import { configureParry, recordParries, resetParries } from './gym-parry.js?v=recovery9';
 
 // Experimental rules belong only to the playable page, never recorded replays.
 export function createGymCombat() {

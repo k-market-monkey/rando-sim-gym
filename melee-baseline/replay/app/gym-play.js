@@ -1,6 +1,6 @@
-import * as engine from './gym-engine.js?v=contact-parry7';
-import { parryRemaining } from './gym-parry.js';
-import { createGymCombat } from './gym-combat.js?v=contact-parry7';
+import * as engine from './gym-engine.js?v=recovery9';
+import { parryRemaining } from './gym-parry.js?v=recovery9';
+import { createGymCombat } from './gym-combat.js?v=recovery9';
 
 import { renderArena, receiveEffects } from './renderer.js';
 import { createInput } from './gym-input.js';

@@ -31,7 +31,12 @@ export function raiseShield(state, player, input) {
     parry?.life === player.life &&
     state.tick > parry.tick &&
     state.tick <= parry.tick + windowFrames;
-  const shielding = originalRaiseShield(state, player, input);
+  // A landed attack commits its recovery; windups can still be abandoned to guard.
+  const recovering =
+    player.swipeRecovery > 0 ||
+    Object.values(player.moveResources || {}).some((resource) => resource.recovery > 0);
+  const shieldInput = !wasShielding && recovering ? { ...input, shield: false } : input;
+  const shielding = originalRaiseShield(state, player, shieldInput);
   if (wasShielding && !shielding) {
     parries.delete(player.id);
     if (canCounter && !input.shield && !player.dead && !player.shieldLocked && player.shield > 0) {
