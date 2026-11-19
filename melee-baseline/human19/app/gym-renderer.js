@@ -1,8 +1,8 @@
-import { renderArena as renderBase } from './gym-base-renderer.js?v=31';
+import { renderArena as renderBase } from './gym-base-renderer.js?v=33';
 import { SHIELD } from '../shared/sim/composed/shield.js';
 import { PLAYER_BODY_RADIUS } from './gym-collision.js';
 import { drawHitCircle } from './hit-overlay.js?v=31';
-export { receiveEffects } from './gym-base-renderer.js?v=31';
+export { receiveEffects } from './gym-base-renderer.js?v=33';
 
 /** Read actual simulation timers, so pause and game speed cannot desync the cue. */
 export function shieldVisualState(player, state = {}) {

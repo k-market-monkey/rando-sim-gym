@@ -1,4 +1,4 @@
-import { renderScores, openReplay } from './score-view.js?v=32';
+import { renderScores, openReplay } from './score-view.js?v=33';
 import { defaults } from './tuning.js';
 import { orderedPair } from './matchups.js';
 const $ = (id) => document.getElementById(id);

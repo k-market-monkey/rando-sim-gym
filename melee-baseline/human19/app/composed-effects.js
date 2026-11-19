@@ -95,7 +95,7 @@ export function drawSlash(ctx, e, template, color, footprint) {
     sweep = template?.motion?.sweep || 0,
     perTick = (sweep * TAU) / 32 / span,
     sign = sweep < 0 ? -1 : 1;
-  faintFootprint(ctx, footprint, geometries, undefined, sweep ? 0.26 : 0.1);
+  faintFootprint(ctx, footprint, geometries, undefined, 0.1);
   // Afterimages: the blade's pose over the last ticks.
   if (sweep && sector)
     for (let k = 3; k >= 1; k--) {
@@ -103,7 +103,7 @@ export function drawSlash(ctx, e, template, color, footprint) {
       ctx.save();
       ctx.rotate(-perTick * k);
       footprint(ctx, g);
-      ctx.globalAlpha = 0.06 / k;
+      ctx.globalAlpha = 0.16 / k;
       ctx.fill();
       ctx.restore();
     }
@@ -121,23 +121,16 @@ export function drawSlash(ctx, e, template, color, footprint) {
     mid = inner + (outer - inner) * 0.62;
   ctx.lineCap = 'round';
   ctx.strokeStyle = color;
-  ctx.globalAlpha = (sweep ? 0.12 : 0.32) * fade;
+  ctx.globalAlpha = 0.32 * fade;
   ctx.lineWidth = Math.max(3, (outer - inner) * 0.55 * fade);
   ctx.beginPath();
   ctx.arc(0, 0, mid, tail, lead, anticlockwise);
   ctx.stroke();
-  ctx.globalAlpha = (sweep ? 0.28 : 0.85) * fade;
+  ctx.globalAlpha = 0.85 * fade;
   ctx.lineWidth = 7 * fade + 2;
   ctx.beginPath();
   ctx.arc(0, 0, outer * 0.86, tail, lead, anticlockwise);
   ctx.stroke();
-  if (sweep && sector) {
-    footprint(ctx, g);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.globalAlpha = 0.95;
-    ctx.stroke();
-  }
   // The edge itself: a white rim near the lead and the blade line.
   const glint = anticlockwise ? Math.min(tail, lead + 0.55) : Math.max(tail, lead - 0.55);
   ctx.strokeStyle = '#ffffff';

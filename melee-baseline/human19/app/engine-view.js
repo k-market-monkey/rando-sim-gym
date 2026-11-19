@@ -4,7 +4,7 @@ import {
   drawComposedEntity,
   drawComposedTelegraphs,
   abilityStatusMarkup as composedAbilityStatus,
-} from './composed-renderer.js?v=31';
+} from './composed-renderer.js?v=33';
 
 export const ENGINE_VIEW = Object.freeze({
   classic: Object.freeze({

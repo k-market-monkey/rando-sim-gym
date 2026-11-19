@@ -1,5 +1,5 @@
 import { replayTime, REPLAY_SPEEDS } from './human17/app/replay-player.js';
-import * as renderer from './human19/app/gym-renderer.js?v=31';
+import * as renderer from './human19/app/gym-renderer.js?v=33';
 import { verifiedRecording } from './recorded-stats.js?v=29';
 import { combatTable } from './stats-view.js';
 const $ = (id) => document.getElementById(id);
