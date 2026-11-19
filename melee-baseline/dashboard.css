@@ -340,3 +340,72 @@ summary {
   color: #c1cbbd;
   font-size: 0.88rem;
 }
+.settings-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.settings-heading h2 {
+  margin: 0;
+}
+#override-count {
+  font-size: 0.82rem;
+  color: #c0ccba;
+}
+#reset {
+  margin-left: auto;
+}
+#reset:disabled {
+  cursor: default;
+}
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 12px;
+}
+.setting-field {
+  min-width: 0;
+  border-left: 2px solid #41503b;
+  padding-left: 9px;
+}
+.setting-field.overridden {
+  border-color: var(--a);
+}
+.setting-field label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+.setting-field input[type='number'],
+.setting-field select {
+  width: 100%;
+  min-width: 0;
+}
+.field-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  min-height: 25px;
+}
+.field-meta small {
+  font-size: 11px;
+  color: #adbba6;
+}
+.overridden .field-meta small {
+  color: var(--a);
+}
+.field-meta button {
+  background: none;
+  border: 0;
+  padding: 3px 0;
+  color: #deebd6;
+  text-decoration: underline;
+  font-size: 12px;
+}
+.move-fields {
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+}

@@ -4,16 +4,21 @@
     name="viewport"
     content="width=device-width,initial-scale=1"
   /><title>Melee gym</title
-  ><link rel="stylesheet" href="dashboard.css?v=19" />
+  ><link rel="stylesheet" href="dashboard.css?v=23" />
   <link rel="stylesheet" href="gym-stats.css?v=22" />
   <main>
     <h1>Melee gym</h1>
-    <p>Set up a matchup, play either side, or run bot duels with the same settings.</p>
+
     <form id="settings">
       <section class="controls">
-        <h2>Shared settings</h2>
+        <div class="settings-heading">
+          <h2>Shared settings</h2>
+          <span id="override-count"></span>
+          <button type="button" id="reset">Reset all settings</button>
+        </div>
         <div id="shared-controls" class="control-grid"></div>
       </section>
+      <h2>Move settings</h2>
       <div id="moves" class="moves"></div>
     </form>
     <p class="muted">
@@ -22,9 +27,9 @@
     </p>
     <h2>Play a matchup</h2>
     <div id="play-links" class="moves"></div>
+    <h2>Simulate matchups</h2>
     <div class="actions">
-      <button id="reset">Reset all parameters</button
-      ><label
+      <label
         >Games per pairing <span id="games-range"></span>
         <input id="games" type="number" min="1" value="24" style="width: 75px" /></label
       ><label
@@ -88,5 +93,5 @@
       <iframe title="Gym game"></iframe>
     </dialog>
   </main>
-  <script type="module" src="dashboard.js?v=22"></script>
+  <script type="module" src="dashboard.js?v=23"></script>
 </html>

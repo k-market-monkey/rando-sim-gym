@@ -2,12 +2,16 @@ import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v
 import { renderScores, openReplay } from './score-view.js?v=22';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
+import { settingField, overrides } from './setting-fields.js';
 const pendingReports = new Map();
 let selection = 0;
 let reference;
 const $ = (id) => document.getElementById(id),
   baseMoves = await fetch('moves.json').then((r) => r.json()),
   KEY = 'rando-gym-tuning-v1';
+const baseline = defaults(baseMoves);
+const runDefaults = { games: 24, seed: 240913285 };
+const fields = [];
 let saved = {};
 try {
   saved = readRaw(localStorage.getItem(KEY));
@@ -32,6 +36,27 @@ const specs = [
   ['shieldRearm', 'Shield release → shield again (frames)', null, 0, 180, 1],
   ['swipeCooldown', 'Swipe cooldown frames', null, 0, 180, 1],
 ];
+function refreshFields() {
+  const count = fields.filter((update) => update()).length;
+  $('override-count').textContent = count
+    ? count + (count === 1 ? ' override' : ' overrides')
+    : 'All defaults';
+  $('reset').disabled = count === 0;
+}
+function storeSettings() {
+  try {
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({
+        ...overrides(tuning, baseline),
+        ...overrides(
+          { games: Number($('games').value), seed: Number($('seed').value) },
+          runDefaults,
+        ),
+      }),
+    );
+  } catch {}
+}
 function build() {
   const controls = $('shared-controls');
   for (const [key, label, choices, min, max, step] of specs) {
@@ -58,11 +83,13 @@ function build() {
     else Object.assign(input, { type: 'number', min, max, step });
     l.append(input);
     controls.append(l);
+    fields.push(settingField(input, baseline[key], label));
   }
   const l = document.createElement('label');
   l.innerHTML =
     '<span>Overlay</span><span><input type="checkbox" id="tune-hitboxes"> Player hit circles</span>';
   controls.append(l);
+  fields.push(settingField($('tune-hitboxes'), baseline.hitboxes, 'player hit circles'));
   baseMoves.forEach((m, i) => {
     const card = document.createElement('section');
     card.className = 'move-tune';
@@ -87,6 +114,7 @@ function build() {
       Object.assign(input, { type: 'number', min, max, step: 1, id: `move-${i}-${key}` });
       l.append(input);
       grid.append(l);
+      fields.push(settingField(input, baseline.moves[m.name][key], m.name + ' ' + label));
     }
     card.append(grid);
     $('moves').append(card);
@@ -115,6 +143,7 @@ function fill() {
     for (const key of ['radius', 'windup', 'cooldown'])
       $(`move-${i}-${key}`).value = tuning.moves[m.name][key];
   });
+  refreshFields();
   updateLinks();
 }
 function updateLinks() {
@@ -158,9 +187,7 @@ function readForm() {
   });
   tuning = sanitize(baseMoves, raw);
   fill();
-  try {
-    localStorage.setItem(KEY, JSON.stringify(tuning));
-  } catch {}
+  storeSettings();
   const url = new URL(location.href);
   url.searchParams.set('tune', JSON.stringify(tuning));
   history.replaceState(null, '', url);
@@ -186,10 +213,31 @@ function show(r, label) {
 $('games').max = MAX_GAMES_PER_PAIR;
 $('games-range').textContent = '(1–' + MAX_GAMES_PER_PAIR + ')';
 build();
+function setRunOptions(raw) {
+  $('games').value = gamesPerPair(raw.games ?? runDefaults.games);
+  const seed = Number(raw.seed ?? runDefaults.seed);
+  $('seed').value = Number.isFinite(seed)
+    ? Math.max(0, Math.min(4294967295, Math.trunc(seed)))
+    : runDefaults.seed;
+}
+setRunOptions(saved);
+for (const [id, value] of Object.entries(runDefaults)) {
+  fields.push(settingField($(id), value, id === 'games' ? 'games per pairing' : 'seed'));
+  $(id).onchange = () => {
+    setRunOptions({
+      games: $('games').value || runDefaults.games,
+      seed: $('seed').value || runDefaults.seed,
+    });
+    refreshFields();
+    storeSettings();
+  };
+}
 fill();
+storeSettings();
 $('settings').onchange = readForm;
 $('settings').onsubmit = (event) => event.preventDefault();
 $('reset').onclick = () => {
+  setRunOptions(runDefaults);
   tuning = defaults(baseMoves);
   fill();
   readForm();
