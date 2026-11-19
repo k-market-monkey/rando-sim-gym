@@ -1,6 +1,7 @@
 import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.2';
 import { renderScores, openReplay } from './score-view.js';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
+import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 const pendingReports = new Map();
 let selection = 0;
 let reference;
@@ -181,6 +182,8 @@ function show(r, label) {
       )
       .join(' · ');
 }
+$('games').max = MAX_GAMES_PER_PAIR;
+$('games-range').textContent = '(1–' + MAX_GAMES_PER_PAIR + ')';
 build();
 fill();
 $('settings').onchange = readForm;
@@ -193,14 +196,14 @@ $('reset').onclick = () => {
 $('run').onclick = () => {
   worker?.terminate();
   const captured = structuredClone(tuning),
-    games = Math.max(1, Math.min(100, Math.round(Number($('games').value)) || 24));
+    games = gamesPerPair($('games').value);
   $('games').value = games;
   $('run').disabled = true;
   $('cancel').disabled = false;
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=20', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

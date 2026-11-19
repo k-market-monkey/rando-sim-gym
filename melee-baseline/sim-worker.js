@@ -2,11 +2,12 @@ import * as engine from './human17/shared/sim/composed/engine.js';
 import { encodeReplayInputs } from './human17/shared/protocol/replay-inputs.js';
 import { createReplayPlayer } from './human17/app/replay-player.js';
 import { sanitize, tunedMoves } from './tuning.js';
+import { gamesPerPair } from './run-size.js';
 self.onmessage = async ({ data }) => {
   try {
     const tuning = sanitize(data.moves, data.tuning),
       moves = tunedMoves(data.moves, tuning),
-      count = Math.max(1, Math.min(100, Math.round(data.games) || 24)),
+      count = gamesPerPair(data.games),
       pairs = [];
     let done = 0;
     for (let a = 0; a < 3; a++)
