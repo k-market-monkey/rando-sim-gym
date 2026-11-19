@@ -1,5 +1,9 @@
 import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.2';
 import { renderScores, openReplay } from './score-view.js';
+import { listRuns, loadRun, saveRun } from './run-history.js';
+const pendingReports = new Map();
+let selection = 0;
+let reference;
 const $ = (id) => document.getElementById(id),
   baseMoves = await fetch('moves.json').then((r) => r.json()),
   KEY = 'rando-gym-tuning-v1';
@@ -204,7 +208,27 @@ $('run').onclick = () => {
         `Simulating and verifying replays: ${data.done} / ${data.total}`;
     }
     if (data.type === 'complete') {
-      show(data.report, 'Your simulated scores');
+      const r = data.report;
+      const created = Date.now();
+      const entry = {
+        id: crypto.randomUUID(),
+        created,
+        label: new Date(created).toLocaleString() + ' · ' + games * 3 + ' games · seed ' + r.seed,
+      };
+      pendingReports.set(entry.id, r);
+      addOption(entry);
+      $('history').value = entry.id;
+      selectRun();
+      saveRun(entry, r)
+        .then(() => pendingReports.delete(entry.id))
+        .catch(() => {
+          const option = Array.from($('history').options).find((o) => o.value === entry.id);
+          option.dataset.label += ' · tab only';
+          numberRuns();
+          if ($('history').value === entry.id)
+            $('history-status').textContent =
+              'Browser storage is unavailable. Download this run to keep it.';
+        });
       $('run-status').textContent =
         `${games * 3} games finished; all replays verified. Scores use the settings captured at start.`;
       end();
@@ -249,11 +273,57 @@ $('close-replay').onclick = () => $('replay-dialog').close();
 $('replay-dialog').onclose = () => {
   $('replay-dialog').querySelector('iframe').src = 'about:blank';
 };
-try {
-  show(
-    await fetch('../melee-moderate-defense/report.json').then((r) => r.json()),
-    'Published reference run · default settings',
+function numberRuns() {
+  const runs = Array.from($('history').options).filter((option) => option.dataset.created);
+  runs.forEach((option, i) => {
+    option.text = 'Run ' + (runs.length - i) + ' · ' + option.dataset.label;
+  });
+}
+function addOption(entry) {
+  const option = new Option(entry.label, entry.id);
+  option.dataset.created = entry.created;
+  option.dataset.label = entry.label;
+  const next = Array.from($('history').options).find(
+    (o) => !o.dataset.created || Number(o.dataset.created) <= entry.created,
   );
-} catch {
-  $('run-status').textContent = 'Choose parameters and start a run.';
+  $('history').insertBefore(option, next || null);
+  numberRuns();
+}
+async function selectRun() {
+  const token = ++selection;
+  const id = $('history').value;
+  report = null;
+  $('download').disabled = true;
+  $('scores').replaceChildren();
+  $('run-settings').textContent = '';
+  $('history-status').textContent = 'Loading results…';
+  try {
+    let r = pendingReports.get(id);
+    if (!r && id === 'reference') {
+      reference ??= fetch('../melee-moderate-defense/report.json')
+        .then((response) => {
+          if (!response.ok) throw Error();
+          return response.json();
+        })
+        .catch((error) => {
+          reference = null;
+          throw error;
+        });
+      r = await reference;
+    } else if (!r) r = await loadRun(id);
+    if (token !== selection) return;
+    show(r, 'Results');
+    $('history-status').textContent = '';
+  } catch {
+    if (token === selection) $('history-status').textContent = 'Could not load this run.';
+  }
+}
+$('history').onchange = selectRun;
+const initialSelection = selection;
+try {
+  for (const entry of await listRuns()) addOption(entry);
+} catch {}
+if (selection === initialSelection) {
+  $('history').selectedIndex = 0;
+  selectRun();
 }

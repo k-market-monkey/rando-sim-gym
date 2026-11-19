@@ -37,14 +37,22 @@
           style="width: 135px" /></label
       ><button id="run" class="primary">Run 3 matchups</button
       ><button id="cancel" disabled>Cancel</button
-      ><button id="download" disabled>Download run</button
       ><progress id="progress" class="run-progress" max="72" value="0"></progress>
     </div>
     <p id="run-status" role="status">
-      Local simulations run in the background; game speed controls playback, not the scores. Runs
-      stay in this tab; download to keep them.
+      Completed runs are saved in this browser. Select a run to inspect its scores and replays.
     </p>
-    <h2 id="result-heading">Scores</h2>
+    <h2 id="result-heading">Results</h2>
+    <div class="actions">
+      <label
+        >View run
+        <select id="history">
+          <option value="reference">Published reference · default settings</option>
+        </select></label
+      >
+      <button id="download" disabled>Download selected run</button>
+    </div>
+    <p id="history-status" role="status"></p>
     <p class="legend">
       <span class="side-a">Positive: first move leads</span
       ><span class="side-b">Negative: second move leads</span><span>Zero: even</span>
@@ -75,5 +83,5 @@
       <iframe title="Gym game"></iframe>
     </dialog>
   </main>
-  <script type="module" src="dashboard.js?v=17.2"></script>
+  <script type="module" src="dashboard.js?v=18"></script>
 </html>
