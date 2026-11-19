@@ -1,7 +1,7 @@
 import { weaponFields } from './weapon-settings.js';
 import { CHARACTER_LOOKS } from './human18/shared/content/characters.js';
 import { drawCharacter } from './human18/app/gym-base-renderer.js';
-import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=27';
+import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=28';
 import { renderScores, openReplay } from './score-view.js?v=26';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
@@ -208,7 +208,8 @@ function show(r, label) {
     openReplay($('replay-dialog'), g.game, title, r.tuning || defaults(baseMoves), moves),
   );
   $('download').disabled = false;
-  const t = sanitize(baseMoves, r.tuning || {});
+  const header = r.pairs[0].games[0].game.header;
+  const t = sanitize(baseMoves, { hitRadius: header.hitRadius ?? 13, ...r.tuning });
   $('run-settings').textContent =
     `${t.difficulty} · ${t.style} · ${CHARACTER_LOOKS.find((look) => look.id === t.shape).label} · Player radius ${t.hitRadius} units · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
     baseMoves
@@ -264,7 +265,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=27', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=28', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

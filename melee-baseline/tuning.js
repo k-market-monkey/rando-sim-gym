@@ -11,7 +11,7 @@ export const ROOT_DEFAULTS = {
   shieldRearm: 15,
   swipeCooldown: 14,
   hitboxes: false,
-  hitRadius: 13,
+  hitRadius: 11,
   shape: DEFAULT_PROFILE.look,
 };
 export function defaults(moves) {
@@ -80,7 +80,7 @@ export function readRaw(text) {
 }
 export function playLink(pair, side, tuning) {
   const url = new URL('play-v18.html', new URL('.', import.meta.url));
-  url.searchParams.set('v', '27');
+  url.searchParams.set('v', '28');
   url.searchParams.set('order', '25');
   url.searchParams.set('pair', pair);
   url.searchParams.set('side', side);

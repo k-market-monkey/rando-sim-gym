@@ -1,7 +1,7 @@
 import * as engine from './human18/shared/sim/composed/engine.js';
 import { encodeReplayInputs } from './human18/shared/protocol/replay-inputs.js';
 import { createReplayPlayer } from './human18/app/replay-player.js';
-import { sanitize, tunedMoves } from './tuning.js?v=27';
+import { sanitize, tunedMoves } from './tuning.js?v=28';
 import { gamesPerPair } from './run-size.js';
 import { collectStats } from './duel-stats.js';
 import { orderedPair } from './matchups.js';

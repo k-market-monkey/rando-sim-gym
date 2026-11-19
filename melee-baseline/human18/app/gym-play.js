@@ -1,5 +1,5 @@
 import { MATCHUPS } from '../../matchups.js';
-import { ROOT_DEFAULTS, readRaw, sanitize, tunedMoves } from '../../tuning.js?v=27';
+import { ROOT_DEFAULTS, readRaw, sanitize, tunedMoves } from '../../tuning.js?v=28';
 import { resetHumanBots } from '../shared/sim/composed/human-bot.js';
 import * as engine from './gym-engine.js';
 import { parryRemaining } from './gym-parry.js';
