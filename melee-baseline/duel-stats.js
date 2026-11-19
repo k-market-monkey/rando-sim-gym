@@ -5,6 +5,7 @@ export function collectStats(state) {
       p.id,
       {
         damage: {},
+        killedOpponent: false,
         movingTicks: 0,
         distance: 0,
         shieldingTicks: 0,
@@ -40,6 +41,8 @@ export function collectStats(state) {
       for (const p of state.players) {
         const last = previous[p.id],
           side = sides[p.id];
+        // The duel engine credits opponent kills even during the post-KO window.
+        side.killedOpponent ||= p.kills > 0;
         if (!last.dead) {
           const distance = Math.hypot(p.x - last.x, p.y - last.y);
           if (distance > 0) side.movingTicks++;

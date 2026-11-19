@@ -3,7 +3,7 @@ import { encodeReplayInputs } from './human18/shared/protocol/replay-inputs.js';
 import { createReplayPlayer } from './human18/app/replay-player.js';
 import { sanitize, tunedMoves } from './tuning.js?v=28';
 import { gamesPerPair } from './run-size.js';
-import { collectStats } from './duel-stats.js';
+import { collectStats } from './duel-stats.js?v=30';
 import { orderedPair } from './matchups.js';
 self.onmessage = async ({ data }) => {
   try {

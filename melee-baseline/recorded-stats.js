@@ -1,5 +1,5 @@
 import { createReplayPlayer } from './human18/app/replay-player.js';
-import { collectStats } from './duel-stats.js';
+import { collectStats } from './duel-stats.js?v=30';
 
 const engines = {
   'composed-b9004': '../melee-moderate/replay/shared/sim/composed/engine.js',

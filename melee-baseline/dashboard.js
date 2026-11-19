@@ -3,7 +3,7 @@ import { CHARACTER_LOOKS } from './human18/shared/content/characters.js';
 import { drawHitCircle } from './human19/app/hit-overlay.js';
 import { drawCharacter } from './human18/app/gym-base-renderer.js';
 import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=29';
-import { renderScores, openReplay } from './score-view.js?v=29';
+import { renderScores, openReplay } from './score-view.js?v=30';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 import { settingField, overrides } from './setting-fields.js';
@@ -260,7 +260,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=29', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=30', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

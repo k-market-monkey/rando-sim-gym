@@ -1,4 +1,4 @@
-import { matchupStats } from './stats-view.js?v=26';
+import { matchupStats } from './stats-view.js?v=30';
 import { distribution } from './duel-stats.js?v=26';
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
@@ -55,6 +55,32 @@ export function renderScores(container, report, onReplay, onPlay) {
     rates.append(el('dt', '', 'Win rate'), rateValues);
     rates.title = 'Wins divided by all games, including ties';
     headline.append(rates);
+    const killRow = el('div'),
+      killValues = el('dd', 'rate-values');
+    killRow.append(el('dt', '', 'Kill rate'), killValues);
+    killRow.title =
+      'Games in which this side killed its opponent, divided by all games. Both sides can earn credit.';
+    headline.append(killRow);
+    function showKillRates() {
+      killValues.replaceChildren();
+      for (const [index, move] of pair.moves.entries()) {
+        let kills = 0;
+        for (const g of pair.games) {
+          const seat = g.game.header.players.find((p) => p.loadout[0].name === move);
+          const killed = g.stats?.[seat.id]?.killedOpponent;
+          if (typeof killed !== 'boolean') return false;
+          if (killed) kills++;
+        }
+        killValues.append(
+          el(
+            'span',
+            index ? 'side-b' : 'side-a',
+            short(move) + ' ' + ((100 * kills) / n).toFixed(1) + '%',
+          ),
+        );
+      }
+      return true;
+    }
     card.append(headline);
     const labels = el('div', 'scale-labels');
     labels.append(
@@ -94,7 +120,13 @@ export function renderScores(container, report, onReplay, onPlay) {
       }
       card.append(links);
     }
-    card.append(matchupStats(pair, spread));
+    const statsPanel = matchupStats(pair, spread, showKillRates);
+    if (!showKillRates()) {
+      const calculate = el('button', '', 'Calculate from replays');
+      calculate.onclick = () => statsPanel.querySelector('button').click();
+      killValues.replaceChildren(calculate);
+    }
+    card.append(statsPanel);
     const grid = el('div', 'game-grid');
     for (const game of pair.games) {
       const favored = game.score > 0 ? a : game.score < 0 ? b : null;

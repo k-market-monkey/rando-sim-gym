@@ -1,4 +1,4 @@
-import { verifiedRecording } from './recorded-stats.js';
+import { verifiedRecording } from './recorded-stats.js?v=30';
 self.onmessage = async ({ data }) => {
   try {
     const stats = [];

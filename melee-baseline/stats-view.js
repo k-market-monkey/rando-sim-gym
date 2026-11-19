@@ -47,7 +47,7 @@ export function combatTable(games, moves, average) {
   );
   return wrap;
 }
-export function matchupStats(pair, { five, bins, variance }) {
+export function matchupStats(pair, { five, bins, variance }, onCalculated) {
   const panel = node('section');
   panel.className = 'match-stats';
   panel.append(
@@ -107,12 +107,16 @@ export function matchupStats(pair, { five, bins, variance }) {
   const combat = node('div');
   panel.append(combat);
   if (pair.games.every((g) => g.stats)) combat.append(combatTable(pair.games, pair.moves, true));
-  else {
+  if (
+    !pair.games.every(
+      (g) => g.stats && Object.values(g.stats).every((s) => typeof s.killedOpponent === 'boolean'),
+    )
+  ) {
     const button = node('button', 'Calculate combat stats from replays');
     button.onclick = () => {
       button.disabled = true;
       button.textContent = 'Reading recorded games…';
-      const worker = new Worker(new URL('./recorded-stats-worker.js', import.meta.url), {
+      const worker = new Worker(new URL('./recorded-stats-worker.js?v=30', import.meta.url), {
         type: 'module',
       });
       const fail = () => {
@@ -128,6 +132,7 @@ export function matchupStats(pair, { five, bins, variance }) {
         }
         worker.terminate();
         pair.games.forEach((g, i) => (g.stats = data.stats[i]));
+        onCalculated();
         combat.replaceChildren(combatTable(pair.games, pair.moves, true));
       };
       worker.postMessage(pair.games.map((g) => g.game));
