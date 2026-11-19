@@ -391,7 +391,7 @@ function drawShield(ctx, canvas, p, t) {
   }
   // Local gym frames use the exact simulation countdown, including slowed play.
   const remaining = p.shieldRelease;
-  const ratio = Math.min(1, remaining / SHIELD_RELEASE_TICKS),
+  const ratio = Math.min(1, remaining / (p.loweringDuration || SHIELD_RELEASE_TICKS)),
     progress = 1 - ratio,
     radius = 12 + 17 * ratio;
   ctx.save();

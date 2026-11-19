@@ -25,15 +25,15 @@ export function resetShield(p) {
   p.shieldPerfect = 0;
 }
 
-function lower(p) {
+function lower(s, p) {
   p.shielding = false;
-  p.shieldRelease = SHIELD.release;
-  p.shieldCooldown = SHIELD.cooldown;
+  p.shieldRelease = s.shieldReleaseFrames ?? SHIELD.release;
+  p.shieldCooldown = s.shieldRearmFrames ?? SHIELD.cooldown;
   p.shieldPerfect = 0;
 }
 function breakShield(s, p) {
   p.shieldLocked = true;
-  lower(p);
+  lower(s, p);
   s.events.push({ type: 'shieldbreak', x: p.x, y: p.y, playerId: p.id });
 }
 
@@ -55,7 +55,7 @@ export function raiseShield(s, p, input) {
   p.shieldCooldown = Math.max(0, p.shieldCooldown - 1);
   p.shieldPerfect = Math.max(0, p.shieldPerfect - 1);
   const shielding = !!input.shield && shieldReady(s, p);
-  if (wasShielding && !shielding) lower(p);
+  if (wasShielding && !shielding) lower(s, p);
   if (!wasShielding && shielding) {
     p.shielding = true;
     p.shieldPerfect = SHIELD.perfect;

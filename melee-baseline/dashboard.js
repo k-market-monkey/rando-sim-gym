@@ -1,4 +1,4 @@
-import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.1';
+import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.2';
 import { renderScores, openReplay } from './score-view.js';
 const $ = (id) => document.getElementById(id),
   baseMoves = await fetch('moves.json').then((r) => r.json()),
@@ -22,6 +22,8 @@ const specs = [
   ['knockback', 'Gun knockback ×', null, 0, 10, 0.5],
   ['flinch', 'Flinch frames', null, 0, 120, 1],
   ['parry', 'Parry release frames', null, 0, 120, 1],
+  ['shieldRelease', 'Shield release → attack/dash (frames)', null, 0, 180, 1],
+  ['shieldRearm', 'Shield release → shield again (frames)', null, 0, 180, 1],
   ['swipeCooldown', 'Swipe cooldown frames', null, 0, 180, 1],
 ];
 function build() {
@@ -167,7 +169,7 @@ function show(r, label) {
   $('download').disabled = false;
   const t = r.tuning || defaults(baseMoves);
   $('run-settings').textContent =
-    `${t.difficulty} · ${t.style} · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Swipe cooldown ${t.swipeCooldown}f. ` +
+    `${t.difficulty} · ${t.style} · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
     baseMoves
       .map(
         (m) =>

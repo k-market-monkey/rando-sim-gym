@@ -27,7 +27,7 @@ export const MECHANICS_VERSIONS = Object.freeze([
   }),
   Object.freeze({
     id: 'composed',
-    build: 'composed-b9005',
+    build: 'composed-b9006',
     aliases: Object.freeze(['composed-v2', 'composed-v3']),
     label: 'Composed',
     description:

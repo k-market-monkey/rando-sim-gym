@@ -1,1 +1,11 @@
-{"format":1,"builds":{"composed-b9005":{"engine":"composed","root":".","entry":"shared/sim/composed/engine.js","sha256":"ddd1c3d870ad058fdfb6cbb8370cbfbe84b3fd5c8161f9712d982e2579b6227f"}}}
+{
+  "format": 1,
+  "builds": {
+    "composed-b9006": {
+      "engine": "composed",
+      "root": ".",
+      "entry": "shared/sim/composed/engine.js",
+      "sha256": "18c0004ea919b5103336a5de7c76d8647fc44aafbe54fe161e5f83a9c4607bc1"
+    }
+  }
+}

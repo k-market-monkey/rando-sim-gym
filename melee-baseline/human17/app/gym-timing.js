@@ -59,7 +59,12 @@ export function timingRows(state, player, { flinch = 0, flinchTotal = 6, parry =
   const guard =
     player.shielding &&
     timer('Shield held', 'blocked', Math.ceil(player.shield / SHIELD.drain), 40);
-  const release = timer('Shield lowering', 'blocked', player.shieldRelease, SHIELD.release);
+  const release = timer(
+    'Shield lowering',
+    'blocked',
+    player.shieldRelease,
+    state.shieldReleaseFrames ?? SHIELD.release,
+  );
   const dash = timer('Dashing', 'active', player.dashTicks, 5);
   const otherWindup =
     player.attack &&
@@ -206,8 +211,18 @@ export function timingRows(state, player, { flinch = 0, flinchTotal = 6, parry =
           Math.max(resourceRecovery, player.swipeRecovery || 0),
           recoveryTotal,
         ),
-        timer('Lowering', 'recovery', player.shieldRelease, SHIELD.release),
-        timer('Cooldown', 'cooldown', player.shieldCooldown, SHIELD.cooldown),
+        timer(
+          'Lowering',
+          'recovery',
+          player.shieldRelease,
+          state.shieldReleaseFrames ?? SHIELD.release,
+        ),
+        timer(
+          'Cooldown',
+          'cooldown',
+          player.shieldCooldown,
+          state.shieldRearmFrames ?? SHIELD.cooldown,
+        ),
         player.shieldLocked &&
           timer(
             'Refilling',

@@ -4,7 +4,7 @@ import { PLAYER_BODY_RADIUS } from './gym-collision.js';
 export { receiveEffects } from './gym-base-renderer.js';
 
 /** Read actual simulation timers, so pause and game speed cannot desync the cue. */
-export function shieldVisualState(player) {
+export function shieldVisualState(player, state = {}) {
   if (player.dead) return { label: 'Out', remaining: 0, total: 1, blocked: true };
   if (player.shielding)
     return {
@@ -18,13 +18,7 @@ export function shieldVisualState(player) {
     ...Object.values(player.moveResources || {}).map((r) => r.recovery || 0),
   );
   const refill = player.shieldLocked ? Math.ceil((100 - player.shield) / SHIELD.recharge) : 0;
-  const remaining = Math.max(
-    player.shieldCooldown || 0,
-    player.shieldRelease || 0,
-    player.dashTicks || 0,
-    recovery,
-    refill,
-  );
+  const remaining = Math.max(player.shieldCooldown || 0, player.dashTicks || 0, recovery, refill);
   const reason = player.shieldLocked
     ? 'Shield refilling'
     : recovery > 0
@@ -39,7 +33,9 @@ export function shieldVisualState(player) {
         : 'Shield ready',
     remaining,
     total: Math.max(
-      player.shieldLocked ? Math.ceil(100 / SHIELD.recharge) : SHIELD.cooldown,
+      player.shieldLocked
+        ? Math.ceil(100 / SHIELD.recharge)
+        : (state.shieldRearmFrames ?? SHIELD.cooldown),
       remaining,
     ),
     blocked: remaining > 0 || player.shieldLocked,
@@ -52,6 +48,10 @@ export function renderArena(canvas, state, options = {}) {
     ...state,
     players: state.players.map((p) => ({
       ...p,
+      loweringDuration: Math.max(
+        state.shieldReleaseFrames ?? SHIELD.release,
+        state.shieldRearmFrames ?? SHIELD.cooldown,
+      ),
       shieldRelease: Math.max(p.shieldRelease || 0, p.shieldCooldown || 0),
     })),
   };

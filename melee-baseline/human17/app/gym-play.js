@@ -5,7 +5,7 @@ import { parryRemaining } from './gym-parry.js';
 import { createGymCombat } from './gym-combat.js';
 
 import { renderArena, receiveEffects, shieldVisualState } from './gym-renderer.js';
-import { renderTiming } from './gym-timing.js?v=17.1';
+import { renderTiming } from './gym-timing.js?v=17.2';
 import { configureSwipeCooldown } from './gym-swipe.js';
 import { createInput } from './gym-input.js';
 import { createAudio } from './audio.js';
@@ -50,6 +50,12 @@ const bounded = (value, fallback, maximum) =>
 let knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
 let flinchFrames = Math.round(bounded(params.get('flinch'), 6, 120));
 let parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
+let shieldReleaseFrames = Math.round(
+  bounded(params.get('shieldRelease'), ROOT_DEFAULTS.shieldRelease, 180),
+);
+let shieldRearmFrames = Math.round(
+  bounded(params.get('shieldRearm'), ROOT_DEFAULTS.shieldRearm, 180),
+);
 let swipeCooldownFrames = Math.round(bounded(params.get('swipeCooldown'), 14, 180));
 configureSwipeCooldown(swipeCooldownFrames);
 combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
@@ -102,6 +108,8 @@ function updateUrl() {
     knockback: knockbackMultiplier,
     flinch: flinchFrames,
     parry: parryFrames,
+    shieldRelease: shieldReleaseFrames,
+    shieldRearm: shieldRearmFrames,
     swipeCooldown: swipeCooldownFrames,
     hitboxes: showHitboxes ? 1 : 0,
   }))
@@ -133,6 +141,8 @@ function start() {
     parryFrames,
     knockbackMultiplier,
     swipeCooldownFrames,
+    shieldReleaseFrames,
+    shieldRearmFrames,
   });
   room = {
     code: 'GYM',
@@ -150,6 +160,8 @@ function start() {
   $('title').textContent = `${matchup[0].name} vs ${matchup[1].name}`;
   $('style').value = style;
   $('difficulty').value = difficulty;
+  $('shield-release').value = shieldReleaseFrames;
+  $('shield-rearm').value = shieldRearmFrames;
   $('swipe-cooldown').value = String(swipeCooldownFrames);
   $('hitboxes').checked = showHitboxes;
   $('speed').value = String(speed);
@@ -206,7 +218,7 @@ function draw() {
       bar.setAttribute('aria-label', p.name + ' health');
       const guard = document.createElement('div');
       guard.className = 'shield-state';
-      const visual = shieldVisualState(p);
+      const visual = shieldVisualState(p, state);
       guard.textContent = visual.label;
       guard.style.color = visual.blocked ? '#f2c56b' : '#a8dcff';
       card.append(name, info, bar, guard);
@@ -267,7 +279,14 @@ function restart() {
   if (resume) setPaused(false);
 }
 $('restart').addEventListener('click', restart);
-for (const id of ['knockback', 'flinch', 'parry', 'swipe-cooldown'])
+for (const id of [
+  'knockback',
+  'flinch',
+  'parry',
+  'shield-release',
+  'shield-rearm',
+  'swipe-cooldown',
+])
   $(id).addEventListener('change', () => {
     knockbackMultiplier = bounded($('knockback').value, 3, 10);
     flinchFrames = Math.round(bounded($('flinch').value, 6, 120));
@@ -275,8 +294,19 @@ for (const id of ['knockback', 'flinch', 'parry', 'swipe-cooldown'])
     swipeCooldownFrames = Math.round(bounded($('swipe-cooldown').value, 14, 180));
     $('swipe-cooldown').value = String(swipeCooldownFrames);
     configureSwipeCooldown(swipeCooldownFrames);
-    for (const player of state.players)
+    shieldReleaseFrames = Math.round(
+      bounded($('shield-release').value, ROOT_DEFAULTS.shieldRelease, 180),
+    );
+    shieldRearmFrames = Math.round(
+      bounded($('shield-rearm').value, ROOT_DEFAULTS.shieldRearm, 180),
+    );
+    $('shield-release').value = shieldReleaseFrames;
+    $('shield-rearm').value = shieldRearmFrames;
+    for (const player of state.players) {
+      player.shieldRelease = Math.min(player.shieldRelease, shieldReleaseFrames);
+      player.shieldCooldown = Math.min(player.shieldCooldown, shieldRearmFrames);
       player.swipeCooldown = Math.min(player.swipeCooldown, swipeCooldownFrames);
+    }
     $('parry').value = String(parryFrames);
     $('knockback').value = String(knockbackMultiplier);
     $('flinch').value = String(flinchFrames);
@@ -288,6 +318,8 @@ for (const id of ['knockback', 'flinch', 'parry', 'swipe-cooldown'])
       parryWindow: parryFrames,
       knockbackMultiplier,
       swipeCooldownFrames,
+      shieldReleaseFrames,
+      shieldRearmFrames,
     });
     updateUrl();
     controls.clearControls();

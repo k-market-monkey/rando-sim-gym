@@ -12,8 +12,10 @@ window.addEventListener('message', async (event) => {
       game.engineBuild === 'composed-b9004'
         ? '../melee-moderate/replay/shared/sim/composed/engine.js'
         : game.engineBuild === 'composed-b9005'
-          ? './human17/shared/sim/composed/engine.js'
-          : null;
+          ? './human16/shared/sim/composed/engine.js'
+          : game.engineBuild === 'composed-b9006'
+            ? './human17/shared/sim/composed/engine.js'
+            : null;
     if (!path) throw Error('Unsupported recorded engine');
     const engine = await import(path);
     player = createReplayPlayer(engine, game, {

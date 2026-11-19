@@ -118,6 +118,8 @@ export function createMatch(options = {}) {
     teamScores: {},
     flinchFrames: options.flinchFrames ?? 6,
     parryWindow: options.parryFrames ?? defaultParryWindow(),
+    shieldReleaseFrames: options.shieldReleaseFrames ?? 8,
+    shieldRearmFrames: options.shieldRearmFrames ?? 15,
     swipeCooldownFrames: options.swipeCooldownFrames ?? 14,
     knockbackMultiplier: options.knockbackMultiplier ?? 3,
     duelFirstDeathTick: null,

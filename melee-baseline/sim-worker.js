@@ -23,6 +23,8 @@ self.onmessage = async ({ data }) => {
             flinchFrames: tuning.flinch,
             parryFrames: tuning.parry,
             knockbackMultiplier: tuning.knockback,
+            shieldReleaseFrames: tuning.shieldRelease,
+            shieldRearmFrames: tuning.shieldRearm,
             swipeCooldownFrames: tuning.swipeCooldown,
             players: chosen.map((move, j) => ({
               id: j ? 'b' : 'a',
@@ -87,7 +89,7 @@ self.onmessage = async ({ data }) => {
       type: 'complete',
       report: {
         format: 1,
-        engineBuild: 'composed-b9005',
+        engineBuild: pairs[0].games[0].game.engineBuild,
         tuning,
         seed: data.seed,
         gamesPerPair: count,

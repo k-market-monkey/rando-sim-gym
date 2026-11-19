@@ -228,6 +228,8 @@ export const COMPOSED_STATE = record(
     'timeLimit',
     'flinchFrames',
     'parryWindow',
+    'shieldReleaseFrames',
+    'shieldRearmFrames',
     'swipeCooldownFrames',
     'knockbackMultiplier',
     'duelFirstDeathTick',
