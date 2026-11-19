@@ -5,6 +5,7 @@ const engines = {
   'composed-b9004': '../melee-moderate/replay/shared/sim/composed/engine.js',
   'composed-b9005': './human16/shared/sim/composed/engine.js',
   'composed-b9006': './human17/shared/sim/composed/engine.js',
+  'composed-b9008': './human19/shared/sim/composed/engine.js',
   'composed-b9007': './human18/shared/sim/composed/engine.js',
 };
 export async function verifiedRecording(game, options) {

@@ -124,6 +124,6 @@ export function openReplay(dialog, game, title, tuning, moves) {
       { type: 'gym-replay', game, title, tuning, moves },
       location.origin,
     );
-  frame.src = new URL('replay17.html?v=26', import.meta.url);
+  frame.src = new URL('replay17.html?v=29', import.meta.url);
   dialog.showModal();
 }

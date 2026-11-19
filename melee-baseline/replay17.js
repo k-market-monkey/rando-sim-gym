@@ -1,6 +1,8 @@
 import { replayTime, REPLAY_SPEEDS } from './human17/app/replay-player.js';
-import { renderArena, receiveEffects } from './human18/app/gym-renderer.js';
-import { verifiedRecording } from './recorded-stats.js';
+import * as oldRenderer from './human18/app/gym-renderer.js';
+import * as centeredRenderer from './human19/app/gym-renderer.js';
+let renderer = oldRenderer;
+import { verifiedRecording } from './recorded-stats.js?v=29';
 import { combatTable } from './stats-view.js';
 const $ = (id) => document.getElementById(id);
 const speedKey = 'rando-gym-replay-speed';
@@ -19,7 +21,10 @@ window.addEventListener('message', async (event) => {
   try {
     player?.pause();
     const { game, tuning } = event.data;
-    const verified = await verifiedRecording(game, { onStep: (s) => receiveEffects(s.events) });
+    renderer = game.engineBuild === 'composed-b9008' ? centeredRenderer : oldRenderer;
+    const verified = await verifiedRecording(game, {
+      onStep: (s) => renderer.receiveEffects(s.events),
+    });
     player = verified.player;
     const sides = event.data.moves ?? game.header.players.map((p) => p.loadout[0].name);
     seatIds = sides.map((move) => game.header.players.find((p) => p.loadout[0].name === move).id);
@@ -60,7 +65,7 @@ function draw(time) {
       ...player.state.players.find((p) => p.id === id),
       color: i === 0 ? '#78f0c5' : '#f18db4',
     }));
-    renderArena(
+    renderer.renderArena(
       $('arena'),
       { ...player.state, players: fighters },
       {

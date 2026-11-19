@@ -1,8 +1,9 @@
 import { weaponFields } from './weapon-settings.js';
 import { CHARACTER_LOOKS } from './human18/shared/content/characters.js';
+import { drawHitCircle } from './human19/app/hit-overlay.js';
 import { drawCharacter } from './human18/app/gym-base-renderer.js';
-import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=28';
-import { renderScores, openReplay } from './score-view.js?v=26';
+import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=29';
+import { renderScores, openReplay } from './score-view.js?v=29';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 import { settingField, overrides } from './setting-fields.js';
@@ -148,13 +149,7 @@ function fill() {
   const ctx = $('shape-preview').getContext('2d');
   ctx.clearRect(0, 0, 100, 100);
   drawCharacter(ctx, { look: tuning.shape, color: '#78f0c5' }, 50, 50, 3);
-  ctx.beginPath();
-  ctx.arc(50, 50, tuning.hitRadius, 0, 2 * Math.PI);
-  ctx.fillStyle = '#6cffe522';
-  ctx.fill();
-  ctx.strokeStyle = '#6cffe5';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  drawHitCircle(ctx, 50, 50, tuning.hitRadius);
   refreshFields();
   updateLinks();
 }
@@ -265,7 +260,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=28', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=29', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

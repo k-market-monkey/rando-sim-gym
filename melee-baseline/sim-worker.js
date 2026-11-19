@@ -1,4 +1,4 @@
-import * as engine from './human18/shared/sim/composed/engine.js';
+import * as engine from './human19/shared/sim/composed/engine.js';
 import { encodeReplayInputs } from './human18/shared/protocol/replay-inputs.js';
 import { createReplayPlayer } from './human18/app/replay-player.js';
 import { sanitize, tunedMoves } from './tuning.js?v=28';

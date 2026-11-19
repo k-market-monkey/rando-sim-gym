@@ -1,0 +1,11 @@
+{
+  "format": 1,
+  "builds": {
+    "composed-b9008": {
+      "engine": "composed",
+      "root": ".",
+      "entry": "shared/sim/composed/engine.js",
+      "sha256": "a5ce17e6601394d99706c2cefe01fb0f95be634e7a62f5caacc36a69ed1a18f1"
+    }
+  }
+}
