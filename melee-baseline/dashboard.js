@@ -3,7 +3,7 @@ import { CHARACTER_LOOKS } from './human18/shared/content/characters.js';
 import { drawHitCircle } from './human19/app/hit-overlay.js';
 import { drawCharacter } from './human18/app/gym-base-renderer.js';
 import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=31';
-import { renderScores, openReplay } from './score-view.js?v=31';
+import { renderScores, openReplay } from './score-view.js?v=32';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 import { settingField, overrides } from './setting-fields.js';

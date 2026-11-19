@@ -1,4 +1,4 @@
-import { matchupStats } from './stats-view.js?v=30';
+import { matchupStats } from './stats-view.js?v=32';
 import { distribution } from './duel-stats.js?v=26';
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);

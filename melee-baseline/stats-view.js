@@ -52,7 +52,7 @@ export function matchupStats(pair, { five, bins, variance }, onCalculated) {
   panel.className = 'match-stats';
   panel.append(
     node('h3', 'Score distribution'),
-    node('p', 'Variance ' + fmt(variance) + ' points²'),
+    node('p', 'Standard deviation: ' + fmt(Math.sqrt(variance)) + ' HP'),
   );
   const box = node('div');
   box.className = 'quartiles';
