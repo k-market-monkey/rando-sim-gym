@@ -1,5 +1,6 @@
 import { matchupStats } from './stats-view.js?v=32';
 import { distribution } from './duel-stats.js?v=26';
+import { scoreInterval } from './score-interval.js';
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -45,6 +46,22 @@ export function renderScores(container, report, onReplay, onPlay) {
         ),
       );
       headline.append(row);
+      if (label === 'Average score') {
+        const interval = scoreInterval(pair),
+          line = el('div');
+        const signed = (x) => (x > 0 ? '+' : '') + x.toFixed(1);
+        line.append(
+          el('dt', '', '95% CI for mean'),
+          el(
+            'dd',
+            'score-interval',
+            interval.message ?? signed(interval.lower) + ' to ' + signed(interval.upper) + ' HP',
+          ),
+        );
+        line.title =
+          'Approximate uncertainty across seeds for this matchup and seat mix. An interval spanning zero leaves the direction of the advantage uncertain.';
+        headline.append(line);
+      }
     }
     const rates = el('div'),
       rateValues = el('dd', 'rate-values');
