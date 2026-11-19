@@ -4,6 +4,7 @@ import { createReplayPlayer } from './human18/app/replay-player.js';
 import { sanitize, tunedMoves } from './tuning.js?v=21';
 import { gamesPerPair } from './run-size.js';
 import { collectStats } from './duel-stats.js';
+import { orderedPair } from './matchups.js';
 self.onmessage = async ({ data }) => {
   try {
     const tuning = sanitize(data.moves, data.tuning),
@@ -99,7 +100,7 @@ self.onmessage = async ({ data }) => {
         tuning,
         seed: data.seed,
         gamesPerPair: count,
-        pairs,
+        pairs: pairs.map(orderedPair),
       },
     });
   } catch (error) {

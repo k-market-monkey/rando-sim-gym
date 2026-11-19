@@ -1,3 +1,4 @@
+import { MATCHUPS } from '../../matchups.js';
 import { ROOT_DEFAULTS, readRaw, sanitize, tunedMoves } from '../../tuning.js?v=21';
 import { resetHumanBots } from '../shared/sim/composed/human-bot.js';
 import * as engine from './gym-engine.js';
@@ -38,11 +39,9 @@ const baseMoves = await fetch(new URL('../../moves.json', import.meta.url)).then
 });
 const tuning = sanitize(baseMoves, forwarded);
 const moves = tunedMoves(baseMoves, tuning);
-const matchup = [
-  [0, 1],
-  [0, 2],
-  [1, 2],
-][pair - 1].map((i) => moves[i]);
+// Older direct links used Lunge as seat A in pairing 2.
+const indices = pair === 2 && params.get('order') !== '25' ? [0, 2] : MATCHUPS[pair - 1];
+const matchup = indices.map((i) => moves[i]);
 const bounded = (value, fallback, maximum) =>
   value !== null && Number.isFinite(Number(value))
     ? Math.max(0, Math.min(maximum, Number(value)))

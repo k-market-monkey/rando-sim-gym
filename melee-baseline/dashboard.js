@@ -1,8 +1,9 @@
-import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=21';
+import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=25';
 import { renderScores, openReplay } from './score-view.js?v=24';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 import { settingField, overrides } from './setting-fields.js';
+import { MATCHUPS, orderedPair } from './matchups.js';
 const pendingReports = new Map();
 let selection = 0;
 let reference;
@@ -120,11 +121,7 @@ function build() {
     $('moves').append(card);
   });
   for (let i = 0; i < 3; i++) {
-    const pair = [
-        [0, 1],
-        [0, 2],
-        [1, 2],
-      ][i],
+    const pair = MATCHUPS[i],
       card = document.createElement('section');
     card.className = 'move-tune';
     const h = document.createElement('h2');
@@ -148,11 +145,7 @@ function fill() {
 }
 function updateLinks() {
   for (let i = 0; i < 3; i++) {
-    const pair = [
-      [0, 1],
-      [0, 2],
-      [1, 2],
-    ][i];
+    const pair = MATCHUPS[i];
     const box = document.querySelector(`[data-links="${i}"]`);
     box.replaceChildren();
     for (let seat = 0; seat < 2; seat++) {
@@ -194,9 +187,9 @@ function readForm() {
   if (report) $('run-status').textContent = 'Parameters changed. Run again to update scores.';
 }
 function show(r, label) {
-  report = r;
+  report = { ...r, pairs: r.pairs.map(orderedPair) };
   $('result-heading').textContent = label;
-  renderScores($('scores'), r, (g, title, moves) =>
+  renderScores($('scores'), report, (g, title, moves) =>
     openReplay($('replay-dialog'), g.game, title, r.tuning || defaults(baseMoves), moves),
   );
   $('download').disabled = false;
@@ -252,7 +245,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=22', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=25', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

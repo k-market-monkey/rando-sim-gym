@@ -1,5 +1,6 @@
 import { renderScores, openReplay } from './score-view.js?v=24';
 import { defaults } from './tuning.js';
+import { orderedPair } from './matchups.js';
 const $ = (id) => document.getElementById(id);
 try {
   const [report, moves] = await Promise.all([
@@ -12,8 +13,11 @@ try {
       : 'Melee · defense-tuned Moderate bot';
   $('report-status').textContent =
     `${report.pairs.reduce((n, p) => n + p.games.length, 0)} games · Recorded run · Positive favors the teal move; negative favors the pink move. Click a game to replay here.`;
-  renderScores($('scores'), report, (game, title, sides) =>
-    openReplay($('dialog'), game.game, title, report.tuning || defaults(moves), sides),
+  renderScores(
+    $('scores'),
+    { ...report, pairs: report.pairs.map(orderedPair) },
+    (game, title, sides) =>
+      openReplay($('dialog'), game.game, title, report.tuning || defaults(moves), sides),
   );
 } catch (e) {
   $('report-status').textContent = e.message;
