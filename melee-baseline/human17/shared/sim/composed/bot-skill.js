@@ -1,3 +1,4 @@
+import { builtinAction } from './combat-identity.js';
 // Difficulty aliases: Impossible = former Hard; Hard = former Moderate.
 // Lapses are hashed from the match seed, bot id and threat id, so they add no state.
 
@@ -38,6 +39,8 @@ function roll(state, player, ...keys) {
 export function noticed(state, player, entity) {
   if (!['hard', 'moderate'].includes(state.botDifficulty)) return true;
   if (roll(state, player, 1, entity.id) < MODERATE.missed) return false;
+  if (state.botDifficulty === 'moderate' && builtinAction(entity.move) === 'shoot')
+    return entity.age >= 2 + (roll(state, player, 19, entity.id) % 4);
   if (state.botDifficulty === 'moderate')
     return entity.age >= 6 + (roll(state, player, 19, entity.id) % 7);
   if (roll(state, player, 2, entity.id) >= MODERATE.late) return true;

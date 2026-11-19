@@ -5,7 +5,7 @@
       "engine": "composed",
       "root": ".",
       "entry": "shared/sim/composed/engine.js",
-      "sha256": "18c0004ea919b5103336a5de7c76d8647fc44aafbe54fe161e5f83a9c4607bc1"
+      "sha256": "f980297b3871f550451169a435d70a11cb3655f39c904063f60ba72faaf84f50"
     }
   }
 }

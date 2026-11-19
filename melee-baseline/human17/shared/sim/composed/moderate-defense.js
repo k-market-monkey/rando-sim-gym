@@ -4,6 +4,46 @@ import { shieldReady } from './shield.js';
 import { allWalls } from './queries.js';
 import { hitEntity, blockedSegment, dir } from './geometry.js';
 import { projectileDir, usesProjectileHeading } from './projectile-heading.js';
+import { SHOOT } from './shoot.js';
+import { SHOOT_KEY, SHOOT_MOVE } from './combat-identity.js';
+import { hypot } from '../exact-math.js';
+const burstReads = new WeakMap();
+// Predict one follow-up from the last visible shot. A delayed shot can bait this guard.
+function expectsBullet(state, player, walls) {
+  let reads = burstReads.get(state);
+  if (!reads) burstReads.set(state, (reads = new Map()));
+  for (const enemy of state.players) {
+    if (enemy === player || enemy.dead || (state.teamBattle && enemy.team === player.team))
+      continue;
+    const distance = hypot(enemy.x - player.x, enemy.y - player.y);
+    if (distance > 145 || blockedSegment(enemy.x, enemy.y, player.x, player.y, walls)) continue;
+    const key = player.id + '/' + enemy.id;
+    if (
+      state.events.some(
+        (e) => e.type === 'cast' && e.moveKey === SHOOT_KEY && e.playerId === enemy.id,
+      )
+    ) {
+      // The muzzle flash and facing are visible even if the first bullet arrives too fast.
+      const dx = player.x - enemy.x,
+        dy = player.y - enemy.y;
+      const ax = enemy.aimX - enemy.x,
+        ay = enemy.aimY - enemy.y;
+      if (ax * dx + ay * dy > 0 && Math.abs(ax * dy - ay * dx) <= 28 * hypot(ax, ay))
+        reads.set(key, { tick: state.tick, life: player.life, shooterLife: enemy.life });
+    }
+    const read = reads.get(key);
+    if (!read || read.life !== player.life || read.shooterLife !== enemy.life) continue;
+    const speed = SHOOT_MOVE.templates[0].motion.speed;
+    const impact = read.tick + SHOOT.interval + Math.max(0, Math.floor((distance - 32) / speed));
+    if (
+      state.tick >= impact - 3 &&
+      state.tick <= impact + 1 &&
+      roll(state, player, read.tick, 43) % 100 < 82
+    )
+      return impact + 1;
+  }
+  return null;
+}
 const guardPlans = new WeakMap();
 const defend = (input, extra) => ({
   ...input,
@@ -33,6 +73,8 @@ export function meleeAttempt(state, player, start, enemyId) {
 export function moderateDefense(state, player, original) {
   const input = { ...original, shield: false };
   if (player.dead) return input;
+  const walls = allWalls(state);
+  const anticipate = expectsBullet(state, player, walls);
   // Cash in a successful parry before the next threat, rather than holding forever.
   if (player.shielding && player.lastParryTick === state.tick) return defend(input, {});
   let plans = guardPlans.get(state);
@@ -44,7 +86,6 @@ export function moderateDefense(state, player, original) {
     shieldReady(state, player) &&
     !player.swipeRecovery &&
     !Object.values(player.moveResources).some((r) => r.recovery > 0);
-  const walls = allWalls(state);
   for (const enemy of state.players) {
     if (enemy === player || enemy.dead || (state.teamBattle && enemy.team === player.team))
       continue;
@@ -112,6 +153,10 @@ export function moderateDefense(state, player, original) {
       )
     )
       return defend(input, { shield: true });
+  }
+  if (anticipate !== null && canShield) {
+    plans.set(player.id, { life: player.life, until: anticipate });
+    return defend(input, { shield: true });
   }
   return input;
 }
