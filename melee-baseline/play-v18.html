@@ -255,68 +255,10 @@
         </select></label
       ><button id="restart">Restart (R)</button><button id="new-game">New spawns</button
       ><button id="pause">Start</button><button id="sound">Sound</button
-      ><label
-        >Player hit-circle radius (units)
-        <input type="number" id="hit-radius" min="1" max="40" step="1" value="13" /></label
       ><label><input type="checkbox" id="hitboxes" /> Show player hit circles</label
-      ><a id="switch" href="?">Switch sides</a><a href="./">Results</a>
+      ><a id="switch" href="?">Switch sides</a
+      ><a id="edit-settings" href="./#settings">Shared settings</a>
     </div>
-    <fieldset class="toolbar">
-      <legend>Combat tuning · both fighters</legend>
-      <label
-        >Gun knockback ×
-        <input
-          id="knockback"
-          type="number"
-          min="0"
-          max="10"
-          step="0.5"
-          value="3"
-          style="width: 75px" /></label
-      ><label
-        >Flinch (frames)
-        <input
-          id="flinch"
-          type="number"
-          min="0"
-          max="120"
-          step="1"
-          value="6"
-          style="width: 75px" /></label
-      ><label
-        >Parry release window (frames)
-        <input
-          id="parry"
-          type="number"
-          min="0"
-          max="120"
-          step="1"
-          value="6"
-          style="width: 75px" /></label
-      ><label
-        >Shield release → attack/dash (frames)
-        <input type="number" id="shield-release" min="0" max="180" step="1" value="8" /></label
-      ><label
-        >Shield release → shield again (frames)
-        <input type="number" id="shield-rearm" min="0" max="180" step="1" value="15" /></label
-      ><label
-        >Swipe cooldown (frames)
-        <input
-          id="swipe-cooldown"
-          type="number"
-          min="0"
-          max="180"
-          step="1"
-          value="14"
-          style="width: 75px" /></label
-      ><output id="flinch-seconds">0.20s</output
-      ><small
-        >Flinch interrupts attacks and stops walking; knockback still moves you. Shield/dash remain
-        available. 30 frames = 1 simulation second. Release shield within the parry window after a
-        perfect block to attack/dash or raise shield again immediately; 0 disables this bonus.
-        Shield cannot be raised during attack recovery. Changes apply immediately.</small
-      >
-    </fieldset>
     <div id="score"></div>
     <div class="arena-layout">
       <canvas
@@ -343,5 +285,5 @@
       difference. Click the arena to start.
     </p>
   </main>
-  <script type="module" src="human18/app/gym-play.js?v=25"></script>
+  <script type="module" src="human18/app/gym-play.js?v=27"></script>
 </html>

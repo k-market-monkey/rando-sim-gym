@@ -409,3 +409,74 @@ summary {
 .move-fields {
   grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
 }
+.tuning-group {
+  border-top: 1px solid #40503b;
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+}
+.tuning-group summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.2rem 0;
+}
+.tuning-group[open] summary {
+  margin-bottom: 0.6rem;
+}
+.body-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+#shape-preview {
+  border-radius: 6px;
+  background: #101811;
+  width: 100px;
+  height: 100px;
+  image-rendering: pixelated;
+}
+.body-preview .control-grid {
+  flex: 1;
+  min-width: min(220px, 100%);
+}
+.weapon-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+}
+#moves .move-tune {
+  background: none;
+  border: 0;
+  padding: 12px 0 4px;
+}
+#moves .move-fields,
+.controls .control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  main {
+    padding: 12px;
+  }
+  .controls {
+    padding: 12px;
+    margin: 10px 0;
+  }
+  .settings-heading {
+    gap: 0.45rem;
+  }
+  .settings-heading button {
+    font-size: 12px;
+  }
+  #play-links {
+    gap: 6px;
+  }
+  #play-links .move-tune {
+    padding: 8px;
+  }
+  #play-links h2 {
+    margin-bottom: 5px;
+  }
+}

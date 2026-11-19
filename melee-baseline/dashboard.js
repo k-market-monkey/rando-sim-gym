@@ -1,4 +1,7 @@
-import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=25';
+import { weaponFields } from './weapon-settings.js';
+import { CHARACTER_LOOKS } from './human18/shared/content/characters.js';
+import { drawCharacter } from './human18/app/gym-base-renderer.js';
+import { defaults, sanitize, readRaw, playLink } from './tuning.js?v=27';
 import { renderScores, openReplay } from './score-view.js?v=26';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
@@ -30,6 +33,7 @@ const specs = [
   ['style', 'Movement', ['balanced', 'aggressive', 'ranged-strafing', 'defensive', 'stationary']],
   ['speed', 'Play speed', [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]],
   ['knockback', 'Gun knockback ×', null, 0, 10, 0.5],
+  ['shape', 'Fighter shape', CHARACTER_LOOKS.map((look) => look.id)],
   ['hitRadius', 'Player hit-circle radius (units)', null, 1, 40, 1],
   ['flinch', 'Flinch frames', null, 0, 120, 1],
   ['parry', 'Parry release frames', null, 0, 120, 1],
@@ -59,7 +63,6 @@ function storeSettings() {
   } catch {}
 }
 function build() {
-  const controls = $('shared-controls');
   for (const [key, label, choices, min, max, step] of specs) {
     const l = document.createElement('label');
     l.textContent = label;
@@ -83,36 +86,34 @@ function build() {
       }
     else Object.assign(input, { type: 'number', min, max, step });
     l.append(input);
-    controls.append(l);
+    const group = ['shape', 'hitRadius'].includes(key)
+      ? 'body-fields'
+      : ['difficulty', 'style', 'speed'].includes(key)
+        ? 'shared-controls'
+        : 'combat-fields';
+    if (key === 'shape')
+      for (const option of input.options)
+        option.textContent = CHARACTER_LOOKS.find((look) => look.id === option.value).label;
+    $(group).append(l);
     fields.push(settingField(input, baseline[key], label));
   }
   const l = document.createElement('label');
   l.innerHTML =
     '<span>Overlay</span><span><input type="checkbox" id="tune-hitboxes"> Player hit circles</span>';
-  controls.append(l);
+  $('body-fields').append(l);
   fields.push(settingField($('tune-hitboxes'), baseline.hitboxes, 'player hit circles'));
   baseMoves.forEach((m, i) => {
     const card = document.createElement('section');
     card.className = 'move-tune';
-    const h = document.createElement('h2');
-    h.textContent = m.name;
-    card.append(h);
-    const root = m.templates.find((t) => t.id === m.root);
-    const info = document.createElement('p');
-    info.className = 'muted';
-    info.textContent = `${root.damage.amount} HP per hit · ${root.lifetime} active frames · ${root.geometry[0].kind} shape`;
-    card.append(info);
+    card.hidden = i !== 0;
+    $('weapon').add(new Option(m.name, String(i)));
     const grid = document.createElement('div');
     grid.className = 'move-fields';
-    for (const [key, label, min, max] of [
-      ['radius', root.geometry[0].kind === 'capsule' ? 'Blade radius' : 'Hit radius', 1, 100],
-      ['windup', 'Windup frames', 0, 30],
-      ['cooldown', 'Cooldown frames', 3, 180],
-    ]) {
+    for (const { key, label, min, max, step } of weaponFields(m)) {
       const l = document.createElement('label');
       l.textContent = label;
       const input = document.createElement('input');
-      Object.assign(input, { type: 'number', min, max, step: 1, id: `move-${i}-${key}` });
+      Object.assign(input, { type: 'number', min, max, step, id: `move-${i}-${key}` });
       l.append(input);
       grid.append(l);
       fields.push(settingField(input, baseline.moves[m.name][key], m.name + ' ' + label));
@@ -120,6 +121,11 @@ function build() {
     card.append(grid);
     $('moves').append(card);
   });
+  $('weapon').onchange = () => {
+    Array.from($('moves').children).forEach((card, i) => {
+      card.hidden = i !== $('weapon').selectedIndex;
+    });
+  };
   for (let i = 0; i < 3; i++) {
     const pair = MATCHUPS[i],
       card = document.createElement('section');
@@ -137,9 +143,18 @@ function fill() {
   for (const [key] of specs) $('tune-' + key).value = tuning[key];
   $('tune-hitboxes').checked = tuning.hitboxes;
   baseMoves.forEach((m, i) => {
-    for (const key of ['radius', 'windup', 'cooldown'])
-      $(`move-${i}-${key}`).value = tuning.moves[m.name][key];
+    for (const { key } of weaponFields(m)) $(`move-${i}-${key}`).value = tuning.moves[m.name][key];
   });
+  const ctx = $('shape-preview').getContext('2d');
+  ctx.clearRect(0, 0, 100, 100);
+  drawCharacter(ctx, { look: tuning.shape, color: '#78f0c5' }, 50, 50, 3);
+  ctx.beginPath();
+  ctx.arc(50, 50, tuning.hitRadius, 0, 2 * Math.PI);
+  ctx.fillStyle = '#6cffe522';
+  ctx.fill();
+  ctx.strokeStyle = '#6cffe5';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
   refreshFields();
   updateLinks();
 }
@@ -169,13 +184,13 @@ function updateLinks() {
 function readForm() {
   const raw = { moves: {} };
   for (const [key, , ,] of specs)
-    raw[key] = ['difficulty', 'style'].includes(key)
+    raw[key] = ['difficulty', 'style', 'shape'].includes(key)
       ? $('tune-' + key).value
       : Number($('tune-' + key).value);
   raw.hitboxes = $('tune-hitboxes').checked;
   baseMoves.forEach((m, i) => {
     raw.moves[m.name] = {};
-    for (const key of ['radius', 'windup', 'cooldown'])
+    for (const { key } of weaponFields(m))
       raw.moves[m.name][key] = Number($(`move-${i}-${key}`).value);
   });
   tuning = sanitize(baseMoves, raw);
@@ -193,13 +208,15 @@ function show(r, label) {
     openReplay($('replay-dialog'), g.game, title, r.tuning || defaults(baseMoves), moves),
   );
   $('download').disabled = false;
-  const t = r.tuning || defaults(baseMoves);
+  const t = sanitize(baseMoves, r.tuning || {});
   $('run-settings').textContent =
-    `${t.difficulty} · ${t.style} · Player radius ${t.hitRadius ?? 13} units · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
+    `${t.difficulty} · ${t.style} · ${CHARACTER_LOOKS.find((look) => look.id === t.shape).label} · Player radius ${t.hitRadius} units · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
     baseMoves
       .map(
         (m) =>
-          `${m.name}: radius ${t.moves[m.name].radius}, windup ${t.moves[m.name].windup}f, cooldown ${t.moves[m.name].cooldown}f`,
+          `${m.name}: ${weaponFields(m)
+            .map((f) => f.label + ' ' + t.moves[m.name][f.key])
+            .join(', ')}`,
       )
       .join(' · ');
 }
@@ -227,7 +244,9 @@ for (const [id, value] of Object.entries(runDefaults)) {
 }
 fill();
 storeSettings();
-$('settings').onchange = readForm;
+$('settings').onchange = (event) => {
+  if (event.target.id !== 'weapon') readForm();
+};
 $('settings').onsubmit = (event) => event.preventDefault();
 $('reset').onclick = () => {
   setRunOptions(runDefaults);
@@ -245,7 +264,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=25', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=27', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;
@@ -315,6 +334,18 @@ $('download').onclick = () => {
   a.click();
   setTimeout(() => URL.revokeObjectURL(u), 1000);
 };
+window.addEventListener('message', (event) => {
+  const dialog = $('replay-dialog');
+  if (
+    event.origin !== location.origin ||
+    event.source !== dialog.querySelector('iframe').contentWindow ||
+    event.data?.type !== 'gym-settings'
+  )
+    return;
+  dialog.close();
+  $('settings').scrollIntoView();
+  $('tune-difficulty').focus({ preventScroll: true });
+});
 $('close-replay').onclick = () => $('replay-dialog').close();
 $('replay-dialog').onclose = () => {
   $('replay-dialog').querySelector('iframe').src = 'about:blank';

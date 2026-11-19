@@ -1,5 +1,5 @@
 import { MATCHUPS } from '../../matchups.js';
-import { ROOT_DEFAULTS, readRaw, sanitize, tunedMoves } from '../../tuning.js?v=21';
+import { ROOT_DEFAULTS, readRaw, sanitize, tunedMoves } from '../../tuning.js?v=27';
 import { resetHumanBots } from '../shared/sim/composed/human-bot.js';
 import * as engine from './gym-engine.js';
 import { parryRemaining } from './gym-parry.js';
@@ -46,19 +46,19 @@ const bounded = (value, fallback, maximum) =>
   value !== null && Number.isFinite(Number(value))
     ? Math.max(0, Math.min(maximum, Number(value)))
     : fallback;
-let knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
-let flinchFrames = Math.round(bounded(params.get('flinch'), 6, 120));
-let parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
-let shieldReleaseFrames = Math.round(
+const knockbackMultiplier = bounded(params.get('knockback'), 3, 10);
+const flinchFrames = Math.round(bounded(params.get('flinch'), 6, 120));
+const parryFrames = Math.round(bounded(params.get('parry'), 6, 120));
+const shieldReleaseFrames = Math.round(
   bounded(params.get('shieldRelease'), ROOT_DEFAULTS.shieldRelease, 180),
 );
-let shieldRearmFrames = Math.round(
+const shieldRearmFrames = Math.round(
   bounded(params.get('shieldRearm'), ROOT_DEFAULTS.shieldRearm, 180),
 );
-let swipeCooldownFrames = Math.round(bounded(params.get('swipeCooldown'), 14, 180));
+const swipeCooldownFrames = Math.round(bounded(params.get('swipeCooldown'), 14, 180));
 configureSwipeCooldown(swipeCooldownFrames);
 combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
-let hitRadius = Math.max(
+const hitRadius = Math.max(
   1,
   Math.round(bounded(params.get('hitRadius'), ROOT_DEFAULTS.hitRadius, 40)),
 );
@@ -121,6 +121,26 @@ function updateUrl() {
   history.replaceState(null, '', url);
   url.searchParams.set('side', enemy);
   $('switch').href = url;
+  const settingsURL = new URL('./', location.href);
+  settingsURL.searchParams.set(
+    'tune',
+    JSON.stringify({
+      ...tuning,
+      difficulty,
+      style,
+      speed,
+      hitboxes: showHitboxes,
+      hitRadius,
+      knockback: knockbackMultiplier,
+      flinch: flinchFrames,
+      parry: parryFrames,
+      swipeCooldown: swipeCooldownFrames,
+      shieldRelease: shieldReleaseFrames,
+      shieldRearm: shieldRearmFrames,
+    }),
+  );
+  settingsURL.hash = 'settings';
+  $('edit-settings').href = settingsURL;
 }
 function start() {
   controls.clearControls();
@@ -133,6 +153,7 @@ function start() {
     name: (index === (side === 'b' ? 1 : 0) ? 'You · ' : 'Bot · ') + move.name,
     color: index ? '#f574a5' : '#78f0c5',
     loadout: [move],
+    look: tuning.shape,
   }));
   state = engine.createMatch({
     seed,
@@ -165,16 +186,8 @@ function start() {
   $('title').textContent = `${matchup[0].name} vs ${matchup[1].name}`;
   $('style').value = style;
   $('difficulty').value = difficulty;
-  $('shield-release').value = shieldReleaseFrames;
-  $('shield-rearm').value = shieldRearmFrames;
-  $('swipe-cooldown').value = String(swipeCooldownFrames);
-  $('hit-radius').value = hitRadius;
   $('hitboxes').checked = showHitboxes;
   $('speed').value = String(speed);
-  $('knockback').value = String(knockbackMultiplier);
-  $('flinch').value = String(flinchFrames);
-  $('parry').value = String(parryFrames);
-  $('flinch-seconds').textContent = (flinchFrames / 30).toFixed(2) + 's';
   updateUrl();
   draw();
   canvas.focus();
@@ -256,13 +269,12 @@ function enemyInput() {
   });
   return style === 'stationary' ? { ...input, x: 0, y: 0, dash: false } : input;
 }
-$('hit-radius').addEventListener('change', () => {
-  hitRadius = Math.max(1, Math.round(bounded($('hit-radius').value, ROOT_DEFAULTS.hitRadius, 40)));
-  $('hit-radius').value = hitRadius;
-  for (const player of state.players) player.hitRadius = hitRadius;
-  updateUrl();
-  draw();
-});
+$('edit-settings').onclick = (event) => {
+  if (window.parent !== window && !event.ctrlKey && !event.metaKey) {
+    event.preventDefault();
+    window.parent.postMessage({ type: 'gym-settings' }, location.origin);
+  }
+};
 $('hitboxes').addEventListener('change', () => {
   showHitboxes = $('hitboxes').checked;
   updateUrl();
@@ -292,53 +304,6 @@ function restart() {
   if (resume) setPaused(false);
 }
 $('restart').addEventListener('click', restart);
-for (const id of [
-  'knockback',
-  'flinch',
-  'parry',
-  'shield-release',
-  'shield-rearm',
-  'swipe-cooldown',
-])
-  $(id).addEventListener('change', () => {
-    knockbackMultiplier = bounded($('knockback').value, 3, 10);
-    flinchFrames = Math.round(bounded($('flinch').value, 6, 120));
-    parryFrames = Math.round(bounded($('parry').value, 6, 120));
-    swipeCooldownFrames = Math.round(bounded($('swipe-cooldown').value, 14, 180));
-    $('swipe-cooldown').value = String(swipeCooldownFrames);
-    configureSwipeCooldown(swipeCooldownFrames);
-    shieldReleaseFrames = Math.round(
-      bounded($('shield-release').value, ROOT_DEFAULTS.shieldRelease, 180),
-    );
-    shieldRearmFrames = Math.round(
-      bounded($('shield-rearm').value, ROOT_DEFAULTS.shieldRearm, 180),
-    );
-    $('shield-release').value = shieldReleaseFrames;
-    $('shield-rearm').value = shieldRearmFrames;
-    for (const player of state.players) {
-      player.shieldRelease = Math.min(player.shieldRelease, shieldReleaseFrames);
-      player.shieldCooldown = Math.min(player.shieldCooldown, shieldRearmFrames);
-      player.swipeCooldown = Math.min(player.swipeCooldown, swipeCooldownFrames);
-    }
-    $('parry').value = String(parryFrames);
-    $('knockback').value = String(knockbackMultiplier);
-    $('flinch').value = String(flinchFrames);
-    $('parry').value = String(parryFrames);
-    $('flinch-seconds').textContent = (flinchFrames / 30).toFixed(2) + 's';
-    combat.configure({ knockbackMultiplier, flinchFrames, parryFrames });
-    Object.assign(state, {
-      flinchFrames,
-      parryWindow: parryFrames,
-      knockbackMultiplier,
-      swipeCooldownFrames,
-      shieldReleaseFrames,
-      shieldRearmFrames,
-    });
-    updateUrl();
-    controls.clearControls();
-    canvas.focus();
-    draw();
-  });
 window.addEventListener('keydown', (event) => {
   if (
     event.code !== 'KeyR' ||
