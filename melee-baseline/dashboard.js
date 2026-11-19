@@ -1,6 +1,6 @@
 import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.2';
 import { renderScores, openReplay } from './score-view.js';
-import { listRuns, loadRun, saveRun } from './run-history.js';
+import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 const pendingReports = new Map();
 let selection = 0;
 let reference;
@@ -216,16 +216,17 @@ $('run').onclick = () => {
         label: new Date(created).toLocaleString() + ' · ' + games * 3 + ' games · seed ' + r.seed,
       };
       pendingReports.set(entry.id, r);
-      addOption(entry);
-      $('history').value = entry.id;
+      const row = addOption(entry);
+      numberRuns();
+      row.querySelector('input').checked = true;
+      $('history').scrollTop = 0;
       selectRun();
       saveRun(entry, r)
         .then(() => pendingReports.delete(entry.id))
         .catch(() => {
-          const option = Array.from($('history').options).find((o) => o.value === entry.id);
-          option.dataset.label += ' · tab only';
-          numberRuns();
-          if ($('history').value === entry.id)
+          row.dataset.tabOnly = 'true';
+          row.querySelector('span').append(' · tab only');
+          if (row.querySelector('input').checked)
             $('history-status').textContent =
               'Browser storage is unavailable. Download this run to keep it.';
         });
@@ -274,24 +275,29 @@ $('replay-dialog').onclose = () => {
   $('replay-dialog').querySelector('iframe').src = 'about:blank';
 };
 function numberRuns() {
-  const runs = Array.from($('history').options).filter((option) => option.dataset.created);
-  runs.forEach((option, i) => {
-    option.text = 'Run ' + (runs.length - i) + ' · ' + option.dataset.label;
+  const rows = $('history').querySelectorAll('[data-created]');
+  rows.forEach((row, i) => {
+    row.querySelector('strong').textContent = 'Run ' + (rows.length - i);
   });
 }
 function addOption(entry) {
-  const option = new Option(entry.label, entry.id);
-  option.dataset.created = entry.created;
-  option.dataset.label = entry.label;
-  const next = Array.from($('history').options).find(
-    (o) => !o.dataset.created || Number(o.dataset.created) <= entry.created,
+  const row = document.createElement('label');
+  row.dataset.created = entry.created;
+  const radio = document.createElement('input');
+  Object.assign(radio, { type: 'radio', name: 'history-run', value: entry.id });
+  const details = document.createElement('span');
+  details.textContent = entry.label;
+  row.append(radio, document.createElement('strong'), details);
+  const next = Array.from($('history').children).find(
+    (other) => !other.dataset.created || Number(other.dataset.created) <= entry.created,
   );
-  $('history').insertBefore(option, next || null);
-  numberRuns();
+  $('history').insertBefore(row, next || null);
+  return row;
 }
 async function selectRun() {
   const token = ++selection;
-  const id = $('history').value;
+  const id = $('history').querySelector('input:checked').value;
+  $('delete-run').disabled = id === 'reference';
   report = null;
   $('download').disabled = true;
   $('scores').replaceChildren();
@@ -319,11 +325,41 @@ async function selectRun() {
   }
 }
 $('history').onchange = selectRun;
+$('delete-run').onclick = async () => {
+  const radio = $('history').querySelector('input:checked');
+  if (!radio || radio.value === 'reference') return;
+  const row = radio.closest('label');
+  if (
+    !confirm(
+      'Delete ' + row.querySelector('strong').textContent + ' and its replays from this browser?',
+    )
+  )
+    return;
+  $('delete-run').disabled = true;
+  try {
+    if (!row.dataset.tabOnly) await deleteRun(radio.value);
+    pendingReports.delete(radio.value);
+    const next = row.nextElementSibling || row.previousElementSibling;
+    const selected = radio.checked;
+    row.remove();
+    numberRuns();
+    if (selected) {
+      next.querySelector('input').checked = true;
+      selectRun();
+    }
+  } catch {
+    if (radio.checked) {
+      $('history-status').textContent = 'Could not delete this run. Please try again.';
+      $('delete-run').disabled = false;
+    }
+  }
+};
 const initialSelection = selection;
 try {
   for (const entry of await listRuns()) addOption(entry);
+  numberRuns();
 } catch {}
 if (selection === initialSelection) {
-  $('history').selectedIndex = 0;
+  $('history').querySelector('input').checked = true;
   selectRun();
 }

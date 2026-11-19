@@ -4,7 +4,7 @@
     name="viewport"
     content="width=device-width,initial-scale=1"
   /><title>Melee gym</title
-  ><link rel="stylesheet" href="dashboard.css?v=17" />
+  ><link rel="stylesheet" href="dashboard.css?v=19" />
   <main>
     <h1>Melee gym</h1>
     <p>Set up a matchup, play either side, or run bot duels with the same settings.</p>
@@ -43,14 +43,18 @@
       Completed runs are saved in this browser. Select a run to inspect its scores and replays.
     </p>
     <h2 id="result-heading">Results</h2>
-    <div class="actions">
+    <div class="history-heading">
+      <strong id="history-label">Run history</strong>
+      <div>
+        <button id="download" disabled>Download selected run</button>
+        <button id="delete-run" disabled>Delete selected run</button>
+      </div>
+    </div>
+    <div id="history" role="radiogroup" aria-labelledby="history-label">
       <label
-        >View run
-        <select id="history">
-          <option value="reference">Published reference · default settings</option>
-        </select></label
+        ><input type="radio" name="history-run" value="reference" checked />
+        <strong>Reference</strong><span>Published default settings</span></label
       >
-      <button id="download" disabled>Download selected run</button>
     </div>
     <p id="history-status" role="status"></p>
     <p class="legend">
@@ -83,5 +87,5 @@
       <iframe title="Gym game"></iframe>
     </dialog>
   </main>
-  <script type="module" src="dashboard.js?v=18"></script>
+  <script type="module" src="dashboard.js?v=19"></script>
 </html>

@@ -19,12 +19,22 @@ async function read(store, key) {
 }
 export const listRuns = () => read('index');
 export const loadRun = (id) => read('reports', id);
-export async function saveRun(entry, report) {
+async function update(write) {
   const tx = (await db).transaction(['index', 'reports'], 'readwrite');
   return new Promise((resolve, reject) => {
     tx.oncomplete = resolve;
     tx.onabort = () => reject(tx.error);
-    tx.objectStore('index').put(entry);
-    tx.objectStore('reports').put(report, entry.id);
+    write(tx.objectStore('index'), tx.objectStore('reports'));
   });
 }
+
+export const saveRun = (entry, report) =>
+  update((index, reports) => {
+    index.put(entry);
+    reports.put(report, entry.id);
+  });
+export const deleteRun = (id) =>
+  update((index, reports) => {
+    index.delete(id);
+    reports.delete(id);
+  });

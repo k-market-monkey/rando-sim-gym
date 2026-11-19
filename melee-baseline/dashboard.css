@@ -296,3 +296,47 @@ summary {
 .tie {
   color: #c2cbbb;
 }
+
+.history-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+#history {
+  max-height: 14rem;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  border: 1px solid #5c7050;
+  border-radius: 5px;
+}
+#history label {
+  display: grid;
+  grid-template-columns: auto 5rem 1fr;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.58rem 0.7rem;
+  cursor: pointer;
+}
+#history label + label {
+  border-top: 1px solid #364330;
+}
+#history label:has(:checked) {
+  background: #283d30;
+}
+#history input {
+  accent-color: var(--a);
+  margin: 0;
+}
+#history label:hover {
+  background: #253223;
+}
+#history label:focus-within {
+  outline: 2px solid var(--a);
+  outline-offset: -2px;
+}
+#history span {
+  color: #c1cbbd;
+  font-size: 0.88rem;
+}
