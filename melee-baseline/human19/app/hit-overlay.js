@@ -1,7 +1,7 @@
 import { hitCenterY } from '../shared/sim/composed/hit-center.js';
 
-export function drawHitCircle(ctx, x, anchorY, radius) {
-  const y = hitCenterY(anchorY);
+export function drawHitCircle(ctx, x, anchorY, radius, centered = true) {
+  const y = centered ? hitCenterY(anchorY) : anchorY;
   ctx.save();
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, 2 * Math.PI);

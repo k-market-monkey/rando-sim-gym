@@ -23,7 +23,7 @@ import {
   isBloomBeam,
   drawLob,
   drawLobTelegraph,
-} from './composed-effects.js';
+} from './composed-effects.js?v=31';
 import { drawSweepWarning } from './sweep-warning.js';
 const TAU = Math.PI * 2;
 // Historical recordings keep the range used by their frozen engine.

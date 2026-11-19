@@ -1,8 +1,8 @@
-import { renderArena as renderBase } from './gym-base-renderer.js';
+import { renderArena as renderBase } from './gym-base-renderer.js?v=31';
 import { SHIELD } from '../shared/sim/composed/shield.js';
 import { PLAYER_BODY_RADIUS } from './gym-collision.js';
-import { drawHitCircle } from './hit-overlay.js';
-export { receiveEffects } from './gym-base-renderer.js';
+import { drawHitCircle } from './hit-overlay.js?v=31';
+export { receiveEffects } from './gym-base-renderer.js?v=31';
 
 /** Read actual simulation timers, so pause and game speed cannot desync the cue. */
 export function shieldVisualState(player, state = {}) {
@@ -61,6 +61,12 @@ export function renderArena(canvas, state, options = {}) {
   for (const player of state.players) {
     if (player.dead) continue;
     if (options.showHitboxes)
-      drawHitCircle(ctx, player.x, player.y, player.hitRadius ?? PLAYER_BODY_RADIUS);
+      drawHitCircle(
+        ctx,
+        player.x,
+        player.y,
+        player.hitRadius ?? PLAYER_BODY_RADIUS,
+        state.engineBuild === 'composed-b9008',
+      );
   }
 }

@@ -1,7 +1,5 @@
 import { replayTime, REPLAY_SPEEDS } from './human17/app/replay-player.js';
-import * as oldRenderer from './human18/app/gym-renderer.js';
-import * as centeredRenderer from './human19/app/gym-renderer.js';
-let renderer = oldRenderer;
+import * as renderer from './human19/app/gym-renderer.js?v=31';
 import { verifiedRecording } from './recorded-stats.js?v=29';
 import { combatTable } from './stats-view.js';
 const $ = (id) => document.getElementById(id);
@@ -21,7 +19,6 @@ window.addEventListener('message', async (event) => {
   try {
     player?.pause();
     const { game, tuning } = event.data;
-    renderer = game.engineBuild === 'composed-b9008' ? centeredRenderer : oldRenderer;
     const verified = await verifiedRecording(game, {
       onStep: (s) => renderer.receiveEffects(s.events),
     });

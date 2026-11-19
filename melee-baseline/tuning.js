@@ -80,7 +80,7 @@ export function readRaw(text) {
 }
 export function playLink(pair, side, tuning) {
   const url = new URL('play-v19.html', new URL('.', import.meta.url));
-  url.searchParams.set('v', '29');
+  url.searchParams.set('v', '31');
   url.searchParams.set('order', '25');
   url.searchParams.set('pair', pair);
   url.searchParams.set('side', side);

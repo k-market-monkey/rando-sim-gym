@@ -4,7 +4,7 @@ import { drawItems, drawItemEffects, itemColor } from './item-renderer.js';
 import { getStateMap } from '/rando-sim-gym/melee-baseline/human17/shared/sim/map-state.js';
 import { TICK_RATE } from '/rando-sim-gym/melee-baseline/human17/shared/sim/classic/engine.js';
 import { drawMapDetails, drawAuthoredMap } from './map-renderer.js';
-import { getEngineView } from './engine-view.js';
+import { getEngineView } from './engine-view.js?v=31';
 import { pixelSprite } from './sprite-renderer.js';
 import { receiveEmotes, drawEmotes } from './emote-sprites.js';
 import {
