@@ -88,3 +88,28 @@
 .combat-table thead th:nth-child(3) {
   color: #f18db4;
 }
+.score-headlines {
+  margin: 0.6rem 0 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.score-headlines > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #394334;
+  padding: 0.3rem 0;
+}
+.score-headlines dt {
+  font-size: 0.85rem;
+  color: #c0cabc;
+}
+.score-headlines dd {
+  margin: 0;
+  font-weight: 650;
+}
+.rate-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.7rem;
+}

@@ -11,6 +11,7 @@ function initialSpeed(runSpeed) {
   } catch {}
   return REPLAY_SPEEDS.includes(saved) ? saved : REPLAY_SPEEDS.includes(runSpeed) ? runSpeed : 0.75;
 }
+let seatIds = [];
 let player,
   previousTime = 0;
 window.addEventListener('message', async (event) => {
@@ -21,6 +22,7 @@ window.addEventListener('message', async (event) => {
     const verified = await verifiedRecording(game, { onStep: (s) => receiveEffects(s.events) });
     player = verified.player;
     const sides = event.data.moves ?? game.header.players.map((p) => p.loadout[0].name);
+    seatIds = sides.map((move) => game.header.players.find((p) => p.loadout[0].name === move).id);
     $('game-stats').replaceChildren(combatTable([{ game, stats: verified.stats }], sides, false));
     $('seek').max = player.total;
     $('speed').value = String(initialSpeed(tuning?.speed));
@@ -54,11 +56,19 @@ function draw(time) {
   previousTime = time;
   if (player) {
     player.advance(elapsed);
-    renderArena($('arena'), player.state, {
-      showHitboxes: $('hitboxes').checked,
-      flinchPlayers: new Map(player.state.players.map((p) => [p.id, p.flinchTicks || 0])),
-      flinchDuration: player.state.flinchFrames || 6,
-    });
+    const fighters = seatIds.map((id, i) => ({
+      ...player.state.players.find((p) => p.id === id),
+      color: i === 0 ? '#78f0c5' : '#f18db4',
+    }));
+    renderArena(
+      $('arena'),
+      { ...player.state, players: fighters },
+      {
+        showHitboxes: $('hitboxes').checked,
+        flinchPlayers: new Map(player.state.players.map((p) => [p.id, p.flinchTicks || 0])),
+        flinchDuration: player.state.flinchFrames || 6,
+      },
+    );
     $('seek').value = player.tick;
     $('play').textContent = player.playing
       ? 'Pause'
@@ -67,7 +77,7 @@ function draw(time) {
         : 'Play';
     $('position').textContent =
       `${replayTime(player.tick / 30)} / ${replayTime(player.total / 30)}`;
-    $('fighters').textContent = player.state.players
+    $('fighters').textContent = fighters
       .map((p) => `${p.name}: ${p.dead ? 'Out' : Math.round(p.hp) + ' HP'}`)
       .join(' · ');
   }

@@ -1,4 +1,3 @@
-import { distribution } from './duel-stats.js';
 const node = (tag, text) => {
   const element = document.createElement(tag);
   if (text !== undefined) element.textContent = text;
@@ -48,17 +47,16 @@ export function combatTable(games, moves, average) {
   );
   return wrap;
 }
-export function matchupStats(pair) {
+export function matchupStats(pair, { five, bins, variance }) {
   const panel = node('section');
   panel.className = 'match-stats';
-  const { five, bins, variance } = distribution(pair.games.map((g) => g.score));
   panel.append(
     node('h3', 'Score distribution'),
-    node('p', 'Median ' + fmt(five[2]) + ' · Variance ' + fmt(variance) + ' points²'),
+    node('p', 'Variance ' + fmt(variance) + ' points²'),
   );
   const box = node('div');
   box.className = 'quartiles';
-  const percent = (x) => (x + 100) / 2;
+  const percent = (x) => (100 - x) / 2;
   for (const [className, start, end] of [
     ['whisker', five[0], five[4]],
     ['quartile-box', five[1], five[3]],
@@ -66,12 +64,13 @@ export function matchupStats(pair) {
   ]) {
     const mark = node('i');
     mark.className = className;
-    mark.style.left = percent(start) + '%';
-    mark.style.width = percent(end) - percent(start) + '%';
+    mark.style.left = percent(end) + '%';
+    mark.style.width = percent(start) - percent(end) + '%';
     box.append(mark);
   }
-  const summary = five
-    .map((v, i) => ['Min', 'Q1', 'Median', 'Q3', 'Max'][i] + ' ' + fmt(v))
+  const summary = [...five]
+    .reverse()
+    .map((v, i) => ['Max', 'Q3', 'Median', 'Q1', 'Min'][i] + ' ' + fmt(v))
     .join(' · ');
   box.setAttribute('aria-label', summary);
   box.setAttribute('role', 'img');
@@ -84,19 +83,26 @@ export function matchupStats(pair) {
   const list = node('ul');
   counts.append(list);
   bins.forEach((count, i) => {
-    const start = -100 + i * 20,
-      end = start + 20;
-    const label = start + ' to ' + (i === 9 ? '' : '< ') + end + ': ' + count + ' games';
+    const distance = Math.abs(i - 5),
+      lower = (distance - 1) * 20,
+      upper = distance * 20;
+    const range =
+      i === 5
+        ? 'Score = 0'
+        : i < 5
+          ? lower + ' < score ≤ ' + upper
+          : -upper + ' ≤ score < ' + -lower;
+    const label = range + ': ' + count + ' games';
     const bar = node('i');
     bar.style.height = (100 * count) / peak + '%';
     bar.title = label;
-    bar.style.background = i < 5 ? 'var(--b)' : 'var(--a)';
+    bar.style.background = i < 5 ? 'var(--a)' : i === 5 ? '#aab4a4' : 'var(--b)';
     histogram.append(bar);
     list.append(node('li', label));
   });
   const axis = node('div');
   axis.className = 'hist-axis';
-  for (const label of ['−100', '0', '+100']) axis.append(node('span', label));
+  for (const label of ['+100', '0', '−100']) axis.append(node('span', label));
   panel.append(histogram, axis, counts);
   const combat = node('div');
   panel.append(combat);

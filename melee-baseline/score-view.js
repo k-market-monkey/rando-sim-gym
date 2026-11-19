@@ -1,4 +1,5 @@
-import { matchupStats } from './stats-view.js';
+import { matchupStats } from './stats-view.js?v=26';
+import { distribution } from './duel-stats.js?v=26';
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -25,9 +26,36 @@ export function renderScores(container, report, onReplay, onPlay) {
         favored ? `${short(favored)} leads by ${Math.abs(mean).toFixed(1)}` : 'Even matchup',
       ),
     );
-    card.append(
-      el('p', 'mean-label', `Average score: ${mean > 0 ? '+' : ''}${mean.toFixed(1)} · ${n} games`),
+    const spread = distribution(pair.games.map((g) => g.score));
+    const wins = pair.wins ?? pair.games.filter((g) => g.winner === 'a').length;
+    const losses = pair.losses ?? pair.games.filter((g) => g.winner === 'b').length;
+    const headline = el('dl', 'score-headlines');
+    for (const [label, value] of [
+      ['Average score', mean],
+      ['Median score', spread.five[2]],
+    ]) {
+      const row = el('div');
+      const name = value > 0 ? short(a) : value < 0 ? short(b) : 'Even';
+      row.append(
+        el('dt', '', label),
+        el(
+          'dd',
+          value > 0 ? 'side-a' : value < 0 ? 'side-b' : '',
+          (value > 0 ? '+' : '') + value.toFixed(1) + ' · ' + name,
+        ),
+      );
+      headline.append(row);
+    }
+    const rates = el('div'),
+      rateValues = el('dd', 'rate-values');
+    rateValues.append(
+      el('span', 'side-a', short(a) + ' ' + ((100 * wins) / n).toFixed(1) + '%'),
+      el('span', 'side-b', short(b) + ' ' + ((100 * losses) / n).toFixed(1) + '%'),
     );
+    rates.append(el('dt', '', 'Win rate'), rateValues);
+    rates.title = 'Wins divided by all games, including ties';
+    headline.append(rates);
+    card.append(headline);
     const labels = el('div', 'scale-labels');
     labels.append(
       el('span', 'side-a', `+ favors ${short(a)}`),
@@ -51,7 +79,7 @@ export function renderScores(container, report, onReplay, onPlay) {
       el(
         'p',
         'wins',
-        `${short(a)} ${pair.wins ?? pair.games.filter((g) => g.winner === 'a').length} wins · ${pair.draws ?? pair.games.filter((g) => g.winner === 'draw').length} ties · ${short(b)} ${pair.losses ?? pair.games.filter((g) => g.winner === 'b').length} wins`,
+        `${short(a)} ${wins} wins · ${pair.draws ?? pair.games.filter((g) => g.winner === 'draw').length} ties · ${short(b)} ${losses} wins`,
       ),
     );
     if (onPlay) {
@@ -66,7 +94,7 @@ export function renderScores(container, report, onReplay, onPlay) {
       }
       card.append(links);
     }
-    card.append(matchupStats(pair));
+    card.append(matchupStats(pair, spread));
     const grid = el('div', 'game-grid');
     for (const game of pair.games) {
       const favored = game.score > 0 ? a : game.score < 0 ? b : null;
@@ -96,6 +124,6 @@ export function openReplay(dialog, game, title, tuning, moves) {
       { type: 'gym-replay', game, title, tuning, moves },
       location.origin,
     );
-  frame.src = new URL('replay17.html?v=24', import.meta.url);
+  frame.src = new URL('replay17.html?v=26', import.meta.url);
   dialog.showModal();
 }

@@ -60,8 +60,10 @@ export function distribution(scores) {
     return sorted[j] + (sorted[Math.ceil(i)] - sorted[j]) * (i - j);
   };
   const mean = sorted.reduce((a, b) => a + b, 0) / n;
-  const bins = Array(10).fill(0);
-  for (const score of sorted) bins[Math.max(0, Math.min(9, Math.floor((score + 100) / 20)))]++;
+  // Read left to right: first move (+), even, second move (-).
+  const bins = Array(11).fill(0);
+  for (const score of scores)
+    bins[5 - Math.sign(score) * Math.min(5, Math.ceil(Math.abs(score) / 20))]++;
   return {
     five: [sorted[0], quantile(0.25), quantile(0.5), quantile(0.75), sorted[n - 1]],
     variance: sorted.reduce((v, s) => v + (s - mean) ** 2, 0) / n,
