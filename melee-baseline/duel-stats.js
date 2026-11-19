@@ -1,0 +1,70 @@
+// Observes completed engine steps. Nothing here writes to the match or replay inputs.
+export function collectStats(state) {
+  const sides = Object.fromEntries(
+    state.players.map((p) => [
+      p.id,
+      {
+        damage: {},
+        movingTicks: 0,
+        distance: 0,
+        shieldingTicks: 0,
+        parries: 0,
+        deflections: 0,
+      },
+    ]),
+  );
+  const previous = Object.fromEntries(
+    state.players.map((p) => [p.id, { x: p.x, y: p.y, hp: p.hp, dead: p.dead }]),
+  );
+  return {
+    sides,
+    step(state) {
+      for (const e of state.events) {
+        const side = sides[e.playerId];
+        if (side && e.type === 'perfect-block') side.parries++;
+        if (side && e.type === 'deflect') side.deflections++;
+        if (e.type !== 'hit' || !side) continue;
+        const victim = previous[e.playerId];
+        const lost = Math.min(victim.hp, Math.max(0, e.damage));
+        victim.hp -= lost;
+        if (!sides[e.owner] || e.owner === e.playerId) continue;
+        const weapon =
+          e.moveKey === 'builtin:shoot'
+            ? 'Built-in gun'
+            : e.moveKey === 'builtin:swipe'
+              ? 'Built-in swipe'
+              : e.move?.name || 'Other';
+        const damage = sides[e.owner].damage;
+        damage[weapon] = (damage[weapon] || 0) + lost;
+      }
+      for (const p of state.players) {
+        const last = previous[p.id],
+          side = sides[p.id];
+        if (!last.dead) {
+          const distance = Math.hypot(p.x - last.x, p.y - last.y);
+          if (distance > 0) side.movingTicks++;
+          side.distance += distance;
+          if (p.shielding) side.shieldingTicks++;
+        }
+        Object.assign(last, { x: p.x, y: p.y, hp: p.hp, dead: p.dead });
+      }
+    },
+  };
+}
+export function distribution(scores) {
+  const sorted = [...scores].sort((a, b) => a - b),
+    n = sorted.length;
+  const quantile = (p) => {
+    const i = (n - 1) * p,
+      j = Math.floor(i);
+    return sorted[j] + (sorted[Math.ceil(i)] - sorted[j]) * (i - j);
+  };
+  const mean = sorted.reduce((a, b) => a + b, 0) / n;
+  const bins = Array(10).fill(0);
+  for (const score of sorted) bins[Math.max(0, Math.min(9, Math.floor((score + 100) / 20)))]++;
+  return {
+    five: [sorted[0], quantile(0.25), quantile(0.5), quantile(0.75), sorted[n - 1]],
+    variance: sorted.reduce((v, s) => v + (s - mean) ** 2, 0) / n,
+    bins,
+  };
+}

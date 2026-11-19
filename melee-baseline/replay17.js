@@ -1,5 +1,7 @@
-import { createReplayPlayer, replayTime } from './human17/app/replay-player.js';
+import { replayTime } from './human17/app/replay-player.js';
 import { renderArena, receiveEffects } from './human18/app/gym-renderer.js';
+import { verifiedRecording } from './recorded-stats.js';
+import { combatTable } from './stats-view.js';
 const $ = (id) => document.getElementById(id);
 let player,
   previousTime = 0;
@@ -8,27 +10,10 @@ window.addEventListener('message', async (event) => {
   try {
     player?.pause();
     const { game, tuning } = event.data;
-    const path =
-      game.engineBuild === 'composed-b9004'
-        ? '../melee-moderate/replay/shared/sim/composed/engine.js'
-        : game.engineBuild === 'composed-b9005'
-          ? './human16/shared/sim/composed/engine.js'
-          : game.engineBuild === 'composed-b9006'
-            ? './human17/shared/sim/composed/engine.js'
-            : game.engineBuild === 'composed-b9007'
-              ? './human18/shared/sim/composed/engine.js'
-              : null;
-    if (!path) throw Error('Unsupported recorded engine');
-    const engine = await import(path);
-    player = createReplayPlayer(engine, game, {
-      onStep: (s) => receiveEffects(s.events),
-      onMismatch: () => {
-        $('verification').textContent = 'Replay verification failed';
-      },
-    });
-    player.seek(player.total);
-    if (player.mismatch) throw Error('Replay checkpoints did not match');
-    player.seek(0);
+    const verified = await verifiedRecording(game, { onStep: (s) => receiveEffects(s.events) });
+    player = verified.player;
+    const sides = event.data.moves ?? game.header.players.map((p) => p.loadout[0].name);
+    $('game-stats').replaceChildren(combatTable([{ game, stats: verified.stats }], sides, false));
     $('seek').max = player.total;
     $('speed').value = String(tuning?.speed || 0.75);
     player.setSpeed(Number($('speed').value));

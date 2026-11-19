@@ -1,0 +1,90 @@
+.match-stats {
+  border-top: 1px solid #425238;
+  padding: 8px 0 14px;
+}
+.match-stats h3,
+.match-stats p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+.match-stats small,
+.combat-table + small {
+  font-size: 12px;
+  color: #bbc8b3;
+}
+.quartiles {
+  position: relative;
+  height: 23px;
+  margin: 8px 2px;
+}
+.quartiles i {
+  position: absolute;
+  min-width: 2px;
+}
+.whisker {
+  top: 5px;
+  height: 14px;
+  border-inline: 2px solid #d6decf;
+  background: linear-gradient(transparent 46%, #d6decf 46% 56%, transparent 56%);
+}
+.quartile-box {
+  top: 3px;
+  height: 18px;
+  background: #516451;
+  border: 1px solid #bac9b6;
+}
+.median {
+  top: 1px;
+  height: 22px;
+  background: white;
+}
+.histogram {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 48px;
+  margin-top: 14px;
+  border-bottom: 1px solid #8c9888;
+}
+.histogram i {
+  flex: 1;
+}
+.hist-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #c0cabc;
+}
+.match-stats details {
+  margin: 6px 0 12px;
+  font-size: 12px;
+}
+.combat-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  margin: 12px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.combat-table caption {
+  text-align: left;
+  font-size: 15px;
+  font-weight: 650;
+  padding: 4px 0;
+}
+.combat-table th,
+.combat-table td {
+  padding: 4px;
+  text-align: right;
+  border-bottom: 1px solid #354131;
+}
+.combat-table th:first-child {
+  text-align: left;
+  font-weight: normal;
+}
+.combat-table thead th:nth-child(2) {
+  color: #78f0c5;
+}
+.combat-table thead th:nth-child(3) {
+  color: #f18db4;
+}

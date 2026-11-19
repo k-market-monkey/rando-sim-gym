@@ -3,6 +3,7 @@ import { encodeReplayInputs } from './human18/shared/protocol/replay-inputs.js';
 import { createReplayPlayer } from './human18/app/replay-player.js';
 import { sanitize, tunedMoves } from './tuning.js?v=21';
 import { gamesPerPair } from './run-size.js';
+import { collectStats } from './duel-stats.js';
 self.onmessage = async ({ data }) => {
   try {
     const tuning = sanitize(data.moves, data.tuning),
@@ -36,6 +37,7 @@ self.onmessage = async ({ data }) => {
             })),
           };
           const state = engine.createMatch(header),
+            tracker = collectStats(state),
             inputs = [],
             checkpoints = [];
           while (!state.ended) {
@@ -52,6 +54,7 @@ self.onmessage = async ({ data }) => {
             );
             inputs.push(structuredClone(input));
             engine.step(state, input);
+            tracker.step(state);
             if (state.tick % 30 === 0) checkpoints.push([state.tick, engine.stateHash(state)]);
             if (state.tick > 810) throw Error('A duel exceeded its time limit');
           }
@@ -70,6 +73,7 @@ self.onmessage = async ({ data }) => {
           games.push({
             id: i + 1,
             score,
+            stats: tracker.sides,
             winner: state.winner === null ? 'draw' : state.winner === first ? 'a' : 'b',
             ticks: state.tick,
             reason: state.duelEndReason,

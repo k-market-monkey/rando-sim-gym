@@ -4,7 +4,7 @@
     name="viewport"
     content="width=device-width,initial-scale=1"
   /><title>Gym replay</title
-  ><style>
+  ><link rel="stylesheet" href="gym-stats.css?v=22" /><style>
     :root {
       color-scheme: dark;
       font: 14px system-ui;
@@ -64,6 +64,10 @@
   <div id="fighters"></div>
   <canvas id="arena" width="440" height="440"></canvas
   ><input id="seek" type="range" min="0" value="0" step="1" aria-label="Replay position" />
+  <details>
+    <summary>Game combat stats</summary>
+    <div id="game-stats"></div>
+  </details>
   <p id="verification">Waiting for game…</p>
-  <script type="module" src="replay17.js?v=21"></script>
+  <script type="module" src="replay17.js?v=22"></script>
 </html>

@@ -1,5 +1,5 @@
 import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=21';
-import { renderScores, openReplay } from './score-view.js?v=21';
+import { renderScores, openReplay } from './score-view.js?v=22';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 const pendingReports = new Map();
@@ -169,8 +169,8 @@ function readForm() {
 function show(r, label) {
   report = r;
   $('result-heading').textContent = label;
-  renderScores($('scores'), r, (g, title) =>
-    openReplay($('replay-dialog'), g.game, title, r.tuning || defaults(baseMoves)),
+  renderScores($('scores'), r, (g, title, moves) =>
+    openReplay($('replay-dialog'), g.game, title, r.tuning || defaults(baseMoves), moves),
   );
   $('download').disabled = false;
   const t = r.tuning || defaults(baseMoves);
@@ -204,7 +204,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=21', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=22', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;

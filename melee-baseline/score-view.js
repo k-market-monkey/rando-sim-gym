@@ -1,3 +1,4 @@
+import { matchupStats } from './stats-view.js';
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -65,6 +66,7 @@ export function renderScores(container, report, onReplay, onPlay) {
       }
       card.append(links);
     }
+    card.append(matchupStats(pair));
     const grid = el('div', 'game-grid');
     for (const game of pair.games) {
       const favored = game.score > 0 ? a : game.score < 0 ? b : null;
@@ -79,18 +81,21 @@ export function renderScores(container, report, onReplay, onPlay) {
         el('strong', 'game-score', `${game.score > 0 ? '+' : ''}${game.score.toFixed(1)}`),
         el('span', 'game-favored', favored ? short(favored) : 'Even'),
       );
-      button.onclick = () => onReplay(game, `${a} vs ${b} · Game ${game.id}`, report);
+      button.onclick = () => onReplay(game, `${a} vs ${b} · Game ${game.id}`, pair.moves);
       grid.append(button);
     }
     card.append(grid);
     container.append(card);
   }
 }
-export function openReplay(dialog, game, title, tuning) {
+export function openReplay(dialog, game, title, tuning, moves) {
   const frame = dialog.querySelector('iframe');
   dialog.querySelector('.replay-title').textContent = title;
   frame.onload = () =>
-    frame.contentWindow.postMessage({ type: 'gym-replay', game, title, tuning }, location.origin);
-  frame.src = new URL('replay17.html?v=21', import.meta.url);
+    frame.contentWindow.postMessage(
+      { type: 'gym-replay', game, title, tuning, moves },
+      location.origin,
+    );
+  frame.src = new URL('replay17.html?v=22', import.meta.url);
   dialog.showModal();
 }
