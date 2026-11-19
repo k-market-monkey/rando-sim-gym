@@ -1,8 +1,16 @@
-import { replayTime } from './human17/app/replay-player.js';
+import { replayTime, REPLAY_SPEEDS } from './human17/app/replay-player.js';
 import { renderArena, receiveEffects } from './human18/app/gym-renderer.js';
 import { verifiedRecording } from './recorded-stats.js';
 import { combatTable } from './stats-view.js';
 const $ = (id) => document.getElementById(id);
+const speedKey = 'rando-gym-replay-speed';
+function initialSpeed(runSpeed) {
+  let saved;
+  try {
+    saved = Number(localStorage.getItem(speedKey));
+  } catch {}
+  return REPLAY_SPEEDS.includes(saved) ? saved : REPLAY_SPEEDS.includes(runSpeed) ? runSpeed : 0.75;
+}
 let player,
   previousTime = 0;
 window.addEventListener('message', async (event) => {
@@ -15,11 +23,12 @@ window.addEventListener('message', async (event) => {
     const sides = event.data.moves ?? game.header.players.map((p) => p.loadout[0].name);
     $('game-stats').replaceChildren(combatTable([{ game, stats: verified.stats }], sides, false));
     $('seek').max = player.total;
-    $('speed').value = String(tuning?.speed || 0.75);
+    $('speed').value = String(initialSpeed(tuning?.speed));
     player.setSpeed(Number($('speed').value));
     $('hitboxes').checked = !!tuning?.hitboxes;
     $('verification').textContent = 'Replay verified against every checkpoint and final state.';
-    draw();
+    previousTime = performance.now();
+    player.play();
   } catch (error) {
     $('verification').textContent = error.message;
   }
@@ -33,7 +42,13 @@ $('play').onclick = () => {
   }
 };
 $('seek').oninput = () => player?.seek(Number($('seek').value));
-$('speed').onchange = () => player?.setSpeed(Number($('speed').value));
+$('speed').onchange = () => {
+  const speed = $('speed').value;
+  player?.setSpeed(Number(speed));
+  try {
+    localStorage.setItem(speedKey, speed);
+  } catch {}
+};
 function draw(time) {
   const elapsed = Math.min(250, time - (previousTime || time));
   previousTime = time;

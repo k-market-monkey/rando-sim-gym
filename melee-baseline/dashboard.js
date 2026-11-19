@@ -1,5 +1,5 @@
 import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=21';
-import { renderScores, openReplay } from './score-view.js?v=22';
+import { renderScores, openReplay } from './score-view.js?v=24';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 import { settingField, overrides } from './setting-fields.js';

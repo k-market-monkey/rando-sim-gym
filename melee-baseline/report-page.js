@@ -1,4 +1,4 @@
-import { renderScores, openReplay } from './score-view.js?v=22';
+import { renderScores, openReplay } from './score-view.js?v=24';
 import { defaults } from './tuning.js';
 const $ = (id) => document.getElementById(id);
 try {
