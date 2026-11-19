@@ -91,6 +91,6 @@ export function openReplay(dialog, game, title, tuning) {
   dialog.querySelector('.replay-title').textContent = title;
   frame.onload = () =>
     frame.contentWindow.postMessage({ type: 'gym-replay', game, title, tuning }, location.origin);
-  frame.src = new URL('replay17.html', import.meta.url);
+  frame.src = new URL('replay17.html?v=21', import.meta.url);
   dialog.showModal();
 }

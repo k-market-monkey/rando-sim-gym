@@ -9,6 +9,7 @@ export const ROOT_DEFAULTS = {
   shieldRearm: 15,
   swipeCooldown: 14,
   hitboxes: false,
+  hitRadius: 13,
 };
 export function defaults(moves) {
   return {
@@ -44,6 +45,7 @@ export function sanitize(moves, raw = {}) {
     ['knockback', 0, 10, false],
     ['flinch', 0, 120, true],
     ['parry', 0, 120, true],
+    ['hitRadius', 1, 40, true],
     ['shieldRelease', 0, 180, true],
     ['shieldRearm', 0, 180, true],
     ['swipeCooldown', 0, 180, true],
@@ -80,7 +82,7 @@ export function readRaw(text) {
   }
 }
 export function playLink(pair, side, tuning) {
-  const url = new URL('play-v17.html', new URL('.', import.meta.url));
+  const url = new URL('play-v18.html', new URL('.', import.meta.url));
   url.searchParams.set('v', '17.2');
   url.searchParams.set('pair', pair);
   url.searchParams.set('side', side);

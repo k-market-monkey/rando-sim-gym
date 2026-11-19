@@ -1,5 +1,5 @@
 import { createReplayPlayer, replayTime } from './human17/app/replay-player.js';
-import { renderArena, receiveEffects } from './human17/app/gym-renderer.js';
+import { renderArena, receiveEffects } from './human18/app/gym-renderer.js';
 const $ = (id) => document.getElementById(id);
 let player,
   previousTime = 0;
@@ -15,7 +15,9 @@ window.addEventListener('message', async (event) => {
           ? './human16/shared/sim/composed/engine.js'
           : game.engineBuild === 'composed-b9006'
             ? './human17/shared/sim/composed/engine.js'
-            : null;
+            : game.engineBuild === 'composed-b9007'
+              ? './human18/shared/sim/composed/engine.js'
+              : null;
     if (!path) throw Error('Unsupported recorded engine');
     const engine = await import(path);
     player = createReplayPlayer(engine, game, {

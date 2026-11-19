@@ -1,7 +1,7 @@
-import * as engine from './human17/shared/sim/composed/engine.js';
-import { encodeReplayInputs } from './human17/shared/protocol/replay-inputs.js';
-import { createReplayPlayer } from './human17/app/replay-player.js';
-import { sanitize, tunedMoves } from './tuning.js';
+import * as engine from './human18/shared/sim/composed/engine.js';
+import { encodeReplayInputs } from './human18/shared/protocol/replay-inputs.js';
+import { createReplayPlayer } from './human18/app/replay-player.js';
+import { sanitize, tunedMoves } from './tuning.js?v=21';
 import { gamesPerPair } from './run-size.js';
 self.onmessage = async ({ data }) => {
   try {
@@ -24,6 +24,7 @@ self.onmessage = async ({ data }) => {
             flinchFrames: tuning.flinch,
             parryFrames: tuning.parry,
             knockbackMultiplier: tuning.knockback,
+            hitRadius: tuning.hitRadius,
             shieldReleaseFrames: tuning.shieldRelease,
             shieldRearmFrames: tuning.shieldRearm,
             swipeCooldownFrames: tuning.swipeCooldown,

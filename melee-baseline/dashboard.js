@@ -1,5 +1,5 @@
-import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=17.2';
-import { renderScores, openReplay } from './score-view.js';
+import { defaults, sanitize, tunedMoves, readRaw, playLink } from './tuning.js?v=21';
+import { renderScores, openReplay } from './score-view.js?v=21';
 import { listRuns, loadRun, saveRun, deleteRun } from './run-history.js?v=19';
 import { MAX_GAMES_PER_PAIR, gamesPerPair } from './run-size.js';
 const pendingReports = new Map();
@@ -25,6 +25,7 @@ const specs = [
   ['style', 'Movement', ['balanced', 'aggressive', 'ranged-strafing', 'defensive', 'stationary']],
   ['speed', 'Play speed', [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4]],
   ['knockback', 'Gun knockback ×', null, 0, 10, 0.5],
+  ['hitRadius', 'Player hit-circle radius (units)', null, 1, 40, 1],
   ['flinch', 'Flinch frames', null, 0, 120, 1],
   ['parry', 'Parry release frames', null, 0, 120, 1],
   ['shieldRelease', 'Shield release → attack/dash (frames)', null, 0, 180, 1],
@@ -174,7 +175,7 @@ function show(r, label) {
   $('download').disabled = false;
   const t = r.tuning || defaults(baseMoves);
   $('run-settings').textContent =
-    `${t.difficulty} · ${t.style} · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
+    `${t.difficulty} · ${t.style} · Player radius ${t.hitRadius ?? 13} units · Gun ${t.knockback}× · Flinch ${t.flinch}f · Parry ${t.parry}f · Shield release ${t.shieldRelease ?? 8}f / rearm ${t.shieldRearm ?? 15}f · Swipe cooldown ${t.swipeCooldown}f. ` +
     baseMoves
       .map(
         (m) =>
@@ -203,7 +204,7 @@ $('run').onclick = () => {
   $('run-status').textContent = `Starting ${games * 3} duels…`;
   $('progress').max = games * 3;
   $('progress').value = 0;
-  worker = new Worker(new URL('sim-worker.js?v=20', import.meta.url), { type: 'module' });
+  worker = new Worker(new URL('sim-worker.js?v=21', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
     if (data.type === 'progress') {
       $('progress').value = data.done;
