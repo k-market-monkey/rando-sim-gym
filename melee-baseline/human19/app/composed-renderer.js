@@ -24,6 +24,7 @@ import {
   drawLob,
   drawLobTelegraph,
 } from './composed-effects.js';
+import { drawSweepWarning } from './sweep-warning.js';
 const TAU = Math.PI * 2;
 // Historical recordings keep the range used by their frozen engine.
 const SWIPE_RANGE_BY_BUILD = Object.freeze({
@@ -221,7 +222,7 @@ export function drawComposedEntity(ctx, e, t, drawCharacter, state, displayColor
     // Armed melee gets its strike; while waiting it shows the plain warning.
     if (style === 'slash' && !waiting) drawSlash(ctx, e, template, color, footprint);
     else if (style === 'thrust' && !waiting) drawThrust(ctx, e, template, color, footprint);
-    else
+    else if (!(waiting && template && drawSweepWarning(ctx, template, color)))
       for (const g of e.geometries || [e.geometry]) {
         footprint(ctx, g, linkLength);
         ctx.globalAlpha = waiting ? 0.1 : 0.25;
@@ -451,6 +452,10 @@ export function drawComposedTelegraphs(ctx, state, attackColors) {
     ctx.fillStyle = color;
     ctx.setLineDash([5, 4]);
     ctx.lineWidth = 2;
+    if (drawSweepWarning(ctx, root, color)) {
+      ctx.restore();
+      continue;
+    }
     for (const g of root.geometry) {
       footprint(ctx, g);
       ctx.globalAlpha = 0.12;
